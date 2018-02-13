@@ -1,0 +1,1 @@
+﻿- tesztelni, hogy async hívás nélkül is megy-e
