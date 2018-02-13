@@ -20,27 +20,27 @@ namespace CRUD.Controllers
         [HttpGet, Produces("application/json")]
         public IActionResult GetSumsSync()
         {
-            var data = sumRepo.GetSync(new DateTime(2017, 08, 10), new DateTime(2018, 10, 10));
+            var data = sumRepo.Get(new DateTime(2017, 08, 10), new DateTime(2018, 10, 10));
             return Json(new { result = data });
         }
 
         [HttpGet, Produces("application/json")]
         public async Task<IActionResult> GetSums()
         {
-            var data = await sumRepo.GetAllSum();
+            var data = await sumRepo.GetAsync();
             return Json(new { result = data });
         }
 
         [HttpPost, Produces("application/json")]
         public async Task<IActionResult> SaveSum([FromBody] Sum model)
         {
-            return Json(await sumRepo.SaveSum(model));
+            return Json(await sumRepo.SaveAsync(model));
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteSumByID(int id)
         {
-            return Json(await sumRepo.DeleteSumByID(id));
+            return Json(await sumRepo.DeleteAsync(id));
         }
     }
 }

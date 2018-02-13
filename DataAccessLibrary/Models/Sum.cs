@@ -21,5 +21,9 @@ namespace CRUD.Models
         public string STATE { get; set; }
 
         public ICollection<SumTagConn> SUM_TAG_CONN { get; set; }
+
+        #region Custom fields
+        public List<Tag> tags { get; set; }
+        #endregion
     }
 }

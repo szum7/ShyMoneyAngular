@@ -10,7 +10,10 @@ namespace BusinessLibrary.Repository
 {
     public class SumRepository : ISumRepository
     {
-        public List<Sum> GetSync(DateTime? fromDate = null, DateTime? toDate = null)
+        #region Sync Methods
+
+        #region - Get Methods
+        public List<Sum> Get(DateTime? fromDate = null, DateTime? toDate = null)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
@@ -36,8 +39,60 @@ namespace BusinessLibrary.Repository
             }
         }
 
-        #region Get Methods
-        public async Task<List<Sum>> Get(DateTime? fromDate = null, DateTime? toDate = null)
+        public List<Sum> GetWithTags(DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
+            {
+                List<Sum> sums = this.Get(fromDate, toDate);
+                ISumTagConnRepository stcRepo = new SumTagConnRepository();
+                List<SumTagConn> sumTagConn = stcRepo.Get_OrderBySumId_DepthTag();
+                foreach (Sum sumItem in sums)
+                {
+                    int i = 0;
+                    while (i < sumTagConn.Count && sumTagConn[i].SUM_ID < sumItem.ID)
+                        i++;
+                    while (i < sumTagConn.Count && sumTagConn[i].SUM_ID == sumItem.ID)
+                    {
+                        if (sumTagConn[i].TAG == null)
+                            throw new Exception("Property tag shouldn't be null!");
+
+                        sumItem.tags.Add(sumTagConn[i].TAG);
+                        sumTagConn.RemoveAt(i); // i is "increased" because RemoveAt
+                    }
+                }
+
+                return sums;
+            }
+        }
+        #endregion
+
+        #region - Delete Methods
+        public bool Delete(int id)
+        {
+            using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region - Save Methods
+        public Sum Save(Sum model)
+        {
+            using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
+            {
+                return null;
+            }
+        }
+        #endregion
+
+        #endregion Sync Methods
+
+
+        #region Async Methods
+
+        #region - Get Methods
+        public async Task<List<Sum>> GetAsync(DateTime? fromDate = null, DateTime? toDate = null)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
@@ -62,63 +117,10 @@ namespace BusinessLibrary.Repository
                               }).ToListAsync();
             }
         }
-
-        //public async Task<List<Sum>> GetWithTags(DateTime? fromDate = null, DateTime? toDate = null)
-        //{
-        //    using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
-        //    {
-        //        Task<List<Sum>> sums = this.Get(fromDate, toDate);
-        //        List<SumTagConn> sumTagConn = SumTagConnDAL.Get(SumTagConnOrderByEnum.sumId, SumTagConnGetDepthEnum.tag);
-        //        foreach (Sum sumItem in sums)
-        //        {
-        //            int i = 0;
-        //            while (i < sumTagConn.Count && sumTagConn[i].sumId < sumItem.id)
-        //                i++;
-        //            while (i < sumTagConn.Count && sumTagConn[i].sumId == sumItem.id)
-        //            {
-        //                if (sumTagConn[i].tag == null)
-        //                    throw new Exception("Property tag shouldn't be null!");
-
-        //                sumItem.tags.Add(sumTagConn[i].tag);
-        //                sumTagConn.RemoveAt(i);
-        //                // i is "increased" because RemoveAt
-        //            }
-        //        }
-
-        //        return sums;
-        //    }
-        //}
         #endregion
 
-        #region Update Methods
-        public static void Update()
-        {
-            using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
-            {
-            }
-        }
-        #endregion
-
-        #region Delete Methods
-        public static void Delete()
-        {
-            using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
-            {
-            }
-        }
-        #endregion
-
-        #region Save Methods
-        public static void Save()
-        {
-            using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
-            {
-            }
-        }
-        #endregion
-        
-        #region Tutorial Methods
-        public async Task<bool> DeleteSumByID(int id)
+        #region - Delete Methods
+        public async Task<bool> DeleteAsync(int id)
         {
             using (DBSHYMONEYV1Context db = new DBSHYMONEYV1Context())
             {
@@ -131,25 +133,10 @@ namespace BusinessLibrary.Repository
                 return await db.SaveChangesAsync() >= 1;
             }
         }
+        #endregion
 
-        public async Task<List<Sum>> GetAllSum()
-        {
-            using (DBSHYMONEYV1Context db = new DBSHYMONEYV1Context())
-            {
-                DateTime dateLimit = new DateTime(2017, 10, 1);
-                return await (from a in db.Sum
-                              where a.DATE > dateLimit
-                              select new Sum()
-                              {
-                                  ID = a.ID,
-                                  TITLE = a.TITLE,
-                                  SUM = a.SUM,
-                                  DATE = a.DATE
-                              }).ToListAsync();
-            }
-        }
-
-        public async Task<bool> SaveSum(Sum model)
+        #region - Save Methods
+        public async Task<Sum> SaveAsync(Sum model)
         {
             using (DBSHYMONEYV1Context db = new DBSHYMONEYV1Context())
             {
@@ -173,9 +160,14 @@ namespace BusinessLibrary.Repository
                     sum.DATE = model.DATE;
                 }
 
-                return await db.SaveChangesAsync() >= 1;
+                if (await db.SaveChangesAsync() >= 1)
+                    return model;
+                else
+                    return null;
             }
         }
         #endregion
+
+        #endregion Async Methods  
     }
 }

@@ -8,15 +8,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLibrary.Repository
 {
-    public class SumTagConnRepository
+    public class SumTagConnRepository : ISumTagConnRepository
     {
         /// <summary>
-        /// Includes: SUM_ID, TAG_ID, TAG
+        /// Includes: properties, TAG
         /// Ordered: SUM_ID ASC
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static List<SumTagConn> Get_OrderBySumId_DepthTag()
+        public List<SumTagConn> Get_OrderBySumId_DepthTag()
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
@@ -40,7 +40,7 @@ namespace BusinessLibrary.Repository
                                 MODIFY_BY = d.TAG.MODIFY_BY,
                                 STATE = d.TAG.STATE
                             }
-                        }).ToList<SumTagConn>();
+                        }).ToList();
             }
         }
     }
