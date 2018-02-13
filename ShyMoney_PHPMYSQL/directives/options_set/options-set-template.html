@@ -1,0 +1,31 @@
+<div class="wrapper" ng-controller="optionsSetController" ng-init="OptionsSetInit()">
+    <h2>Global options</h2>
+    <input type="text" ng-model="allFrom" ng-change="ChangeAllDateFrom()" /><label>Date, from (ALL)</label><br />
+    <input type="text" ng-model="allTo" ng-change="ChangeAllDateTo()" /><label>Date, to (ALL)</label><br />
+    <hr />
+    <input type="text" ng-model="options.dateFrom" /><label>Date, from</label><br />
+    <input type="text" ng-model="options.dateTo" /><label>Date, to</label><br />
+    <input type="text" ng-model="options.startingSum" /><label>Starting sum</label><br />
+    <input type="text" ng-model="options.startingSumDate" /><label>Starting sum's date</label><br />
+    <input type="text" ng-model="options.unit.title" ng-options="item as item.title for item in units track by item.id" /><label>Unit</label><br />
+    <input type="text" ng-model="options.unit.count" /><label>Unit count</label><br />
+    <input type="button" value="Reset" ng-click="ResetGlobalOptions()" />
+    <h2>Graph view options</h2>
+    <input type="text" ng-model="options.graphView.dateFrom" /><label>Date, from</label><br />
+    <input type="text" ng-model="options.graphView.dateTo" /><label>Date, to</label><br />
+    <input type="button" value="Reset" ng-click="ResetGraphViewOptions()" />
+
+    <h2>Period averages options</h2>
+    <input type="text" ng-model="options.periodAverages.dateFrom" /><label>Date, from</label><br />
+    <input type="text" ng-model="options.periodAverages.dateTo" /><label>Date, to</label><br />
+    <input type="button" value="Reset" ng-click="ResetPeriodAveragesOptions()" />
+
+    <h2>Monthly averages options</h2>
+    <input type="text" ng-model="options.monthlyAverages.dateFrom" /><label>Date, from</label><br />
+    <input type="text" ng-model="options.monthlyAverages.dateTo" /><label>Date, to</label><br />
+    <input type="button" value="Reset" ng-click="ResetMonthlyAveragesOptions()" />
+
+    <hr />
+
+    <input type="button" value="Update all" ng-click="UpdateOptions()" />
+</div>

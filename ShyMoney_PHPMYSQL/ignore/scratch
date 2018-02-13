@@ -1,0 +1,60 @@
+v1
+{
+    "2010-10-11" : 
+        [
+            {
+                "Title" : "Fogorvos",
+                "Sum" : -15000,
+                "Tags" : ["kiadás", "orvos"]
+            },{
+                "Title" : "Generali",
+                "Sum" : -11880,
+                "Tags" : ["fix", "generali", "havifix"]
+            }
+        ],
+    "2010-10-12" : 
+        [
+        ],
+    "2010-10-13" : 
+        [
+            {
+                "Title" : "OE ösztöndíj",
+                "Sum" : 24000,
+                "Tags" : ["bevétel", "OE"]
+            }
+        ]
+}
+
+v2
+[
+    {
+        "date" : "2010-10-11"
+        "data" : 
+        [
+            {
+                "Title" : "Fogorvos",
+                "Sum" : -15000,
+                "Tags" : ["kiadás", "orvos"]
+            },{
+                "Title" : "Generali",
+                "Sum" : -11880,
+                "Tags" : ["fix", "generali", "havifix"]
+            }
+        ]
+    },
+    {
+        "date" : "2010-10-12"
+        "data" : 
+        [
+            {
+                "Title" : "OE ösztöndíj",
+                "Sum" : 24000,
+                "Tags" : ["bevétel", "OE"]
+            }
+        ]
+    },
+    {
+        "date" : "2010-10-13"
+        "data" : []
+    }
+]

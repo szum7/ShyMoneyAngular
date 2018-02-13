@@ -1,0 +1,546 @@
+<?php
+/*
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+require_once '../../../db.php';
+require_once '../../view-models/monthly-averages.php';
+require_once '../../view-models/graph-view.php';
+require_once '../../view-models/period-averages.php';
+require_once '../../view-models/sum.php';
+require_once '../../view-models/option.php';
+require_once '../../view-models/tag.php';
+require_once '../../view-models/unit.php';
+require_once '../../view-models/user.php';
+require_once '../../globals.php';
+require_once '../../settings.php';
+require_once '../../functions/date-order.php';
+require_once '../../functions/average.php';
+require_once '../../dal/sums-dal.php';
+
+// Init settings
+$settings = new Settings($connection_id);
+// Init dal
+$sumDAL = new SumsDAL();
+// Get dates
+$dates = $sumDAL->GetSimpleDates($connection_id);
+// Format dates for data
+$dates = Dates_OrderByYear($dates);
+
+$expensePer = AverageExpensePerYearMonthDay($connection_id, Settings::$OPTIONS->periodAverages->dateFrom, Settings::$OPTIONS->periodAverages->dateTo);
+$incomePer = AverageIncomePerYearMonthDay($connection_id, Settings::$OPTIONS->periodAverages->dateFrom, Settings::$OPTIONS->periodAverages->dateTo);
+
+// Get data
+$data = array(
+    "expense" => ExpenseByDate($connection_id, Settings::$OPTIONS->periodAverages->dateFrom, Settings::$OPTIONS->periodAverages->dateTo),
+    "income" => IncomeByDate($connection_id, Settings::$OPTIONS->periodAverages->dateFrom, Settings::$OPTIONS->periodAverages->dateTo),
+    "expensePerMonth" => floatval(number_format((float)$expensePer["perMonth"], 2, '.', '')),
+    "incomePerMonth" => floatval(number_format((float)$incomePer["perMonth"], 2, '.', '')),
+    "expensePerDay" => floatval(number_format((float)$expensePer["perDay"], 2, '.', '')),
+    "incomePerDay" => floatval(number_format((float)$incomePer["perDay"], 2, '.', ''))
+);
+
+$data["flow"] = floatval(number_format((float)($data["income"] + $data["expense"]), 2, '.', ''));
+$data["flowPerMonth"] = floatval(number_format((float)($data["incomePerMonth"] + $data["expensePerMonth"]), 2, '.', ''));
+$data["flowPerDay"] = floatval(number_format((float)($data["incomePerDay"] + $data["expensePerDay"]), 2, '.', ''));
+
+echo json_encode($data);
+
+
+
+
+
+
+
+
+
+function Dates_OrderByDay($dates) {
+    
+    $prevDate = "";    
+    $ret = array();    
+    
+    for ($i = 0; $i < count($dates); $i++) {
+        if ($prevDate != $dates[$i]["date"]) {
+            $prevDate = $dates[$i]["date"];
+            array_push($ret, array(
+                "date" => $prevDate,
+                "data" => array()
+            ));
+        }
+        array_push($ret[count($ret) - 1]["data"], $dates[$i]);
+    }
+    
+    return $ret;
+}
+
+
+
+
+
+
+
+    public function GetSuperSimpleDates($connection_id) {
+        $this->InitTagsArray($connection_id);
+
+        $sums = $this->GetSumsArray($connection_id, Settings::$OPTIONS->graphView->dateFrom, Settings::$OPTIONS->graphView->dateTo);
+        
+        return $this->SimpleAssembleSumsWithDates($sums);
+    }
+
+
+
+
+
+
+
+
+
+    
+    private function SimpleAssembleSumsWithDates($sums){
+        $ret = array();
+        $dates = Globals::CreateDateRangeArray(Settings::$OPTIONS->graphView->dateFrom, Settings::$OPTIONS->graphView->dateTo);
+        
+        $ret = array();
+        $c = 0;
+        $prevC = 0;
+        
+        for($i = 0; $i < count($dates); $i++){
+            
+            while($c < count($sums) && $dates[$i] == $sums[$c]->date){
+                array_push($ret, array(
+                    "id" => $sums[$c]->id,
+                    "title" => $sums[$c]->title,
+                    "sum" => $sums[$c]->sum,
+                    "tags" => $sums[$c]->tags,
+                    "date"=> $sums[$c]->date
+                ));
+                $c++;
+            }
+            
+            // ha nem volt ezen a dátumon bejegyzés, létrehozunk egyet a $dates tömbből
+            if($prevC == $c){
+                array_push($ret, array(
+                    "date" => $dates[$i],
+                    "data" => array()
+                ));
+                $prevC = $c;
+            }
+        }
+        
+        return $ret;
+    }
+
+
+
+
+
+
+sum.isDeleted = true;
+        console.log(sum);
+        return;
+        
+        // TODO
+
+        if (confirm("Biztosan törlöd?")) {
+            $http({
+                method: "post",
+                url: "class/responses/delete-sum.php",
+                data: id
+            }).then(function (response) {
+                console.log(response.data);
+                sum.IsDeleted = true;
+            }, function (response) {
+                console.error(response.data);
+            });
+        }
+
+        var d = {
+            "date": "2013-12-10",
+            "data": [
+                {
+                    "id": 45,
+                    "title": "Kiadás1",
+                    "sum": -3290,
+                    "tags": ["fix", "fánk", "kacsa"],
+                    "isDeleted": false
+                }, {
+                    "id": 71,
+                    "title": "Kiadás2",
+                    "sum": -5000,
+                    "tags": [],
+                    "isDeleted": false
+                }, {
+                    "id": 12,
+                    "title": "Bev1",
+                    "sum": 7900,
+                    "tags": [],
+                    "isDeleted": true
+                }
+            ]
+        };
+        // server side
+        // 1. insert
+        // 2. if insert success : delete by id IN (45, 71, 12)
+        // 3. return date
+
+        // TODO... módosítani az összeset, vagy csak azt ami változott? date vagy id alapján? stb.
+        console.log($scope.index);
+        console.log(sum);
+        console.log($scope.editingDay.data);
+        return;
+
+        $http({
+            method: "post",
+            url: "class/responses/update-sum.php",
+            data: sum
+        }).then(function (response) {
+            console.log(response.data);
+            $scope.dates[$scope.index].data = response.data;
+            $scope.UpdateDay();
+        }, function (response) {
+            console.error(response.data);
+        });
+
+
+private function GetCascTimeSumsArray($connection_id) {
+
+        $query = "
+            SELECT *
+            FROM sums
+            WHERE date >= '" . Options::$MASTER_DATE["from"] . "'
+            ORDER BY date ASC
+            ;";
+        $result = mysqli_query($connection_id, $query) or die("ss10 - " . $query);
+        if (mysqli_num_rows($result) > 0) {
+
+            $dates = array();
+
+            $prevYear = "";
+            $prevMonth = "";
+            $prevDay = "";
+
+            $year = array();
+            $month = array();
+            $day = array();
+
+            while ($row = mysqli_fetch_assoc($result)) {
+
+                if ($prevDay != substr($row["date"], 8, 2) || count($day) == 0) { // new day
+                    if ($prevMonth != substr($row["date"], 5, 2) || count($month) == 0) { // new month
+                        if ($prevYear != substr($row["date"], 0, 4) || count($year) == 0) { // new year
+                            if (count($year) > 0) {
+                                array_push($dates, $year);
+                            }
+
+                            $year = array(
+                                "year" => substr($row["date"], 0, 4),
+                                "income" => 0,
+                                "incomeAverage" => 0,
+                                "filteredIncomeAverage" => 0,
+                                "expense" => 0,
+                                "expenseAverage" => 0,
+                                "filteredExpenseAverage" => 0,
+                                "filteredTags" => array(),
+                                "data" => array()
+                            );
+                        } else {
+                            array_push($year["data"], $month);
+                        }
+
+                        $month = array(
+                            "month" => substr($row["date"], 5, 2),
+                            "income" => 0,
+                            "incomeAverage" => 0,
+                            "filteredIncomeAverage" => 0,
+                            "expense" => 0,
+                            "expenseAverage" => 0,
+                            "filteredExpenseAverage" => 0,
+                            "filteredTags" => array(),
+                            "data" => array()
+                        );
+                    } else {
+                        array_push($month["data"], $day);
+                    }
+
+                    $day = array(
+                        "day" => substr($row["date"], 8, 2),
+                        "income" => 0,
+                        "expense" => 0,
+                        "data" => array()
+                    );
+                }
+
+                $prevDay = substr($row["date"], 8, 2);
+                $prevMonth = substr($row["date"], 5, 2);
+                $prevYear = substr($row["date"], 0, 4);
+
+                array_push($day["data"], array(
+                    "id" => $row["id"],
+                    "title" => $row["title"],
+                    "sum" => $row["sum"],
+                    "tags" => $this->AssembleSumTagArray($row["id"])
+                ));
+
+                if (intval($row["sum"]) > 0) {
+                    $day["income"] += intval($row["sum"]);
+                } else if (intval($row["sum"]) < 0) {
+                    $day["expense"] += intval($row["sum"]);
+                }
+                if (intval($row["sum"]) > 0) {
+                    $month["income"] += intval($row["sum"]);
+                } else if (intval($row["sum"]) < 0) {
+                    $month["expense"] += intval($row["sum"]);
+                }
+                if (intval($row["sum"]) > 0) {
+                    $year["income"] += intval($row["sum"]);
+                } else if (intval($row["sum"]) < 0) {
+                    $year["expense"] += intval($row["sum"]);
+                }
+            }
+
+            array_push($dates, $year); // last one
+        }
+        return $dates;
+    }
+
+
+
+
+
+
+
+
+
+
+$connection_id = new mysqli("localhost", "root", "", "mymoney_10");
+if ($connection_id->connect_errno) {
+    echo "Failed to connect to MySQL: (" . $connection_id->connect_errno . ") " . $connection_id->connect_errno;
+}
+$connection_id->set_charset("utf8");
+
+$query = "
+    SELECT *
+    FROM flow
+    ;";
+$result = mysqli_query($connection_id, $query) or die("BAD QUERY - " . $query);
+if (mysqli_num_rows($result) > 0) {
+    $str = "INSERT INTO sums (title, sum, date) VALUES ";
+    $str .= "<br/>";
+    $i = 0;
+    while ($row = mysqli_fetch_assoc($result)) {
+        if($i != 0){
+            $str .= ",<br/>";
+        }
+        $i++;
+        $des = ($row["description"] == "null") ? "" : $row["description"];
+        $str .= "('" . $des . "', " . $row["sum"] . ", '" . $row["date"] . " 00:00:00')";
+    }
+    $str .= ";";
+}
+//echo $str;
+
+
+
+    
+    $scope.DrawExpenseGraphFragment = function(i, sum){        
+        // Line
+        var str = "";
+        if(i == 0){
+            str = "M0 " + windowHeight;
+        }else{
+            str += "M";
+            str += GetChartLeft(i - 1);
+            str += " ";
+            str += GetExpenseGraphTop($scope.dates[i - 1].data.expenseGraph.sum);            
+        }
+        str += "L";
+        str += GetChartLeft(i);
+        str += " ";
+        str += GetExpenseGraphTop(sum);
+        
+        elements.expenseGraph.push(paper.path(str)).attr($scope.setStyles.expenseGraphLine);
+        $scope.dates[i].data["expenseGraph"] = {
+            "sum" : sum
+        };
+        // Point
+        var point = paper.circle(
+                GetChartLeft(i), 
+                GetExpenseGraphTop(sum), 
+                $scope.setStyles.expenseGraphPoint.r).attr($scope.setStyles.expenseGraphPoint.attr);
+        elements.expensePoints.push(point);
+    };
+    
+    $scope.DrawIncomeGraphFragment = function(i, sum){        
+        // Line
+        var str = "";
+        if(i == 0){
+            str = "M0 " + windowHeight;
+        }else{
+            str += "M";
+            str += GetChartLeft(i - 1);
+            str += " ";
+            str += GetIncomeGraphTop($scope.dates[i - 1].data.incomeGraph.sum);            
+        }
+        str += "L";
+        str += GetChartLeft(i);
+        str += " ";
+        str += GetIncomeGraphTop(sum);
+        
+        elements.incomeGraph.push(paper.path(str)).attr($scope.setStyles.incomeGraphLine);
+        $scope.dates[i].data["incomeGraph"] = {
+            "sum" : sum
+        };
+        // Point
+        var point = paper.circle(
+                GetChartLeft(i), 
+                GetIncomeGraphTop(sum), 
+                $scope.setStyles.incomeGraphPoint.r).attr($scope.setStyles.incomeGraphPoint.attr);
+        elements.incomePoints.push(point);
+    };
+
+
+
+INSERT INTO flow (date, sum) VALUES 
+("2016-02-12", -7395),
+("2016-02-20", -3665),
+("2016-02-20", -3450),
+("2016-02-21", -155),
+("2016-02-25", -1085),
+("2016-02-25", -6475),
+("2016-02-29", -310),
+("2016-02-29", -11880),
+("2016-03-03", -25000),
+("2016-03-03", -14790),
+("2016-03-12", -7385),
+("2016-03-18", 45200),
+("2016-03-24", -6475),
+("2016-03-25", -911),
+("2016-03-26", -8676),
+("2016-03-28", -155),
+("2016-03-29", -11880),
+("2016-03-31", -7395),
+("2016-04-01", -25000),
+("2016-04-01", -17110),
+("2016-04-08", 22600),
+("2016-04-11", 18040),
+("2016-04-20", 197000),
+("2016-04-20", -25000),
+("2016-04-21", -3450),
+("2016-04-21", -1900),
+("2016-04-27", -11880),
+("2016-04-28", -6475),
+("2016-05-01", -13460),
+("2016-05-05", -868),
+("2016-05-05", -8190),
+("2016-05-10", -7140),
+("2016-05-11", 22600),
+("2016-05-26", -6475),
+("2016-05-27", -11880),
+("2016-05-27", -4605),
+("2016-06-01", -5740),
+("2016-06-01", -3000),
+("2016-06-02", -25000),
+("2016-06-06", -2500),
+("2016-06-10", 11900),
+("2016-06-14", 22600),
+("2016-06-16", 50000),
+("2016-06-16", 4000),
+("2016-06-16", 1000),
+("2016-06-17", -155),
+("2016-06-17", -500),
+("2016-06-17", -2000),
+("2016-06-18", -620),
+("2016-06-18", 5000),
+("2016-06-19", -620),
+("2016-06-23", -3450),
+("2016-06-23", -250),
+("2016-06-24", -3690),
+("2016-06-24", -505),
+("2016-06-30", -6575),
+("2016-07-01", -25000),
+("2016-07-01", -2200),
+("2016-07-01", -98000),
+("2016-07-08", -1900),
+("2016-07-10", -310),
+("2016-07-15", -6675),
+("2016-07-20", -4220),
+("2016-07-23", -3450),
+("2016-07-26", -12847);
+
+
+
+
+
+
+
+
+
+
+
+pub.Draw = function() {
+        var circle = new createjs.Shape();
+        circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
+        circle.x = 100;
+        circle.y = 100;
+        stage.addChild(circle);
+        circle.addEventListener("click", function(evt) {
+            alert("Hello");
+            evt.remove(); // removes this listener.
+        });
+        
+//        var g = new createjs.Graphics();
+//        g.setStrokeStyle(1);
+//        g.beginStroke("#000000");
+//        g.moveTo(0, 60);
+//        g.lineTo(windowWidth, 120);
+//        g.endStroke();
+//        var shape = new createjs.Shape(g);
+//        stage.addChild(shape);
+        var polygon = new createjs.Shape();
+        polygon.graphics.beginStroke("black");
+        polygon.graphics.moveTo(0, 60).lineTo(60, 60).lineTo(30, 90).lineTo(0, 60);
+        stage.addChild(polygon);
+        
+        stage.update();
+    };
+
+
+
+
+
+        //$scope.InitDrawAllExpenseGraph();
+        var line = new createjs.Shape();
+        line.graphics.moveTo(200, 200);
+        line.graphics.lineTo(700, 500);
+        line.graphics.endStroke();
+        $scope.Sums[7].Data.expenseGraph.graphic.graphics.setStrokeStyle(10);
+        
+        stage.removeChild($scope.Sums[7].Data.expenseGraph.graphic.graphics);
+        stage.addChild(line);
+        stage.update();
+
+
+<body ng-app="ShyMoneyApp" ng-controller="Test2Controller">
+<!--        <input type="button" value="OK" ng-click="Test()" />-->
+        <div class="wrapper">
+            <div id="cons"></div>
+            <canvas id="graphs"></canvas>
+        </div>
+        <div id="container" ng-init="Init()">
+        </div>
+    </body>
+
+#graphs{
+                background:#ddd;
+            }
+            .wrapper{
+                position: relative;
+            }
+            #cons{
+                position: absolute;
+                top:0px;left:0px;
+                width:100px;
+                height:20px;
+                z-index:5000;
+            }
+ 
+ */

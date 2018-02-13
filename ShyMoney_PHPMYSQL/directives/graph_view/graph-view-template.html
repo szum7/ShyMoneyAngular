@@ -1,0 +1,86 @@
+<div id="container" ng-controller="graphViewController" ng-init="GraphViewInit()" ng-cloak>
+
+    <div class="dayProperties">
+        <span class="title date">{{dayPropertyTitles.date}}</span><ul class="dayProps">
+            <li class="title" style="color:{{setStyles.flowGraphLine.stroke}};">
+                <span class="fa fa-line-chart"></span>
+                <span>{{dayPropertyTitles.flowGraph}}</span>
+            </li><li class="title" style="color:{{setStyles.expenseGraphLine.stroke}};">
+                <span class="fa fa-line-chart"></span>
+                <span>-{{dayPropertyTitles.expenseGraph}}</span>
+            </li><li class="title" style="color:{{setStyles.incomeGraphLine.stroke}};">
+                <span class="fa fa-line-chart"></span>
+                <span>{{dayPropertyTitles.incomeGraph}}</span>
+            </li><li class="title" style="color:{{setStyles.expenseBars.fill}};">
+                <span class="fa fa-signal"></span>
+                <span>-{{dayPropertyTitles.expenseBars}}</span>
+            </li><li class="title" style="color:{{setStyles.incomeBars.fill}};">
+                <span class="fa fa-signal"></span>
+                <span>{{dayPropertyTitles.incomeBars}}</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="clickPanel" style="{{ClickPanelCSS($index)}}" id="cp{{day.date}}"
+         ng-class="{active: cPSelected=='cp{{day.date}}'}"
+         ng-repeat="day in dates"
+         ng-click="ClickPanelClick($index, day)"
+         ng-mouseover="ClickPanelHover($index, day)"></div>
+
+    <div id="sumControlPanel" ng-show="isInEditMode">     
+        <!-- Header -->
+        <div class="btn close" 
+             ng-click="CloseSumControlPanel()">X</div>
+        <!-- Date -->
+        <span class="date">{{editingDay.date}}</span><br/>
+
+        <ul class="dayProps">
+            <li class="title" style="color:{{setStyles.flowGraphLine.stroke}};">
+                <span class="fa fa-line-chart"></span>
+                <span>{{editingDay.data.flowGraph.sum}}</span>
+            </li><li class="title" style="color:{{setStyles.expenseGraphLine.stroke}};">
+                <span class="fa fa-line-chart"></span>
+                <span>-{{editingDay.data.expenseGraph.sum}}</span>
+            </li><li class="title" style="color:{{setStyles.incomeGraphLine.stroke}};">
+                <span class="fa fa-line-chart"></span>
+                <span>{{editingDay.data.incomeGraph.sum}}</span>
+            </li><li class="title" style="color:{{setStyles.expenseBars.fill}};">
+                <span class="fa fa-signal"></span>
+                <span>-{{editingDay.data.expenseBars.sum}}</span>
+            </li><li class="title" style="color:{{setStyles.incomeBars.fill}};">
+                <span class="fa fa-signal"></span>
+                <span>{{editingDay.data.incomeBars.sum}}</span>
+            </li>
+        </ul>
+
+        <!-- Expenses -->
+        <div ng-repeat="sum in editingDay.data.expenseBars.data"
+             ng-if="!sum.isDeleted">
+            <input type="text" ng-model="sum.title" />
+            <input type="text" ng-model="sum.sum" />
+            <span ng-repeat="tag in sum.tags">{{tag.id}} - {{tag.title}}</span>
+            <input type="button" value="Töröl" 
+                   ng-click="DeleteSum(sum)" />
+        </div>
+        <!-- Incomes -->
+        <div ng-repeat="sum in editingDay.data.incomeBars.data"
+             ng-if="!sum.isDeleted">
+            <input type="text" ng-model="sum.title" />
+            <input type="text" ng-model="sum.sum" />
+            <span ng-repeat="tag in sum.tags">{{tag.id}} - {{tag.title}}</span>
+            <input type="button" value="Töröl" 
+                   ng-click="DeleteSum(sum)" />
+        </div>
+        <!-- New sum -->
+        <div>
+            <input type="text" ng-model="newSum.title" />
+            <input type="text" ng-model="newSum.sum" />
+            <input type="button" value="Mentés" 
+                   ng-click="UpdateSum(sum)" />
+            <input type="button" value="Töröl" 
+                   ng-click="DeleteSum(sum)" />
+        </div>
+        <input type="button" value="Töröl" 
+               ng-click="AddNewInput()" />
+    </div>
+</div>

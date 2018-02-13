@@ -1,0 +1,7 @@
+
+munkanapok átlagos száma egy hónapban = 22
+
+angular js post object -> php
+object properties are accessed by using an arrow, NOT []
+e.g.: $sum->title
+BAD e.g.: $sum["title"]

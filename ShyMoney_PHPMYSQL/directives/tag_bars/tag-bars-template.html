@@ -1,0 +1,44 @@
+<div class="wrapper" ng-init="tbcWrap.Init()">    
+    <!--<h2>Settings</h2>
+    <input type="text" title="" ng-model="tbcWrap.options.tagBars.dateFrom" />
+    <input type="text" title="" ng-model="tbcWrap.options.tagBars.dateTo" />
+    <input type="button" value="Update" ng-click="tbcWrap.UpdatePeriodAveragesOptions()" />-->
+
+    <h2>Tag bars</h2>
+    <!--p>{{pacWrap.dateFrom}} - {{pacWrap.dateTo}}</p>-->
+    <table class="basic">
+        <tr class="header">
+            <td>Tag</td>
+            <td>Expense</td>
+            <td class="center">
+                <span class="txtBtn" ng-click="tbcWrap.OrderByExpenseASC()" ng-show="tbcWrap.order != 'expense-ASC'">ASC</span>
+                &nbsp;&nbsp;
+                <span class="txtBtn" ng-click="tbcWrap.OrderByExpenseDESC()" ng-show="tbcWrap.order != 'expense-DESC'">DESC</span>
+            </td>
+            <td>Income</td>
+            <td class="center">
+                <span class="txtBtn" ng-click="tbcWrap.OrderByIncomeASC()" ng-show="tbcWrap.order != 'income-ASC'">ASC</span>
+                &nbsp;&nbsp;
+                <span class="txtBtn" ng-click="tbcWrap.OrderByIncomeDESC()" ng-show="tbcWrap.order != 'income-DESC'">DESC</span>
+            </td>
+            <td>Flow</td>
+            <td class="center">
+                <span class="txtBtn" ng-click="tbcWrap.OrderByFlowASC()" ng-show="tbcWrap.order != 'flow-ASC'">ASC</span>
+                &nbsp;&nbsp;
+                <span class="txtBtn" ng-click="tbcWrap.OrderByFlowDESC()" ng-show="tbcWrap.order != 'flow-DESC'">DESC</span>
+            </td>
+        </tr>
+        <tr ng-repeat="tag in tbcWrap.data">
+            <td class="title">{{tag.title}}</td>
+            
+            <td class="red">{{tag.expense}}</td>
+            <td class="bar red"><div style="{{tbcWrap.ExpenseBarWidth(tag.expense)}}"></div></td>
+            
+            <td class="green">{{tag.income}}</td>
+            <td class="bar green"><div style="{{tbcWrap.IncomeBarWidth(tag.income)}}"></div></td>
+            
+            <td class="bold {{tbcWrap.PrefixClass(tag.flow)}}">{{tag.flow}}</td>
+            <td class="bar {{tbcWrap.PrefixClass(tag.flow)}}"><div style="{{tbcWrap.FlowBarWidth(tag.flow)}}"></div></td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,67 @@
+
+    <div ng-controller="modifyDatesController" ng-init="ModifyDatesInit()" ng-cloak>
+
+        <div ng-repeat="date in dates">
+            <div class="header day">
+                <span>{{date.date}}</span>
+                <input type="button" value="New" 
+                       ng-click="AddNew(date)" />
+            </div>
+            <div class="items" 
+                 ng-show="date.data.length > 0">
+                <ul class="header">
+                    <li class="save">
+                    </li><li class="delete">
+                    </li><li class="update">
+                    </li><li class="id">Id
+                    </li><li class="date">Date
+                    </li><li class="title">Title
+                    </li><li class="sum">Sum
+                    </li><li class="tags">Tags
+                    </li>
+                </ul>
+                <ul class="item"
+                    ng-repeat="sum in date.data" 
+                    ng-show="!sum.isDeleted">
+                    <li class="save">
+                        <input type="button" value="Save" 
+                               ng-click="Save(sum)"
+                               ng-show="sum.isNew" />
+                    </li><li class="delete">
+                        <input type="button" value="Delete" 
+                               ng-click="Delete(sum, date)" />
+                    </li><li class="update">
+                        <input type="button" value="Update" 
+                               ng-click="Update(sum)"
+                               ng-show="!sum.isNew" />
+                    </li><li class="id">
+                        <p class="pr">{{sum.id}}</p>
+                    </li><li class="date">
+                        <input type="text" ng-model="sum.date" />
+                    </li><li class="title">
+                        <input type="text" ng-model="sum.title" />
+                    </li><li class="sum">
+                        <input type="text" ng-model="sum.sum" />
+                    </li><li class="tags">
+                        <md-chips ng-model="sum.tags" md-autocomplete-snap
+                                  md-require-match="true">
+                            <md-autocomplete
+                                md-selected-item="selectedItem"
+                                md-search-text="sum.searchText"
+                                md-items="item in tagsChips.QuerySearch(sum.searchText)"
+                                md-item-text="item.title"
+                                placeholder="Add tags...">
+                                <span md-highlight-text="sum.searchText">{{item.id}}, {{item.title}}</span>
+                            </md-autocomplete>
+                            <md-chip-template>
+                                <span>
+                                    <em>{{$chip.id}}</em>
+                                    <span>{{$chip.title}}</span>
+                                </span>
+                            </md-chip-template>
+                        </md-chips>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>

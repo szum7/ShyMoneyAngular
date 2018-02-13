@@ -1,0 +1,175 @@
+* {
+    margin:0;
+    padding:0;
+    font-size:inherit;
+}
+body, html {
+    height: 100%;
+    width:100%;
+    font-family: "Arial";
+}
+#container{
+    position: relative;
+    background:#333;
+    height:100%;
+}
+#container .clickPanel{
+    position: absolute;
+    opacity: 0.1;
+    top:0px; bottom:0px;
+    height:100%;
+    z-index:3000;
+    transition: background 0.2s ease;
+}
+#container .clickPanel:hover{
+    background:#fff;
+}
+#container .clickPanel.active{
+    background:#F6FF91;
+}
+#container #sumControlPanel{
+    position: absolute;
+    top:20px;left:0px;
+    opacity:0.8;
+    background:#000;
+    border:1px solid #fff;
+    padding:10px;
+    z-index:5000;
+    cursor: move;
+}
+#container #sumControlPanel .date{
+    color:#fff;
+}
+#container .dayProperties{
+    position: fixed;
+    top:0px;left:0px;right:0px;
+    background:#333;
+    z-index: 4000;
+}
+#container ul.dayProps{
+    display: inline-block;
+}
+#container .title{
+    display: inline-block;
+    padding:5px;
+    width: 100px;
+    border:2px solid;
+    font-size: 10pt;
+    font-weight: bold;
+    cursor: pointer;
+}
+#container .dayProperties .title.date{
+    color:#fff;
+}
+.btn{
+    display: inline-block;
+    padding:5px;
+    cursor: pointer;
+}
+.btn.close{
+    background:red;
+}
+
+table.basic{
+    font-size:15px;
+    font-family: "Arial";
+}
+table.basic td{
+    padding:5px;
+    border:1px solid #555;
+    text-align: right;
+    min-width:100px;
+}
+table.basic .header td{
+    text-align: center;
+    background:#444;
+    color:#ddd;
+}
+table.basic td.title{
+    background:#777;
+    color:#eee;
+}
+
+table.basic td.bold { background:#e4e4e4; }
+table.basic td.red { color:#d85d56; }
+table.basic td.green { color:#56b77e; }
+
+table td.bar{
+    position:relative;
+    border:none;
+}
+table td.bar div{ 
+    position: absolute;
+    left:0px;top:0px;bottom:0px;
+}
+table td.bar.red div{
+    background:red;
+}
+table td.bar.green div{
+    background:green;
+}
+.txtBtn{
+    cursor: pointer;
+}
+td.center{
+    text-align: center;
+}
+
+.main{
+    padding:10px;
+}
+section.directive{
+    padding:10px 0px;
+}
+section.directive h1{
+    padding:10px;
+    margin:30px 0px 20px;
+    color:#ddd;
+    background: #333;
+    text-transform: uppercase;
+    display: inline-block;
+}
+section.directive h2{
+    margin:20px 0px 10px;
+}
+
+.main{
+    padding-top:50px;
+}
+nav{
+    background:#333;
+    position: fixed;
+    width:100%;
+    top:0px;left:0px;right:0px;
+    z-index:2000;
+}
+nav ul li{
+    display: inline-block;
+}
+nav ul.left{
+    float:left;
+}
+nav ul.right{
+    float:right;
+}
+nav ul li a{
+    padding:10px 15px;
+    display: block;
+    text-decoration: none;
+    color:#ddd;
+    font-size:13px;
+}
+nav ul li span, .nav-trigger ul li span{
+    padding:10px 15px;
+    display: block;
+    color:#ddd;
+    font-size:13px;
+    cursor: pointer;
+}
+.nav-trigger{
+    background:#333;
+    position: fixed;
+    top:0px;right:0px;
+    display:inline-block;
+    z-index:2000;
+}

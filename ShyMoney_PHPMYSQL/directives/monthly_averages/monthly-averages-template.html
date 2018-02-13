@@ -1,0 +1,78 @@
+<div class="wrapper" ng-init="macWrap.Init()">    
+    <h2>Settings</h2>
+    <input type="text" title="" ng-model="macWrap.options.monthlyAverages.dateFrom" />
+    <input type="text" title="" ng-model="macWrap.options.monthlyAverages.dateTo" />
+    <input type="button" value="Update" ng-click="macWrap.UpdateMonthlyAveragesOptions()" />
+
+    <h2>Tags</h2>
+    <md-chips ng-model="pacWrap.tags" md-autocomplete-snap
+              md-transform-chip="macTagsChips.TransformChip($chip)"
+              md-require-match="autocompleteDemoRequireMatch">
+        <md-autocomplete
+            md-selected-item="selectedItem"
+            md-search-text="macWrap.searchText"
+            md-items="item in macTagsChips.QuerySearch(macWrap.searchText)"
+            md-item-text="item.title"
+            placeholder="Add tags...">
+            <span md-highlight-text="macWrap.searchText">{{item.id}}, {{item.title}}</span>
+        </md-autocomplete>
+        <md-chip-template>
+            <span>
+                <em>{{$chip.id}}</em>
+                <span>{{$chip.title}}</span>
+            </span>
+        </md-chip-template>
+    </md-chips>
+    <input type="button" value="Get" ng-click="macWrap.GetTagsFilteredMonthlyAverages()" />
+    
+    <h2>Monthly-average statistics</h2>
+    <p>{{macWrap.dateFrom}} - {{macWrap.dateTo}}</p>
+    <table class="basic">
+        <tr class="header">
+            <td></td>
+            <td>Expense</td>
+            <td>Expense by tags</td>
+            <td>Income</td>
+            <td>Income by tags</td>
+            <td>Flow</td>
+            <td>Flow by tags</td>
+            <td>Expense / day</td>
+            <td>Expense / day by tags</td>
+            <td>Income / day</td>
+            <td>Income / day by tags</td>
+            <td>Flow / day</td>
+            <td>Flow / day by tags</td>
+        </tr>
+        <tr ng-repeat="item in macWrap.data.simple">
+            <td class="title">{{item.date}}</td>
+            <td class="red">{{item.expense}}</td>
+            <td class="red">{{item.expenseByTags}}</td>
+            <td class="green">{{item.income}}</td>
+            <td class="green">{{item.incomePerTags}}</td>
+            <td class="">{{item.flow}}</td>
+            <td class="">{{item.flowByTags}}</td>
+            <td class="red">{{item.expensePerDay}}</td>
+            <td class="red">{{item.expensePerDayByTags}}</td>
+            <td class="green">{{item.incomePerDay}}</td>
+            <td class="green">{{item.incomePerDayByTags}}</td>
+            <td class="">{{item.flowPerDay}}</td>
+            <td class="">{{item.flowPerDayByTags}}</td>
+        </tr>
+        <tr>
+            <td class="title">&#931;</td>
+            <td class="red">{{macWrap.data.sumup.expense}}</td>
+            <td class="red"></td>
+            <td class="green">{{macWrap.data.sumup.income}}</td>
+            <td class="green"></td>
+            <td class="">{{macWrap.data.sumup.flow}}</td>
+            <td class=""></td>
+            <td class="red">{{macWrap.data.sumup.expensePerDay}}</td>
+            <td class="red"></td>
+            <td class="green">{{macWrap.data.sumup.incomePerDay}}</td>
+            <td class="green"></td>
+            <td class="">{{macWrap.data.sumup.flowPerDay}}</td>
+            <td class=""></td>
+        </tr>
+    </table>
+    
+</div>

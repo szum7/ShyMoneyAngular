@@ -1,0 +1,68 @@
+<div class="wrapper" ng-init="pacWrap.Init()">    
+    <h2>Settings</h2>
+    <input type="text" title="" ng-model="pacWrap.options.periodAverages.dateFrom" />
+    <input type="text" title="" ng-model="pacWrap.options.periodAverages.dateTo" />
+    <input type="button" value="Update" ng-click="pacWrap.UpdatePeriodAveragesOptions()" />
+
+    <h2>Tags</h2>
+    <md-chips ng-model="pacWrap.tags" md-autocomplete-snap
+              md-transform-chip="tagsChips.TransformChip($chip)"
+              md-require-match="autocompleteDemoRequireMatch">
+        <md-autocomplete
+            md-selected-item="selectedItem"
+            md-search-text="pacWrap.searchText"
+            md-items="item in tagsChips.QuerySearch(pacWrap.searchText)"
+            md-item-text="item.title"
+            placeholder="Add tags...">
+            <span md-highlight-text="pacWrap.searchText">{{item.id}}, {{item.title}}</span>
+        </md-autocomplete>
+        <md-chip-template>
+            <span>
+                <em>{{$chip.id}}</em>
+                <span>{{$chip.title}}</span>
+            </span>
+        </md-chip-template>
+    </md-chips>
+    <input type="button" value="Get" ng-click="pacWrap.GetTagsFilteredPeriodAverages()" />
+
+    <h2>Period-average statistics</h2>
+    <p>{{pacWrap.dateFrom}} - {{pacWrap.dateTo}}</p>
+    <table class="basic">
+        <tr class="header">
+            <td></td>
+            <td>Expense</td>
+            <td>Income</td>
+            <td>Flow</td>
+            <td>Expense / month</td>
+            <td>Income / month</td>
+            <td>Flow / month</td>
+            <td>Expense / day</td>
+            <td>Income / day</td>
+            <td>Flow / day</td>
+        </tr>
+        <tr>
+            <td class="title">Total</td>
+            <td class="red">{{pacWrap.FSumT(pacWrap.data.simple.expense)}}</td>
+            <td class="green">{{pacWrap.FSumT(pacWrap.data.simple.income)}}</td>
+            <td class="bold {{pacWrap.PrefixClass(pacWrap.data.simple.flow)}}">{{pacWrap.FSumT(pacWrap.data.simple.flow)}}</td>
+            <td class="red">{{pacWrap.FSumT(pacWrap.data.simple.expensePerMonth)}}</td>
+            <td class="green">{{pacWrap.FSumT(pacWrap.data.simple.incomePerMonth)}}</td>
+            <td class="bold {{pacWrap.PrefixClass(pacWrap.data.simple.flowPerMonth)}}">{{pacWrap.FSumT(pacWrap.data.simple.flowPerMonth)}}</td>
+            <td class="red">{{pacWrap.FSumT(pacWrap.data.simple.expensePerDay)}}</td>
+            <td class="green">{{pacWrap.FSumT(pacWrap.data.simple.incomePerDay)}}</td>
+            <td class="bold {{pacWrap.PrefixClass(pacWrap.data.simple.flowPerDay)}}">{{pacWrap.FSumT(pacWrap.data.simple.flowPerDay)}}</td>
+        </tr>
+        <tr>
+            <td class="title">Tags</td>
+            <td class="red">{{pacWrap.FSumT(pacWrap.data.tagsFiltered.expense)}}</td>
+            <td class="green">{{pacWrap.FSumT(pacWrap.data.tagsFiltered.income)}}</td>
+            <td class="bold {{pacWrap.PrefixClass(pacWrap.data.tagsFiltered.flow)}}">{{pacWrap.FSumT(pacWrap.data.tagsFiltered.flow)}}</td>
+            <td class="red">{{pacWrap.FSumT(pacWrap.data.tagsFiltered.expensePerMonth)}}</td>
+            <td class="green">{{pacWrap.FSumT(pacWrap.data.tagsFiltered.incomePerMonth)}}</td>
+            <td class="bold {{pacWrap.PrefixClass(pacWrap.data.tagsFiltered.flowPerMonth)}}">{{pacWrap.FSumT(pacWrap.data.tagsFiltered.flowPerMonth)}}</td>
+            <td class="red">{{pacWrap.FSumT(pacWrap.data.tagsFiltered.expensePerDay)}}</td>
+            <td class="green">{{pacWrap.FSumT(pacWrap.data.tagsFiltered.incomePerDay)}}</td>
+            <td class="bold {{pacWrap.PrefixClass(pacWrap.data.tagsFiltered.flowPerDay)}}">{{pacWrap.FSumT(pacWrap.data.tagsFiltered.flowPerDay)}}</td>
+        </tr>
+    </table>
+</div>
