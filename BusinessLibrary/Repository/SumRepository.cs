@@ -13,15 +13,15 @@ namespace BusinessLibrary.Repository
         #region Sync Methods
 
         #region - Get Methods
-        public List<Sum> Get(DateTime? fromDate = null, DateTime? toDate = null)
+        public List<Sum> Get(DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
                 return (from d in context.Sum
                         where (
                           (d.STATE == "Y")
-                          && (fromDate == null || d.DATE >= fromDate)
-                          && (toDate == null || d.DATE <= toDate)
+                          && (FROM_DATE == null || d.DATE >= FROM_DATE)
+                          && (TO_DATE == null || d.DATE <= TO_DATE)
                         )
                         orderby d.ID ascending
                         select new Sum()
@@ -39,11 +39,11 @@ namespace BusinessLibrary.Repository
             }
         }
 
-        public List<Sum> GetWithTags(DateTime? fromDate = null, DateTime? toDate = null)
+        public List<Sum> GetWithTags(DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                List<Sum> sums = this.Get(fromDate, toDate);
+                List<Sum> sums = this.Get(FROM_DATE, TO_DATE);
                 ISumTagConnRepository stcRepo = new SumTagConnRepository();
                 List<SumTagConn> sumTagConn = stcRepo.Get_OrderBySumId_DepthTag();
                 foreach (Sum sumItem in sums)
@@ -67,21 +67,64 @@ namespace BusinessLibrary.Repository
         #endregion
 
         #region - Delete Methods
-        public bool Delete(int id)
+        public bool Delete(int ID)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                return false;
+                Sum sum = context.Sum.Where(x => x.ID == ID).FirstOrDefault();
+                if (sum != null)
+                {
+                    DateTime now = DateTime.Now;
+                    sum.MODIFY_BY = 0;
+                    sum.MODIFY_DATE = now;
+                    sum.STATE = "N";
+                    context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    throw new Exception("Record not found for deletion.");
+                }
             }
         }
         #endregion
 
         #region - Save Methods
-        public Sum Save(Sum model)
+        public Sum Save(Sum SUM)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                return null;
+                Sum sum = context.Sum.Where(x => x.ID == SUM.ID).FirstOrDefault();
+                DateTime now = DateTime.Now;
+                if (sum == null)
+                {
+                    sum = new Sum()
+                    {
+                        ID = SUM.ID,
+                        TITLE = SUM.TITLE,
+                        SUM = SUM.SUM,
+                        DATE = SUM.DATE,
+                        CREATE_DATE = now,
+                        CREATE_BY = SUM.CREATE_BY,
+                        MODIFY_DATE = now,
+                        MODIFY_BY = SUM.MODIFY_BY,
+                        STATE = "Y"
+                    };
+                    context.Sum.Add(sum);
+                }
+                else
+                {
+                    sum.TITLE = SUM.TITLE;
+                    sum.SUM = SUM.SUM;
+                    sum.DATE = SUM.DATE;
+                    sum.MODIFY_DATE = now;
+                    sum.MODIFY_BY = SUM.MODIFY_BY;
+                }
+
+                if (context.SaveChanges() >= 1)
+                    return SUM;
+                else
+                    return null;
             }
         }
         #endregion

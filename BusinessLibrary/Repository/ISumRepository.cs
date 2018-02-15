@@ -9,15 +9,16 @@ namespace BusinessLibrary.Repository
     public interface ISumRepository
     {
         #region Sync Methods
-        List<Sum> Get(DateTime? fromDate = null, DateTime? toDate = null);
+        List<Sum> Get(DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
+        List<Sum> GetWithTags(DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
         Sum Save(Sum model);
         bool Delete(int id);
         #endregion
 
         #region Async Methods
-        Task<List<Sum>> GetAsync(DateTime? fromDate = null, DateTime? toDate = null);
-        Task<Sum> SaveAsync(Sum model);
-        Task<bool> DeleteAsync(int id);
+        Task<List<Sum>> GetAsync(DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
+        Task<Sum> SaveAsync(Sum SUM);
+        Task<bool> DeleteAsync(int ID);
         #endregion
     }
 }

@@ -1,1 +1,2 @@
-﻿- tesztelni, hogy async hívás nélkül is megy-e
+﻿o tesztelni, hogy async hívás nélkül is megy-e
+- átállni session használatára. Minden db műveletnél kötelező session paraméter (min user adatai legyenek a sessionben)
