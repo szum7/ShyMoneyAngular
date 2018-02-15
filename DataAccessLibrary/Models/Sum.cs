@@ -8,6 +8,7 @@ namespace CRUD.Models
         public Sum()
         {
             SUM_TAG_CONN = new HashSet<SumTagConn>();
+            this.tags = new List<Tag>();
         }
 
         public decimal ID { get; set; }

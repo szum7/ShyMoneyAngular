@@ -29,25 +29,17 @@ export class SumComponent implements OnInit {
 
     ngOnInit() {
         this.editSumId = 0;
-        this.loadData();
+        //this.loadData();
 
-        var rows: any[] = [];
-        //this.sumService.getSumsSync()
-        //    .subscribe(res => {
-        //        rows = res.result;
-        //        console.log(res.result);
-        //    });
-        this.sumService.getSumsSync()
-            .subscribe(function (res) {
-                console.log(res.result);
-            });
-        console.log(rows);
+        var rows: Array<any> = [];
     }
 
     loadData() {
-        this.sumService.getSums()
-            .subscribe(res => {
-                this.rowData = res.result;
+        let fromDate = new Date(2017, 5, 1);
+        let toDate = new Date(2018, 1, 1);
+        this.sumService.get(fromDate, toDate)
+            .subscribe(function (res) {
+                console.log(res.result);
             });
     }
 
@@ -73,7 +65,7 @@ export class SumComponent implements OnInit {
     }
 
     save() {
-        this.sumService.saveSum(this.sum)
+        this.sumService.save(this.sum)
             .subscribe(response => {
                 (this.sum.ID && this.sum.ID > 0) ?
                     this.toastrService.success('Data updated Successfully') :
@@ -97,7 +89,7 @@ export class SumComponent implements OnInit {
 
     okDelete(isDeleteConfirm: boolean) {
         if (isDeleteConfirm) {
-            this.sumService.deleteSum(this.editSumId)
+            this.sumService.delete(this.editSumId)
                 .subscribe(response => {
                     this.editSumId = 0;
                     this.loadData();

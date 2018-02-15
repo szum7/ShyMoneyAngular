@@ -7,45 +7,39 @@ import "rxjs/Rx";
 @Injectable()
 export class SumService {
 
-    private _getSumsUrl = "/Sum/GetSums";
-    public _saveUrl: string = '/Sum/SaveSum/';
-    public _updateUrl: string = '/Sum/UpdateSum/';
-    public _deleteByIdUrl: string = '/Sum/DeleteSumByID/';
+    constructor(private http: Http) {
+    }
 
-    constructor(private http: Http) { }
-
-    getSumsSync() {
+    get(FROM_DATE?: Date, TO_DATE?: Date) {
         var headers = new Headers();
         headers.append("If-Modified-Since", "Tue, 24 July 2017 00:00:00 GMT");
-        return this.http.get("/Sum/GetSumsSync", { headers: headers })
+
+        var url = "/Sum/GetWithTags";
+        if (FROM_DATE != null) {
+            url += "?";
+            url += "FROM_DATE=" + FROM_DATE.toJSON();
+        }
+        if (TO_DATE != null) {
+            url += "&";
+            url += "TO_DATE=" + TO_DATE.toJSON();
+        }
+
+        return this.http.get(url, { headers: headers })
             .map(response => <any>(<Response>response).json());
     }
 
-    getSums() {
-        var headers = new Headers();
-        headers.append("If-Modified-Since", "Tue, 24 July 2017 00:00:00 GMT");
-        var getSumsUrl = this._getSumsUrl;
-        return this.http.get(getSumsUrl, { headers: headers })
-            .map(response => <any>(<Response>response).json());
-    }
-
-    //Post Savd and Update operation
-    saveSum(sum: ISum): Observable<string> {
-        let body = JSON.stringify(sum);
+    save(SUM: ISum): Observable<string> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
+        let body = JSON.stringify(SUM);
 
-        return this.http.post(this._saveUrl, body, options)
+        return this.http.post("/Sum/Save/", body, options)
             .map(res => res.json().message)
             .catch(this.handleError);
     }
 
-    //Delete Operation
-    deleteSum(id: number): Observable<string> {
-        //debugger
-        var deleteByIdUrl = this._deleteByIdUrl + '/' + id
-
-        return this.http.delete(deleteByIdUrl)
+    delete(ID: number): Observable<string> {
+        return this.http.delete("/Sum/Delete/" + ID)
             .map(response => response.json().message)
             .catch(this.handleError);
     }

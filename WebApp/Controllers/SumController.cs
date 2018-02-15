@@ -19,16 +19,16 @@ namespace CRUD.Controllers
 
         #region - Get Methods
         [HttpGet, Produces("application/json")]
-        public IActionResult Get(DateTime? fromDate, DateTime? toDate)
+        public IActionResult Get(DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
         {
-            var data = repo.Get(fromDate, toDate);
+            var data = repo.Get(FROM_DATE, TO_DATE);
             return Json(new { result = data });
         }
 
         [HttpGet, Produces("application/json")]
-        public IActionResult GetWithTags(DateTime? fromDate, DateTime? toDate)
+        public IActionResult GetWithTags(DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
         {
-            var data = repo.GetWithTags(fromDate, toDate);
+            var data = repo.GetWithTags(FROM_DATE, TO_DATE);
             return Json(new { result = data });
         }
         #endregion
