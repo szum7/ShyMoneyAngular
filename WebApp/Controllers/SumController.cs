@@ -17,8 +17,6 @@ namespace CRUD.Controllers
             this.repo = repo;
         }
 
-        #region Sync Methods
-
         #region - Get Methods
         [HttpGet, Produces("application/json")]
         public IActionResult Get(DateTime? fromDate, DateTime? toDate)
@@ -36,40 +34,19 @@ namespace CRUD.Controllers
         #endregion
 
         #region - Save Methods
-        #endregion
-
-        #region - Delete Methods
-        #endregion
-
-        #endregion
-
-        #region Async Methods
-
-        #region - Get Methods
-        [HttpGet, Produces("application/json")]
-        public async Task<IActionResult> GetSums()
-        {
-            var data = await repo.GetAsync();
-            return Json(new { result = data });
-        }
-        #endregion
-
-        #region - Save Methods
         [HttpPost, Produces("application/json")]
-        public async Task<IActionResult> SaveSum([FromBody] Sum model)
+        public IActionResult Save([FromBody] Sum SUM)
         {
-            return Json(await repo.SaveAsync(model));
+            return Json(repo.Save(SUM));
         }
         #endregion
 
         #region - Delete Methods
         [HttpDelete]
-        public async Task<IActionResult> DeleteSumByID(int id)
+        public IActionResult Delete(int ID)
         {
-            return Json(await repo.DeleteAsync(id));
+            return Json(repo.Delete(ID));
         }
-        #endregion
-
         #endregion
     }
 }

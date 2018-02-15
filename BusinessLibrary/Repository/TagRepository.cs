@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLibrary.Repository
 {
-    public class TagRepository: ITagRepository
+    public class TagRepository : ITagRepository
     {
+        #region Get Methods
         public List<Tag> Get()
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
@@ -32,7 +33,9 @@ namespace BusinessLibrary.Repository
                         }).ToList();
             }
         }
+        #endregion
 
+        #region Save Methods
         public Tag Save(Tag TAG)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
@@ -72,7 +75,9 @@ namespace BusinessLibrary.Repository
                     return null;
             }
         }
+        #endregion
 
+        #region Delete Methods
         public bool Delete(int ID)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
@@ -93,5 +98,6 @@ namespace BusinessLibrary.Repository
                 }
             }
         }
+        #endregion
     }
 }

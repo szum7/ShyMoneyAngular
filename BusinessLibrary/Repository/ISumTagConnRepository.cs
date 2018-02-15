@@ -7,12 +7,6 @@ namespace BusinessLibrary.Repository
 {
     public interface ISumTagConnRepository
     {
-        #region Sync Methods
         List<SumTagConn> Get_OrderBySumId_DepthTag();
-        #endregion
-
-        #region Async Methods
-
-        #endregion
     }
 }

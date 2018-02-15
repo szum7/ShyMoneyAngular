@@ -7,10 +7,8 @@ namespace BusinessLibrary.Repository
 {
     public interface ITagRepository
     {
-        #region Sync Methods
         List<Tag> Get();
         Tag Save(Tag model);
         bool Delete(int id);
-        #endregion
     }
 }
