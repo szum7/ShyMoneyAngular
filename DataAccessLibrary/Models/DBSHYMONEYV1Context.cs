@@ -130,8 +130,16 @@ namespace CRUD.Models
                     .HasColumnName("CREATE_DATE")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.DATE)
-                    .HasColumnName("DATE")
+                entity.Property(e => e.INPUT_DATE)
+                    .HasColumnName("INPUT_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.ACCOUNT_DATE)
+                    .HasColumnName("ACCOUNT_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.DUE_DATE)
+                    .HasColumnName("DUE_DATE")
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.MODIFY_BY)

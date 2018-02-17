@@ -1,0 +1,9 @@
+﻿/***
+ * Module: primeng
+ */
+@import 'externalcss/primeng/themes/omega/theme.css';
+@import 'externalcss/primeng/primeng.min.css';
+
+.ui-slider .ui-slider-range {
+    background: red;
+}

@@ -14,7 +14,9 @@ namespace CRUD.Models
         public decimal ID { get; set; }
         public string TITLE { get; set; }
         public decimal? SUM { get; set; }
-        public DateTime? DATE { get; set; }
+        public DateTime? INPUT_DATE { get; set; }
+        public DateTime? ACCOUNT_DATE { get; set; }
+        public DateTime? DUE_DATE { get; set; }
         public decimal? MODIFY_BY { get; set; }
         public DateTime? MODIFY_DATE { get; set; }
         public decimal? CREATE_BY { get; set; }

@@ -18,8 +18,8 @@ namespace BusinessLibrary.Repository
                 return (from d in context.Sum
                         where (
                           (d.STATE == "Y")
-                          && (FROM_DATE == null || d.DATE >= FROM_DATE)
-                          && (TO_DATE == null || d.DATE <= TO_DATE)
+                          && (FROM_DATE == null || d.INPUT_DATE >= FROM_DATE)
+                          && (TO_DATE == null || d.INPUT_DATE <= TO_DATE)
                         )
                         orderby d.ID ascending
                         select new Sum()
@@ -27,7 +27,9 @@ namespace BusinessLibrary.Repository
                             ID = d.ID,
                             TITLE = d.TITLE,
                             SUM = d.SUM,
-                            DATE = d.DATE,
+                            INPUT_DATE = d.INPUT_DATE,
+                            ACCOUNT_DATE = d.ACCOUNT_DATE,
+                            DUE_DATE = d.DUE_DATE,                            
                             CREATE_DATE = d.CREATE_DATE,
                             CREATE_BY = d.CREATE_BY,
                             MODIFY_DATE = d.MODIFY_DATE,
@@ -101,7 +103,9 @@ namespace BusinessLibrary.Repository
                         ID = SUM.ID,
                         TITLE = SUM.TITLE,
                         SUM = SUM.SUM,
-                        DATE = SUM.DATE,
+                        INPUT_DATE = SUM.INPUT_DATE,
+                        ACCOUNT_DATE = SUM.ACCOUNT_DATE,
+                        DUE_DATE = SUM.DUE_DATE,
                         CREATE_DATE = now,
                         CREATE_BY = SUM.CREATE_BY,
                         MODIFY_DATE = now,
@@ -114,7 +118,9 @@ namespace BusinessLibrary.Repository
                 {
                     sum.TITLE = SUM.TITLE;
                     sum.SUM = SUM.SUM;
-                    sum.DATE = SUM.DATE;
+                    sum.INPUT_DATE = SUM.INPUT_DATE;
+                    sum.ACCOUNT_DATE = SUM.ACCOUNT_DATE;
+                    sum.DUE_DATE = SUM.DUE_DATE;
                     sum.MODIFY_DATE = now;
                     sum.MODIFY_BY = SUM.MODIFY_BY;
                 }

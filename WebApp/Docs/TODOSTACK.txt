@@ -1,2 +1,4 @@
-﻿o tesztelni, hogy async hívás nélkül is megy-e
+﻿- 3 dátum felvétele SUM hoz (+2)
+- dátum szerint rendezze a kapott sum tömböt
+o tesztelni, hogy async hívás nélkül is megy-e
 - átállni session használatára. Minden db műveletnél kötelező session paraméter (min user adatai legyenek a sessionben)
