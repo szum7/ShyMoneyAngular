@@ -1,0 +1,212 @@
+﻿import { Component, OnInit } from '@angular/core';
+import { ISum } from '../../_models/index';
+import { SumService } from '../../_services/index';
+import { ToastrService } from 'toastr-ng2';
+import { InputTextModule, DataTableModule, ButtonModule, DialogModule } from 'primeng/primeng';
+
+class SumInfo implements ISum {
+    constructor(public ID?: number, public TITLE?: string, public DATE?: Date, public SUM?: number) { }
+}
+
+@Component({
+    selector: 'sum',
+    templateUrl: './sum.component.html'
+})
+export class SumComponent implements OnInit {
+
+    private rowData: any[];
+    displayDialog: boolean;
+    displayDeleteDialog: boolean;
+    newSum: boolean;
+    sum: ISum = new SumInfo();
+    sums: ISum[];
+    public editSumId: any;
+    public fullname: string;
+
+    constructor(private sumService: SumService, private toastrService: ToastrService) {
+
+    }
+
+    ngOnInit() {
+        this.editSumId = 0;
+        //this.loadData();
+
+        var rows: Array<any> = [];
+    }
+
+    loadData() {
+        let fromDate = new Date(2017, 5, 1);
+        let toDate = new Date(2018, 1, 1);
+        this.sumService.get(fromDate, toDate)
+            .subscribe(function (res) {
+                console.log(res.result);
+            });
+    }
+
+    showDialogToAdd() {
+        this.newSum = true;
+        this.editSumId = 0;
+        this.sum = new SumInfo();
+        this.displayDialog = true;
+    }
+
+
+    showDialogToEdit(sum: ISum) {
+        this.newSum = false;
+        this.sum = new SumInfo();
+        this.sum.ID = sum.ID;
+        this.sum.TITLE = sum.TITLE;
+        this.sum.SUM = sum.SUM;
+        this.sum.DATE = sum.DATE;
+        this.displayDialog = true;
+    }
+
+    onRowSelect(event: any) {
+    }
+
+    save() {
+        this.sumService.save(this.sum)
+            .subscribe(response => {
+                (this.sum.ID && this.sum.ID > 0) ?
+                    this.toastrService.success('Data updated Successfully') :
+                    this.toastrService.success('Data inserted Successfully');
+                this.loadData();
+            });
+        this.displayDialog = false;
+    }
+
+    cancel() {
+        this.sum = new SumInfo();
+        this.displayDialog = false;
+    }
+
+
+    showDialogToDelete(sum: ISum) {
+        this.fullname = sum.ID + ' ' + sum.TITLE;
+        this.editSumId = sum.ID;
+        this.displayDeleteDialog = true;
+    }
+
+    okDelete(isDeleteConfirm: boolean) {
+        if (isDeleteConfirm) {
+            this.sumService.delete(this.editSumId)
+                .subscribe(response => {
+                    this.editSumId = 0;
+                    this.loadData();
+                });
+            this.toastrService.error('Data Deleted Successfully');
+        }
+        this.displayDeleteDialog = false;
+    }
+}
+
+**********************************************************************************************************************
+
+<table style="width:80%;margin-left: 100px">
+    <tr>
+        <td>
+            <h2>Sum Details</h2>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button type="button" pButton icon="fa-plus"
+                    style="float:left" (click)="showDialogToAdd()" label="Add"></button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <br />
+            <div class="ContentSideSections Implementation">
+                <p-dataTable [value]="rowData" [rows]="10" [paginator]="true"
+                             [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
+                    <header>Sum Details</header>
+                    <p-column field="id" [style]="{'width':'50px'}"
+                              header="Id" [sortable]="true"></p-column>
+                    <p-column field="title"
+                              header="Title" [sortable]="true"></p-column>
+                    <p-column field="sum"
+                              header="Sum" [sortable]="true"></p-column>
+                    <p-column field="date" [style]="{'width':'200px'}"
+                              header="Date" [sortable]="true"></p-column>
+                    <p-column header="Edit">
+                        <ng-template let-col let-contact="rowData"
+                                     pTemplate type="body">
+                            <button type="button" pButton icon="fa-check"
+                                    (click)="showDialogToEdit(sum)"
+                                    label="Edit"></button>
+                        </ng-template>
+                    </p-column>
+                    <p-column header="Delete">
+                        <ng-template let-col let-contact="rowData"
+                                     pTemplate type="body">
+                            <button type="button" pButton icon="fa-close"
+                                    (click)="showDialogToDelete(sum)"
+                                    label="Delete"></button>
+                        </ng-template>
+                    </p-column>
+                    <footer>
+                        <div class="ui-helper-clearfix"
+                             style="width:100%"></div>
+                    </footer>
+                </p-dataTable>
+
+                <p-dialog header="Sum Details" [(visible)]="displayDialog"
+                          [responsive]="true"
+                          showEffect="fade" [modal]="true">
+                    <div class="ui-grid ui-grid-responsive ui-fluid ui-grid-pad">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                <label for="title">Title</label>
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText id="edit_sum_title"
+                                       [(ngModel)]="sum.TITLE" />
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                <label for="sum">Sum</label>
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText id="edit_sum_sum"
+                                       [(ngModel)]="sum.SUM" />
+                            </div>
+                        </div>                        
+                    </div>
+                    <footer>
+                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                            <button type="button" pButton icon="fa-close"
+                                    (click)="cancel()"
+                                    label="Cancel"></button>
+                            <button type="button" pButton icon="fa-check"
+                                    (click)="save()" *ngIf="newSum"
+                                    label="Save"></button>
+                            <button type="button" pButton icon="fa-check"
+                                    (click)="save()" *ngIf="!newSum"
+                                    label="Update"></button>
+                        </div>
+                    </footer>
+                </p-dialog>
+                <p-dialog header="Confirm Deletion" [(visible)]="displayDeleteDialog"
+                          modal="modal" showEffect="fade">
+                    <p>
+                        Are you sure to delete the following sum?
+                    </p>
+                    <p>
+                        <strong>{{ fullname }}</strong><br />
+                    </p>
+                    <footer>
+                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+                            <button type="button" pButton icon="fa-close"
+                                    (click)="okDelete(false)" label="No"></button>
+                            <button type="button" pButton icon="fa-check"
+                                    (click)="okDelete(true)" label="Yes"></button>
+                        </div>
+                    </footer>
+                </p-dialog>
+            </div>
+        </td>
+    </tr>
+</table>
+

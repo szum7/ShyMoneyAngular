@@ -1,0 +1,16 @@
+﻿.record-fields {
+    list-style:none;
+    margin:0px;
+}
+.record-fields li {
+    display:inline-block;
+}
+
+/**
+ * Global styles
+ */
+.sbtn{
+	display:inline-block;
+	width:20px;
+	height:20px;
+}

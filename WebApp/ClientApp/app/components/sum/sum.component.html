@@ -1,107 +1,20 @@
-﻿<table style="width:80%;margin-left: 100px">
-    <tr>
-        <td>
-            <h2>Sum Details</h2>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button type="button" pButton icon="fa-plus"
-                    style="float:left" (click)="showDialogToAdd()" label="Add"></button>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <br />
-            <div class="ContentSideSections Implementation">
-                <p-dataTable [value]="rowData" [rows]="10" [paginator]="true"
-                             [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
-                    <header>Sum Details</header>
-                    <p-column field="id" [style]="{'width':'50px'}"
-                              header="Id" [sortable]="true"></p-column>
-                    <p-column field="title"
-                              header="Title" [sortable]="true"></p-column>
-                    <p-column field="sum"
-                              header="Sum" [sortable]="true"></p-column>
-                    <p-column field="date" [style]="{'width':'200px'}"
-                              header="Date" [sortable]="true"></p-column>
-                    <p-column header="Edit">
-                        <ng-template let-col let-contact="rowData"
-                                     pTemplate type="body">
-                            <button type="button" pButton icon="fa-check"
-                                    (click)="showDialogToEdit(sum)"
-                                    label="Edit"></button>
-                        </ng-template>
-                    </p-column>
-                    <p-column header="Delete">
-                        <ng-template let-col let-contact="rowData"
-                                     pTemplate type="body">
-                            <button type="button" pButton icon="fa-close"
-                                    (click)="showDialogToDelete(sum)"
-                                    label="Delete"></button>
-                        </ng-template>
-                    </p-column>
-                    <footer>
-                        <div class="ui-helper-clearfix"
-                             style="width:100%"></div>
-                    </footer>
-                </p-dataTable>
+﻿<h3>Range: {{rangeValues[0] + ' - ' + rangeValues[1]}}</h3>
+<p-slider [(ngModel)]="rangeValues" [style]="{'width':'200px'}" [range]="true"></p-slider>
 
-                <p-dialog header="Sum Details" [(visible)]="displayDialog"
-                          [responsive]="true"
-                          showEffect="fade" [modal]="true">
-                    <div class="ui-grid ui-grid-responsive ui-fluid ui-grid-pad">
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-4">
-                                <label for="title">Title</label>
-                            </div>
-                            <div class="ui-grid-col-8">
-                                <input pInputText id="edit_sum_title"
-                                       [(ngModel)]="sum.TITLE" />
-                            </div>
-                        </div>
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-4">
-                                <label for="sum">Sum</label>
-                            </div>
-                            <div class="ui-grid-col-8">
-                                <input pInputText id="edit_sum_sum"
-                                       [(ngModel)]="sum.SUM" />
-                            </div>
-                        </div>                        
-                    </div>
-                    <footer>
-                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                            <button type="button" pButton icon="fa-close"
-                                    (click)="cancel()"
-                                    label="Cancel"></button>
-                            <button type="button" pButton icon="fa-check"
-                                    (click)="save()" *ngIf="newSum"
-                                    label="Save"></button>
-                            <button type="button" pButton icon="fa-check"
-                                    (click)="save()" *ngIf="!newSum"
-                                    label="Update"></button>
-                        </div>
-                    </footer>
-                </p-dialog>
-                <p-dialog header="Confirm Deletion" [(visible)]="displayDeleteDialog"
-                          modal="modal" showEffect="fade">
-                    <p>
-                        Are you sure to delete the following sum?
-                    </p>
-                    <p>
-                        <strong>{{ fullname }}</strong><br />
-                    </p>
-                    <footer>
-                        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                            <button type="button" pButton icon="fa-close"
-                                    (click)="okDelete(false)" label="No"></button>
-                            <button type="button" pButton icon="fa-check"
-                                    (click)="okDelete(true)" label="Yes"></button>
-                        </div>
-                    </footer>
-                </p-dialog>
-            </div>
-        </td>
-    </tr>
-</table>
+<div class="day" *ngFor="let day of days">
+    <div class="header">
+        <span>{{day.date}}</span>
+		<div class="sbtn" (click)="add(day)"><span class="glyphicon glyphicon-plus"></span></div>
+    </div>
+    <div class="records">
+        <div class="record" *ngFor="let sum of day.sums">
+            <ul class="record-fields">
+                <li class="field"><input type="text" placeholder="Title..." [(value)]="sum.title" /></li>
+                <li class="field"><input type="text" placeholder="Sum..." [(value)]="sum.sum" /></li>
+                <li class="field"><input type="text" placeholder="Date..." [(value)]="sum.date" /></li>
+                <li class="field"><div class="sbtn" (click)="save(sum)"><span class="glyphicon glyphicon-check"></span></div></li>
+                <li class="field"><div class="sbtn" (click)="delete(sum.id)"><span class="glyphicon glyphicon-minus"></span></div></li>
+            </ul>
+        </div>
+    </div>
+</div>

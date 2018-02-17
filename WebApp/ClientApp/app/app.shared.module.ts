@@ -7,6 +7,7 @@ import { APP_BASE_HREF, CommonModule, Location, LocationStrategy, HashLocationSt
 
 import { ToastrModule } from 'toastr-ng2'; // third party module to display toast
 import { InputTextModule, DataTableModule, ButtonModule, DialogModule } from 'primeng/primeng'; //PRIMENG - Third party module
+import { SliderModule } from 'primeng/slider';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
@@ -40,7 +41,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         FormsModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
-        InputTextModule, DataTableModule, ButtonModule, DialogModule,
+        InputTextModule, DataTableModule, ButtonModule, DialogModule, SliderModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'sum', pathMatch: 'full' },
             { path: 'sum', component: SumComponent },

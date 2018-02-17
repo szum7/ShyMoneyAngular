@@ -1,6 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { ISum } from '../_models/index';
 import { Observable } from 'rxjs/Observable';
 import "rxjs/Rx";
 
@@ -28,7 +27,7 @@ export class SumService {
             .map(response => <any>(<Response>response).json());
     }
 
-    save(SUM: ISum): Observable<string> {
+    save(SUM: Sum): Observable<string> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let body = JSON.stringify(SUM);

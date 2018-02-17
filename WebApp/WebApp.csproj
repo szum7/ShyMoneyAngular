@@ -24,9 +24,16 @@
   <ItemGroup>
     <None Remove="ClientApp\app\components\sum\sum.component.ts" />
     <None Remove="ClientApp\app\_models\index.ts" />
+    <None Remove="ClientApp\app\_models\modelbase.ts" />
     <None Remove="ClientApp\app\_models\sum.ts" />
+    <None Remove="ClientApp\app\_models\tag.ts" />
     <None Remove="ClientApp\app\_services\index.ts" />
     <None Remove="ClientApp\app\_services\sum.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\dist\externalcss\primeng\themes\omega\fonts\roboto-v15-latin-regular.svg" />
+    <None Include="wwwroot\dist\externalcss\primeng\themes\omega\fonts\roboto-v15-latin-regular.woff2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +43,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\sum\sum.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\_models\index.ts" />
+    <TypeScriptCompile Include="ClientApp\app\_models\modelbase.ts" />
     <TypeScriptCompile Include="ClientApp\app\_models\sum.ts" />
+    <TypeScriptCompile Include="ClientApp\app\_models\tag.ts" />
     <TypeScriptCompile Include="ClientApp\app\_services\index.ts" />
     <TypeScriptCompile Include="ClientApp\app\_services\sum.service.ts" />
   </ItemGroup>
