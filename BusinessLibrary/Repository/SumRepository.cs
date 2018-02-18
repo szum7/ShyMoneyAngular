@@ -5,14 +5,40 @@ using System.Threading.Tasks;
 using CRUD.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using BusinessLibrary.Common;
+using DataAccessLibrary.CustomModels;
+using BusinessLibrary.Common.Enum;
 
 namespace BusinessLibrary.Repository
 {
     public class SumRepository : ISumRepository
     {
         #region Get Methods
+        public SumsOnDayWrap GetOnDates(DateTypeEnum dateType, DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
+        {
+            DateTime start = DateTime.Now.AddDays(-60);
+            if (FROM_DATE != null)
+                start = FROM_DATE.Value;
+
+            DateTime end = DateTime.Now.AddDays(60);
+            if (TO_DATE != null)
+                end = TO_DATE.Value;
+            if (TO_DATE == null && FROM_DATE != null)
+                end = FROM_DATE.Value.AddDays(60);
+
+            List<DateTime> dates = Global.GetDatesInRange(start, end);
+
+            List<Sum> sums = new List<Sum>();
+            if (dateType == DateTypeEnum.INPUT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.INPUT_DATE).ToList();
+            else if (dateType == DateTypeEnum.ACCOUNT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.ACCOUNT_DATE).ToList();
+            else if (dateType == DateTypeEnum.DUE_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.DUE_DATE).ToList();
+
+            return this.AssableSumsWithDates(sums, dates, dateType);
+        }
+
         public List<Sum> Get(DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
         {
+
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
                 return (from d in context.Sum
@@ -29,7 +55,7 @@ namespace BusinessLibrary.Repository
                             SUM = d.SUM,
                             INPUT_DATE = d.INPUT_DATE,
                             ACCOUNT_DATE = d.ACCOUNT_DATE,
-                            DUE_DATE = d.DUE_DATE,                            
+                            DUE_DATE = d.DUE_DATE,
                             CREATE_DATE = d.CREATE_DATE,
                             CREATE_BY = d.CREATE_BY,
                             MODIFY_DATE = d.MODIFY_DATE,
@@ -130,6 +156,55 @@ namespace BusinessLibrary.Repository
                 else
                     return null;
             }
+        }
+        #endregion
+
+        #region Privates
+        /// <summary>
+        /// Gets the api returnable, dates wrapped sums
+        /// </summary>
+        /// <param name="sums">Requires: <i>dateType</i>-ordered ASC!</param>
+        /// <param name="dates">Requires: ordered ASC!</param>
+        /// <param name="dateType"></param>
+        /// <returns></returns>
+        private SumsOnDayWrap AssableSumsWithDates(List<Sum> sums, List<DateTime> dates, DateTypeEnum dateType)
+        {
+            SumsOnDayWrap ret = new SumsOnDayWrap();
+            if (dateType == DateTypeEnum.INPUT_DATE) ret.dateType = "INPUT_DATE";
+            else if (dateType == DateTypeEnum.ACCOUNT_DATE) ret.dateType = "ACCOUNT_DATE";
+            else if (dateType == DateTypeEnum.DUE_DATE) ret.dateType = "DUE_DATE";
+
+            int i = 0;
+            int j = 0;
+            while (i < dates.Count)
+            {
+                SumsOnDay dayData = new SumsOnDay();
+                dayData.date = dates[i];
+
+                DateTime? sumDate = sums[j].INPUT_DATE; // default set
+                if (dateType == DateTypeEnum.INPUT_DATE) sumDate = sums[j].INPUT_DATE;
+                else if (dateType == DateTypeEnum.ACCOUNT_DATE) sumDate = sums[j].ACCOUNT_DATE;
+                else if (dateType == DateTypeEnum.DUE_DATE) sumDate = sums[j].DUE_DATE;
+
+                if (dates[i] < sumDate)
+                {
+                    i++;                    
+                }
+                else if (dates[i] == sumDate)
+                {
+                    while(dates[i] == sumDate)
+                    {
+                        dayData.data.Add(sums[j]);
+                        j++;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Dates and Sums' dates start doesn't match!");
+                }
+                ret.data.Add(dayData);
+            }
+            return ret;
         }
         #endregion
     }
