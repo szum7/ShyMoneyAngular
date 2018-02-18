@@ -28,7 +28,7 @@ export class SumComponent implements OnInit {
 
     loadData() {
         let _this = this;
-        this.sumService.get(_this.fromDate, _this.toDate).subscribe(function (response) {
+        this.sumService.getOnDates("INPUT_DATE", _this.fromDate, _this.toDate).subscribe(function (response) {
             console.log(response);
             _this.sums = response.data;
         });

@@ -16,6 +16,7 @@ namespace BusinessLibrary.Repository
         #region Get Methods
         public SumsOnDayWrap GetOnDates(DateTypeEnum dateType, DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
         {
+            // Set default dates
             DateTime start = DateTime.Now.AddDays(-60);
             if (FROM_DATE != null)
                 start = FROM_DATE.Value;
@@ -23,11 +24,13 @@ namespace BusinessLibrary.Repository
             DateTime end = DateTime.Now.AddDays(60);
             if (TO_DATE != null)
                 end = TO_DATE.Value;
-            if (TO_DATE == null && FROM_DATE != null)
+            else if (TO_DATE == null && FROM_DATE != null)
                 end = FROM_DATE.Value.AddDays(60);
 
+            // Get dates
             List<DateTime> dates = Global.GetDatesInRange(start, end);
 
+            // Get sums
             List<Sum> sums = new List<Sum>();
             if (dateType == DateTypeEnum.INPUT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.INPUT_DATE).ToList();
             else if (dateType == DateTypeEnum.ACCOUNT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.ACCOUNT_DATE).ToList();
@@ -128,27 +131,23 @@ namespace BusinessLibrary.Repository
                     {
                         ID = SUM.ID,
                         TITLE = SUM.TITLE,
-                        SUM = SUM.SUM,
-                        INPUT_DATE = SUM.INPUT_DATE,
-                        ACCOUNT_DATE = SUM.ACCOUNT_DATE,
-                        DUE_DATE = SUM.DUE_DATE,
+                        SUM = SUM.SUM,                        
                         CREATE_DATE = now,
                         CREATE_BY = SUM.CREATE_BY,
                         MODIFY_DATE = now,
                         MODIFY_BY = SUM.MODIFY_BY,
                         STATE = "Y"
                     };
+                    this.ResolveDateTypeDefaults(sum, SUM);
                     context.Sum.Add(sum);
                 }
                 else
                 {
                     sum.TITLE = SUM.TITLE;
-                    sum.SUM = SUM.SUM;
-                    sum.INPUT_DATE = SUM.INPUT_DATE;
-                    sum.ACCOUNT_DATE = SUM.ACCOUNT_DATE;
-                    sum.DUE_DATE = SUM.DUE_DATE;
+                    sum.SUM = SUM.SUM;                    
                     sum.MODIFY_DATE = now;
                     sum.MODIFY_BY = SUM.MODIFY_BY;
+                    this.ResolveDateTypeDefaults(sum, SUM);
                 }
 
                 if (context.SaveChanges() >= 1)
@@ -176,35 +175,52 @@ namespace BusinessLibrary.Repository
 
             int i = 0;
             int j = 0;
-            while (i < dates.Count)
+            while (i < dates.Count && j < sums.Count)
             {
                 SumsOnDay dayData = new SumsOnDay();
-                dayData.date = dates[i];
+                dayData.date = dates[i].Date;
 
-                DateTime? sumDate = sums[j].INPUT_DATE; // default set
-                if (dateType == DateTypeEnum.INPUT_DATE) sumDate = sums[j].INPUT_DATE;
-                else if (dateType == DateTypeEnum.ACCOUNT_DATE) sumDate = sums[j].ACCOUNT_DATE;
-                else if (dateType == DateTypeEnum.DUE_DATE) sumDate = sums[j].DUE_DATE;
+                DateTime sumDate = sums[j].INPUT_DATE.Value; // default set
+                if (dateType == DateTypeEnum.ACCOUNT_DATE) sumDate = sums[j].ACCOUNT_DATE.Value;
+                else if (dateType == DateTypeEnum.DUE_DATE) sumDate = sums[j].DUE_DATE.Value;
 
-                if (dates[i] < sumDate)
+                if (dayData.date == sumDate.Date)
                 {
-                    i++;                    
-                }
-                else if (dates[i] == sumDate)
-                {
-                    while(dates[i] == sumDate)
+                    while(j < sums.Count && dayData.date == sumDate.Date)
                     {
                         dayData.data.Add(sums[j]);
                         j++;
+
+                        if(j < sums.Count)
+                        {
+                            sumDate = sums[j].INPUT_DATE.Value; // default set
+                            if (dateType == DateTypeEnum.ACCOUNT_DATE) sumDate = sums[j].ACCOUNT_DATE.Value;
+                            else if (dateType == DateTypeEnum.DUE_DATE) sumDate = sums[j].DUE_DATE.Value;
+                        }
                     }
                 }
-                else
-                {
-                    throw new Exception("Dates and Sums' dates start doesn't match!");
-                }
+                i++;
                 ret.data.Add(dayData);
             }
             return ret;
+        }
+
+        private void ResolveDateTypeDefaults(Sum setSum, Sum inputSum)
+        {
+            DateTime? defDate = inputSum.INPUT_DATE;
+            if (defDate == null)
+                defDate = inputSum.ACCOUNT_DATE;
+            if (defDate == null)
+                defDate = inputSum.DUE_DATE;
+            if (defDate == null)
+                throw new Exception("At least one date should be not null.");
+
+            if (inputSum.INPUT_DATE == null)
+                setSum.INPUT_DATE = defDate;
+            if (inputSum.ACCOUNT_DATE == null)
+                setSum.ACCOUNT_DATE = defDate;
+            if (inputSum.DUE_DATE == null)
+                setSum.DUE_DATE = defDate;
         }
         #endregion
     }

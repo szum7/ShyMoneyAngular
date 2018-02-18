@@ -27,6 +27,8 @@
     <None Remove="ClientApp\app\_models\modelbase.ts" />
     <None Remove="ClientApp\app\_models\sum.ts" />
     <None Remove="ClientApp\app\_models\tag.ts" />
+    <None Remove="ClientApp\app\_models\_custom_models\sumsonday.ts" />
+    <None Remove="ClientApp\app\_models\_custom_models\sumsondaywrap.ts" />
     <None Remove="ClientApp\app\_services\index.ts" />
     <None Remove="ClientApp\app\_services\sum.service.ts" />
   </ItemGroup>
@@ -46,6 +48,8 @@
     <TypeScriptCompile Include="ClientApp\app\_models\modelbase.ts" />
     <TypeScriptCompile Include="ClientApp\app\_models\sum.ts" />
     <TypeScriptCompile Include="ClientApp\app\_models\tag.ts" />
+    <TypeScriptCompile Include="ClientApp\app\_models\_custom_models\sumsonday.ts" />
+    <TypeScriptCompile Include="ClientApp\app\_models\_custom_models\sumsondaywrap.ts" />
     <TypeScriptCompile Include="ClientApp\app\_services\index.ts" />
     <TypeScriptCompile Include="ClientApp\app\_services\sum.service.ts" />
   </ItemGroup>

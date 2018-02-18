@@ -9,6 +9,25 @@ export class SumService {
     constructor(private http: Http) {
     }
 
+    getOnDates(dateType: string, FROM_DATE?: Date, TO_DATE?: Date) {
+        var headers = new Headers();
+        headers.append("If-Modified-Since", "Tue, 24 July 2017 00:00:00 GMT");
+
+        var url = "/Sum/GetOnDates";
+        url += "?dateType=" + dateType;
+        if (FROM_DATE != null) {
+            url += "&";
+            url += "FROM_DATE=" + FROM_DATE.toJSON();
+        }
+        if (TO_DATE != null) {
+            url += "&";
+            url += "TO_DATE=" + TO_DATE.toJSON();
+        }
+
+        return this.http.get(url, { headers: headers })
+            .map(response => <any>(<Response>response).json());
+    }
+
     get(FROM_DATE?: Date, TO_DATE?: Date) {
         var headers = new Headers();
         headers.append("If-Modified-Since", "Tue, 24 July 2017 00:00:00 GMT");
