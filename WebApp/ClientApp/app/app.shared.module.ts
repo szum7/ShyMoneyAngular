@@ -26,6 +26,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
 
 @NgModule({
     declarations: [
+        NavMenuComponent,
         AppComponent,
         NavMenuComponent,
         SumComponent
