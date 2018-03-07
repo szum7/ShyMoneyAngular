@@ -13,6 +13,10 @@ import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { SumComponent } from './components/sum/sum.component';
 
+//import { ModelBase } from './global/modelbase';
+//import { SumModel } from './global/summodel';
+//import { SumsOnDayWrap } from './global/sumsondaywrap';
+
 import { SumService } from './_services/index';
 
 class AppBaseRequestOptions extends BaseRequestOptions {
@@ -37,6 +41,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         { provide: RequestOptions, useClass: AppBaseRequestOptions }
     ],
     imports: [
+        //ModelBase, SumModel, SumsOnDayWrap,
         CommonModule,
         HttpModule,
         FormsModule,

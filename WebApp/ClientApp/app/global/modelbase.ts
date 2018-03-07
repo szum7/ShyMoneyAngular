@@ -1,4 +1,4 @@
-﻿class ModelBase {
+﻿export class ModelBase {
     CREATE_BY?: number;
     CREATE_DATE?: Date;
     MODIFY_BY?: number;

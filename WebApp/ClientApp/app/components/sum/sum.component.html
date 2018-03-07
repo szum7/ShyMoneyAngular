@@ -1,17 +1,17 @@
 ﻿<h3>Range: {{rangeValues[0] + ' - ' + rangeValues[1]}}</h3>
 <p-slider [(ngModel)]="rangeValues" [style]="{'width':'200px'}" [range]="true"></p-slider>
 
-<div class="day" *ngFor="let day of days">
+<div class="day" *ngFor="let day of sumsOnDayWrap.data">
     <div class="header">
         <span>{{day.date}}</span>
 		<div class="sbtn" (click)="add(day)"><span class="glyphicon glyphicon-plus"></span></div>
     </div>
     <div class="records">
-        <div class="record" *ngFor="let sum of day.sums">
+        <div class="record" *ngFor="let sum of day.data">
             <ul class="record-fields">
                 <li class="field"><input type="text" placeholder="Title..." [(value)]="sum.title" /></li>
                 <li class="field"><input type="text" placeholder="Sum..." [(value)]="sum.sum" /></li>
-                <li class="field"><input type="text" placeholder="Input date..." [(value)]="sum.input_date" /></li>
+                <li class="field"><input type="text" placeholder="Input date..." [(value)]="sum.inpuT_DATE" /></li>
                 <li class="field"><div class="sbtn" (click)="save(sum)"><span class="glyphicon glyphicon-check"></span></div></li>
                 <li class="field"><div class="sbtn" (click)="delete(sum.id)"><span class="glyphicon glyphicon-minus"></span></div></li>
             </ul>
