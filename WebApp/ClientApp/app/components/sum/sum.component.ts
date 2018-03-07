@@ -1,18 +1,17 @@
-﻿import { Component, OnInit } from '@angular/core';
+// external libraries
+import { Component, OnInit } from '@angular/core';
 import { SumService } from '../../_services/index';
 import { ToastrService } from 'toastr-ng2';
 import { InputTextModule, DataTableModule, ButtonModule, DialogModule } from 'primeng/primeng';
 
-//import { SumsOnDay } from '../../_models/_custom_models/sumsonday';
-//import { SumsOnDayWrap } from '../../_models/_custom_models/sumsondaywrap';
-
-//import '../../_models/tag';
-//import '../../_models/sum';
-//import '../../_models/_custom_models/sumsonday';
-//import '../../_models/_custom_models/sumsondaywrap';
-
+// models
 import { SumModel } from './../../global/summodel';
 import { SumsOnDayWrap } from './../../global/sumsondaywrap';
+
+class Ordering {
+    public orderBy: string;
+    public steep: string;
+}
 
 @Component({
     selector: 'sum',
@@ -23,8 +22,7 @@ export class SumComponent implements OnInit {
 
     public fromDate: Date;
     public toDate: Date;
-    public sumModel: SumModel;
-
+    public ordering: Ordering;
     public sumsOnDayWrap: SumsOnDayWrap;
 
     // BEGIN test
@@ -33,15 +31,15 @@ export class SumComponent implements OnInit {
     // END test
 
     constructor(private sumService: SumService, private toastrService: ToastrService) {
-        // TODO megszerezni user beállításaiból adatbázisból
-        this.sumsOnDayWrap = new SumsOnDayWrap();
-        console.log(this.sumsOnDayWrap.dateType);
-        console.log((new SumModel()));
+        // TODO megszerezni user beállításaiból adatbázisból       
         this.fromDate = new Date(new Date().setDate(new Date().getDate() - 60));
         this.toDate = new Date(new Date().setDate(new Date().getDate()));
-
-        this.sumModel = new SumModel();
-        this.sumModel.CREATE_BY = 1;
+        this.sumsOnDayWrap = new SumsOnDayWrap(); 
+        this.ordering = new Ordering();
+        
+        // set defaults
+        this.ordering.orderBy = "INPUT_DATE";        
+        this.ordering.steep = "ASC";
     }
 
     ngOnInit() {
@@ -50,10 +48,10 @@ export class SumComponent implements OnInit {
 
     loadData() {
         let _this = this;
-        //this.sumService.getOnDates("INPUT_DATE", _this.fromDate, _this.toDate).subscribe(function (response) {
-        //    console.log(response);
-        //    _this.sumsOnDayWrap = response;
-        //});
+        this.sumService.getOnDates(_this.ordering.orderBy, _this.fromDate, _this.toDate).subscribe(function (response) {
+            console.log(response);
+            _this.sumsOnDayWrap = response;
+        });
     }
 
     save(d: SumModel) {
