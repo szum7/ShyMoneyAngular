@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace CRUD.Models
+namespace WebApp.Models
 {
     public partial class DBSHYMONEYV1Context : DbContext
     {

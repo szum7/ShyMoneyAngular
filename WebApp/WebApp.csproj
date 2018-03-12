@@ -22,14 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\components\daterangepicker\daterangepicker.component.ts" />
     <None Remove="ClientApp\app\components\sum\sum.component.ts" />
     <None Remove="ClientApp\app\global\models.ts" />
-    <None Remove="ClientApp\app\_models\index.ts" />
-    <None Remove="ClientApp\app\_models\modelbase.ts" />
-    <None Remove="ClientApp\app\_models\sum.ts" />
-    <None Remove="ClientApp\app\_models\tag.ts" />
-    <None Remove="ClientApp\app\_models\_custom_models\sumsonday.ts" />
-    <None Remove="ClientApp\app\_models\_custom_models\sumsondaywrap.ts" />
     <None Remove="ClientApp\app\_services\index.ts" />
     <None Remove="ClientApp\app\_services\sum.service.ts" />
   </ItemGroup>
@@ -44,21 +39,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\daterangepicker\daterangepicker.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\sum\sum.component.ts" />
-    <TypeScriptCompile Include="ClientApp\app\global\models.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\summodel.ts" />
-    <TypeScriptCompile Include="ClientApp\app\_models\index.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\modelbase.ts" />
-    <TypeScriptCompile Include="ClientApp\app\_models\sum.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\tagmodel.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\sumsonday.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\sumsondaywrap.ts" />
     <TypeScriptCompile Include="ClientApp\app\_services\index.ts" />
     <TypeScriptCompile Include="ClientApp\app\_services\sum.service.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ClientApp\app\_models\_custom_models\" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

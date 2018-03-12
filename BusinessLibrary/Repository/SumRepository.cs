@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using CRUD.Models;
+using WebApp.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using BusinessLibrary.Common;

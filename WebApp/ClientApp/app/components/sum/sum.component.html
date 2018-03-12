@@ -1,5 +1,5 @@
-﻿<h3>Range: {{rangeValues[0] + ' - ' + rangeValues[1]}}</h3>
-<p-slider [(ngModel)]="rangeValues" [style]="{'width':'200px'}" [range]="true"></p-slider>
+﻿<h3>Range: {{showDateRange()}}</h3>
+<p-slider [(ngModel)]="dateRange" [style]="{'width':'100%'}" [range]="true" [min]="minDate" [max]="maxDate"></p-slider>
 
 <div class="day" *ngFor="let day of sumsOnDayWrap.data">
     <div class="header">

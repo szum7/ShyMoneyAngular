@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BusinessLibrary.Repository;
-using CRUD.Models;
+using WebApp.Models;
 using BusinessLibrary.Common.Enum;
 
-namespace CRUD.Controllers
+namespace WebApp.Controllers
 {
     public class SumController : Controller
     {

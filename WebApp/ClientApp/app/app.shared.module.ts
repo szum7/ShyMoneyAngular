@@ -6,16 +6,13 @@ import { HttpModule, Headers, RequestOptions, BaseRequestOptions } from '@angula
 import { APP_BASE_HREF, CommonModule, Location, LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 import { ToastrModule } from 'toastr-ng2'; // third party module to display toast
-import { InputTextModule, DataTableModule, ButtonModule, DialogModule } from 'primeng/primeng'; //PRIMENG - Third party module
+import { InputTextModule, DataTableModule, ButtonModule, DialogModule, CalendarModule } from 'primeng/primeng'; //PRIMENG - Third party module
 import { SliderModule } from 'primeng/slider';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { SumComponent } from './components/sum/sum.component';
-
-//import { ModelBase } from './global/modelbase';
-//import { SumModel } from './global/summodel';
-//import { SumsOnDayWrap } from './global/sumsondaywrap';
+import { CounterComponent } from './components/counter/counter.component';
 
 import { SumService } from './_services/index';
 
@@ -33,7 +30,8 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         NavMenuComponent,
         AppComponent,
         NavMenuComponent,
-        SumComponent
+        SumComponent,
+        CounterComponent
     ],
     providers: [
         SumService,
@@ -41,13 +39,12 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         { provide: RequestOptions, useClass: AppBaseRequestOptions }
     ],
     imports: [
-        //ModelBase, SumModel, SumsOnDayWrap,
         CommonModule,
         HttpModule,
         FormsModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
-        InputTextModule, DataTableModule, ButtonModule, DialogModule, SliderModule,
+        InputTextModule, DataTableModule, ButtonModule, DialogModule, SliderModule, CalendarModule, 
         RouterModule.forRoot([
             { path: '', redirectTo: 'sum', pathMatch: 'full' },
             { path: 'sum', component: SumComponent },
