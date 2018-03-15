@@ -1,1 +1,21 @@
-﻿<p-slider [(ngModel)]="dateRange" [style]="{'width':'100%'}" [range]="true" [min]="minDate" [max]="maxDate"></p-slider>
+﻿<div class="drpicker">
+
+    <p>{{showRange()}}</p>
+    <p>{{showRange2()}}</p>
+    <p>{{getDateSub()}}</p>
+
+    <div>
+        <div class="slider ib">
+            <div class="inputs">
+                <p-calendar class="pcleft" [style.margin-left]="getMarginInputFromDateCss()" [(ngModel)]="pickDateFrom" (ngModelChange)="dateInputChanged()"></p-calendar>
+                <p-calendar class="pcright" [style.margin-left]="getMarginInputToDateCss()" [(ngModel)]="pickDateTo" (ngModelChange)="dateInputChanged()"></p-calendar>
+            </div>
+            <div class="relative">
+                <!--<span class="time-show moving" [style.left]="timeShowLeftCss()">{{getDateSub()}}</span>-->
+                <p-slider [(ngModel)]="dateRange" [style]="{'width':'100%'}" [range]="true" [min]="minDate" [max]="maxDate" [step]="sliderStep" (onChange)="sliderInputChanged()"></p-slider>
+            </div>
+        </div><div class="showings ib">
+            <span class="time-show" [style.left]="timeShowLeftCss()">{{getDateSub()}}</span>
+        </div>
+    </div>
+</div>

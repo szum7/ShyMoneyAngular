@@ -1,1 +1,41 @@
-﻿
+﻿.drpicker{
+    padding:0 15px;
+}
+.ib{
+    display:inline-block;
+    vertical-align:top;
+}
+.drpicker .slider{
+    width:calc(100% - 80px);
+}
+.drpicker .showings{
+    width:80px;
+}
+.inputs{
+    height:30px;
+}
+.pcleft{
+    float:left;
+}
+.pcright{
+    float:left;
+    clear:both;
+    margin-top:13px;
+}
+.relative{
+    position:relative;
+}
+.time-show {
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 5px;
+    background: #333;
+}
+.time-show.moving {
+    position: absolute;
+    z-index: 3000;
+    top: 16px;
+    pointer-events: none;
+    opacity: 0.3;
+}

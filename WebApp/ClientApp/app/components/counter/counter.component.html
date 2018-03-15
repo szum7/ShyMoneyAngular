@@ -1,24 +1,10 @@
 <div style="padding:50px;">
-    <h1>Counter</h1>
+    <h1>TESTER</h1>
 
-    <p>This is a simple example of an Angular component.</p>
-
-    <p>Current count: <strong>{{ currentCount }}</strong></p>
-
-    <button (click)="incrementCounter()">Increment</button>
-
-    <p>{{dateRange[0]}} - {{dateRange[1]}}</p>
-    <p>{{minDate}} - {{maxDate}}</p>
     <p>{{soutVal()}}</p>
-    <!--<input type="text" [(ngModel)]="dateRange[0]" name="min" />-->
-    <!--<input type="text" [(ngModel)]="dateRange[1]" name="max" />-->
+
     <p-calendar [(ngModel)]="pickDateFrom" (ngModelChange)="dateInputChanged()"></p-calendar>
     <p-calendar [(ngModel)]="pickDateTo" (ngModelChange)="dateInputChanged()"></p-calendar>
-    <!--<p-calendar [(ngModel)]="dateRange[1]"></p-calendar>-->
-    <p-slider [(ngModel)]="dateRange" [style]="{'width':'100%'}" [range]="true" [min]="minDate" [max]="maxDate"></p-slider>
-    <p>{{myTest[0]}}</p>
-    <!--<p-slider [(ngModel)]="myTest" [style]="{'width':'50%'}" [min]="10" [max]="20"></p-slider>-->
-    <p-slider [(ngModel)]="myTest" [style]="{'width':'50%'}" [range]="true" [min]="10" [max]="20"></p-slider>
-    <input type="button" value="TEST" (click)="changeTestVal()" />
+    <p-slider [(ngModel)]="dateRange" [style]="{'width':'100%'}" [range]="true" [min]="minDate" [max]="maxDate" (onChange)="sliderInputChanged()"></p-slider>    
 
 </div>

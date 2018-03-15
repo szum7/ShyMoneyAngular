@@ -5,13 +5,7 @@ import { Component } from '@angular/core';
     templateUrl: './counter.component.html'
 })
 export class CounterComponent {
-
-    public min = 10;
-    public max = 200;
-    public val = 50;
-
-    public myTest = [15, 17];
-
+    
     public pickDateFrom: Date = new Date(2010, 9, 1);
     public pickDateTo: Date = new Date(2018, 4, 10);
 
@@ -20,15 +14,13 @@ export class CounterComponent {
     public dateRange: Array<number> = [this.minDate, this.maxDate];
     public psStep = 86400000;
 
-    public changeTestVal() {
-        this.myTest[0] = 11;
+    public dateInputChanged() {
+        this.dateRange = [this.pickDateFrom.getTime(), this.pickDateTo.getTime()];
     }
 
-    public dateInputChanged() {
-        console.log(this.pickDateFrom.getTime());
-        console.log(this.pickDateTo.getTime());
-        this.dateRange[0] = this.pickDateFrom.getTime();
-        this.dateRange[1] = this.pickDateTo.getTime();
+    public sliderInputChanged() {
+        this.pickDateFrom = new Date(this.dateRange[0]);
+        this.pickDateTo = new Date(this.dateRange[1]);
     }
 
     public soutVal() {
@@ -50,10 +42,5 @@ export class CounterComponent {
 
     public soutVal2() {
         return (new Date(this.dateRange[0])) + " - " + (new Date(this.dateRange[1]));
-    }
-
-    public currentCount = 0;
-    public incrementCounter() {
-        this.currentCount++;
     }
 }
