@@ -7,41 +7,60 @@
 })
 export class DateRangePickerComponent implements OnInit {
 
-    counterValue: string;
-    @Output() counterChange = new EventEmitter();
-
-    @Input()
-    get counter() {
-        return this.counterValue;
+    pickDateFromValue: Date;
+    @Input() get pickDateFrom() { return this.pickDateFromValue; }
+    @Output() pickDateFromChange = new EventEmitter();
+    set pickDateFrom(val) {
+        this.pickDateFromValue = val;
+        this.pickDateFromChange.emit(this.pickDateFromValue);
     }
 
-    set counter(val) {
-        this.counterValue = val;
-        this.counterChange.emit(this.counterValue);
+    pickDateToValue: Date;
+    @Input() get pickDateTo() { return this.pickDateToValue; }
+    @Output() pickDateToChange = new EventEmitter();
+    set pickDateTo(val) {
+        this.pickDateToValue = val;
+        this.pickDateToChange.emit(this.pickDateToValue);
     }
 
-    decrement() {
-        this.counter = "barack";
-    }
+    minDate: number = (new Date(2017, 1, 1)).getTime();
+    //minDateValue: number;
+    //@Input() get minDate() { return this.minDateValue; }
+    //@Output() minDateChange = new EventEmitter();
+    //set minDate(val) {
+    //    this.minDateValue = val;
+    //    this.minDateChange.emit(this.minDateValue);
+    //}
+    
+    maxDate: number = (new Date()).getTime();
+    //maxDateValue: number;
+    //@Input() get maxDate() { return this.maxDateValue; }
+    //@Output() maxDateChange = new EventEmitter();
+    //set maxDate(val) {
+    //    this.maxDateValue = val;
+    //    this.maxDateChange.emit(this.maxDateValue);
+    //}
 
-    public pickDateFrom: Date;
-    public pickDateTo: Date;
-
-    public minDate: number;
-    public maxDate: number;
     public dateRange: Array<number>;
     public sliderStep: number;
 
     constructor() {        
-        this.minDate = (new Date(2017, 1, 1)).getTime();
-        this.maxDate = (new Date()).getTime();
-
-        var date = new Date();
-        this.pickDateFrom = new Date(date.getFullYear() - 1, date.getMonth(), 1);
-        this.pickDateTo = date;
+        this.setDefaultMinMaxDate();
+        this.setDefaultFromTo();
 
         this.dateRange = [this.pickDateFrom.getTime(), this.pickDateTo.getTime()];
         this.sliderStep = 86400000;
+    }
+
+    private setDefaultMinMaxDate(): void {
+        if (!this.minDate) this.minDate = (new Date(2017, 1, 1)).getTime();
+        if (!this.maxDate) this.maxDate = (new Date()).getTime();
+    }
+
+    private setDefaultFromTo(): void {
+        var date = new Date();
+        if (!this.pickDateFrom) this.pickDateFrom = new Date(date.getFullYear() - 1, date.getMonth(), 1);
+        if (!this.pickDateTo) this.pickDateTo = date;
     }
 
     ngOnInit(): void {

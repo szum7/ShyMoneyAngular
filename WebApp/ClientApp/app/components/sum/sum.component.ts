@@ -19,30 +19,23 @@ class Ordering {
     styleUrls: ['./sum.component.css']
 })
 export class SumComponent implements OnInit {
-
-    public fromDate: Date;
-    public toDate: Date;
+        
     public ordering: Ordering;
     public sumsOnDayWrap: SumsOnDayWrap;
 
-    // BEGIN test
-    //public sumsOnDayWrap = { data: [] };
-    public counterValue: string = "alma";
-    public soutInpi() {
-        console.log(this.counterValue);
-    }
-    // END test
+    // DateRangePicker properties
+    public pickDateFromValue: Date;
+    public pickDateToValue: Date;
+    //public minDate: number = (new Date(2017, 1, 1)).getTime();
+    //public maxDate: number = (new Date()).getTime();
 
-    // BEGIN DateRangePicker
-    public dateRange: number[];
-    public minDate: number;
-    public maxDate: number;
-    // END DateRangePicker
+    // BEGIN test   
+    // END test
     
     constructor(private sumService: SumService, private toastrService: ToastrService) {
-        // TODO megszerezni user beállításaiból adatbázisból       
-        this.fromDate = new Date(new Date().setDate(new Date().getDate() - 70));
-        this.toDate = new Date(new Date().setDate(new Date().getDate()));
+
+        // TODO megszerezni user beállításaiból adatbázisból
+
         this.sumsOnDayWrap = new SumsOnDayWrap(); 
         this.ordering = new Ordering();
         
@@ -50,47 +43,31 @@ export class SumComponent implements OnInit {
         this.ordering.orderBy = "INPUT_DATE";        
         this.ordering.steep = "ASC";
 
-        this.minDate = (new Date(2010, 1, 1)).getTime();
-        this.maxDate = new Date().getTime();
-        this.dateRange = [(new Date(2010, 1, 1).getTime()) + 50000000000, (new Date().getTime()) - 50000000000];
+        // Init DateRangePicker properties
+        var date = new Date();
+        this.pickDateFromValue = new Date(date.getFullYear() - 1, date.getMonth(), 1);
+        this.pickDateToValue = new Date(2018, 2, 14);
     }
 
     ngOnInit() {
         this.loadData();
     }
 
-    public showDateRange(): string {
-        var str: string = "";
-        var dateFrom: Date = new Date(this.dateRange[0]);
-        var dateTo: Date = new Date(this.dateRange[1]);
-        str += dateFrom.getFullYear() + "-";
-        str += (dateFrom.getMonth() < 10) ? "0" : "";
-        str += dateFrom.getMonth() + "-";
-        str += (dateFrom.getDay() < 10) ? "0" : "";
-        str += dateFrom.getDay() + " -> ";
-        str += dateTo.getFullYear() + "-";
-        str += (dateTo.getMonth() < 10) ? "0" : "";
-        str += dateTo.getMonth() + "-";
-        str += (dateTo.getDay() < 10) ? "0" : "";
-        str += dateTo.getDay();
-        return str;
-    }
-
-    loadData() {
+    public loadData(): void {
         let _this = this;
-        this.sumService.getOnDates(_this.ordering.orderBy, _this.fromDate, _this.toDate).subscribe(function (response) {
+        this.sumService.getOnDates(_this.ordering.orderBy, _this.pickDateFromValue, _this.pickDateToValue).subscribe(function (response) {
             console.log(response);
             _this.sumsOnDayWrap = response;
         });
     }
 
-    save(d: SumModel) {
+    public save(d: SumModel): void {
         this.sumService.save(d).subscribe(function (response) {
             console.log(response);
         });
     }
 
-    delete(id: number) {
+    public delete(id: number): void {
         this.sumService.delete(id).subscribe(function (response) {
             console.log(response);
         });
