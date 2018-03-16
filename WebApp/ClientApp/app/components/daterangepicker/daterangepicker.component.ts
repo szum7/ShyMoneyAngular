@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'date-range-picker',
@@ -6,6 +6,23 @@
     styleUrls: ['./daterangepicker.component.css']
 })
 export class DateRangePickerComponent implements OnInit {
+
+    counterValue: string;
+    @Output() counterChange = new EventEmitter();
+
+    @Input()
+    get counter() {
+        return this.counterValue;
+    }
+
+    set counter(val) {
+        this.counterValue = val;
+        this.counterChange.emit(this.counterValue);
+    }
+
+    decrement() {
+        this.counter = "barack";
+    }
 
     public pickDateFrom: Date;
     public pickDateTo: Date;
@@ -36,9 +53,24 @@ export class DateRangePickerComponent implements OnInit {
         return "calc(" + (percent / 2) + "% - 30px)";
     }
 
-    public getDateSub(): string {
+    public getDaysInRange(): string {
         var days = Math.round(((this.pickDateTo as any) - (this.pickDateFrom as any)) / (1000 * 60 * 60 * 24));
         return days + " days";
+    }
+
+    public getMonthsInRange(): string {
+        var months;
+        months = (this.pickDateTo.getFullYear() - this.pickDateFrom.getFullYear()) * 12;
+        months -= this.pickDateFrom.getMonth() + 1;
+        months += this.pickDateTo.getMonth();
+        //return (months <= 0 ? 0 : months) + " months";
+        return (this.pickDateTo.getMonth() - this.pickDateFrom.getMonth() + (12 * (this.pickDateTo.getFullYear() - this.pickDateFrom.getFullYear()))) + " months";
+    }
+
+    public getYearsInRange(): string {
+        var ageDifMs = (this.pickDateTo as any) - this.pickDateFrom.getTime();
+        var ageDate = new Date(ageDifMs); // miliseconds from epoch
+        return Math.abs(ageDate.getUTCFullYear() - 1970) + " years";
     }
 
     public getMarginInputFromDateCss(): string {

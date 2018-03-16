@@ -1,26 +1,26 @@
 ﻿.drpicker{
-    padding:0 15px;
 }
-.ib{
+.ib {
     display:inline-block;
     vertical-align:top;
 }
 .drpicker .slider{
-    width:calc(100% - 80px);
+    width:calc(100% - 100px);
 }
 .drpicker .showings{
-    width:80px;
+    width:100px;
 }
 .inputs{
     height:30px;
 }
-.pcleft{
-    float:left;
+.pcleft {
+    float: left;
+    margin-top: 3px;
 }
 .pcright{
     float:left;
     clear:both;
-    margin-top:13px;
+    margin-top:11px;
 }
 .relative{
     position:relative;
@@ -39,3 +39,18 @@
     pointer-events: none;
     opacity: 0.3;
 }
+.showings ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+.showings ul li {
+    margin-bottom:2px;
+}
+    .showings ul li span {
+        color: #838688;
+        background: #444;
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 13px;
+    }

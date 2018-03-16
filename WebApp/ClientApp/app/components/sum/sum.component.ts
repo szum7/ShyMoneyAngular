@@ -27,6 +27,10 @@ export class SumComponent implements OnInit {
 
     // BEGIN test
     //public sumsOnDayWrap = { data: [] };
+    public counterValue: string = "alma";
+    public soutInpi() {
+        console.log(this.counterValue);
+    }
     // END test
 
     // BEGIN DateRangePicker

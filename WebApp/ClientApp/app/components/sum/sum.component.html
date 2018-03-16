@@ -1,4 +1,15 @@
-﻿<h3>Range: {{showDateRange()}}</h3>
+﻿<div class="header2 padd10">
+    <div class="calc-mw-200 ib vertical-top">
+
+        <date-range-picker [(counter)]="counterValue"></date-range-picker>
+        <p style="color:white;">{{counterValue}}</p>
+
+    </div><div class="w-200 ib vertical-top">
+        <p-button label="OK"></p-button>
+        <input type="button" value="SOUT" (click)="soutInpi()" />
+    </div>
+</div>
+<!--<h3>Range: {{showDateRange()}}</h3>
 <p-slider [(ngModel)]="dateRange" [style]="{'width':'100%'}" [range]="true" [min]="minDate" [max]="maxDate"></p-slider>
 
 <div class="day" *ngFor="let day of sumsOnDayWrap.data">
@@ -17,4 +28,4 @@
             </ul>
         </div>
     </div>
-</div>
+</div>-->

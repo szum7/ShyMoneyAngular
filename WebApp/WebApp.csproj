@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\dist\externalcss\app.shared.css" />
     <None Include="wwwroot\dist\externalcss\primeng\themes\omega\fonts\roboto-v15-latin-regular.svg" />
     <None Include="wwwroot\dist\externalcss\primeng\themes\omega\fonts\roboto-v15-latin-regular.woff2" />
   </ItemGroup>

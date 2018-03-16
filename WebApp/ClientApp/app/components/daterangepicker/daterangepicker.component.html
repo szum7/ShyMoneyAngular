@@ -1,9 +1,11 @@
 ﻿<div class="drpicker">
 
-    <p>{{showRange()}}</p>
+    <!--<p>{{showRange()}}</p>
     <p>{{showRange2()}}</p>
     <p>{{getDateSub()}}</p>
-
+    <p>{{inpi}}</p>-->
+    <p style="color:white;">{{counter}}</p>
+    <input type="button" value="counterValue--" (click)="decrement()" />
     <div>
         <div class="slider ib">
             <div class="inputs">
@@ -14,8 +16,12 @@
                 <!--<span class="time-show moving" [style.left]="timeShowLeftCss()">{{getDateSub()}}</span>-->
                 <p-slider [(ngModel)]="dateRange" [style]="{'width':'100%'}" [range]="true" [min]="minDate" [max]="maxDate" [step]="sliderStep" (onChange)="sliderInputChanged()"></p-slider>
             </div>
-        </div><div class="showings ib">
-            <span class="time-show" [style.left]="timeShowLeftCss()">{{getDateSub()}}</span>
+        </div><div class="showings pl15 ib">
+            <ul>
+                <li><span>{{getYearsInRange()}}</span></li>
+                <li><span>{{getMonthsInRange()}}</span></li>
+                <li><span>{{getDaysInRange()}}</span></li>
+            </ul>
         </div>
     </div>
 </div>
