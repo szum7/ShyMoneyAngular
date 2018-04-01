@@ -48,19 +48,19 @@ export class SumService {
             .map(response => <any>(<Response>response).json());
     }
 
-    save(SUM: SumModel): Observable<string> {
+    save(SUM: SumModel): Observable<SumModel> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let body = JSON.stringify(SUM);
 
         return this.http.post("/Sum/Save/", body, options)
-            .map(res => res.json().message)
+            .map(res => res.json())
             .catch(this.handleError);
     }
 
     delete(ID: number): Observable<string> {
         return this.http.delete("/Sum/Delete/" + ID)
-            .map(response => response.json().message)
+            .map(response => response.json())
             .catch(this.handleError);
     }
 

@@ -7,8 +7,8 @@ namespace BusinessLibrary.Repository
 {
     public interface ITagRepository
     {
-        List<Tag> Get();
-        Tag Save(Tag model);
+        List<TagModel> Get();
+        TagModel Save(TagModel model);
         bool Delete(int id);
     }
 }

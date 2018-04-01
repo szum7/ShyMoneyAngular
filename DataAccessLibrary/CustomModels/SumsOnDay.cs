@@ -8,10 +8,10 @@ namespace DataAccessLibrary.CustomModels
     public class SumsOnDay
     {
         public DateTime date { get; set; }
-        public List<Sum> data { get; set; }
+        public List<SumModel> data { get; set; }
         public SumsOnDay()
         {
-            this.data = new List<Sum>();
+            this.data = new List<SumModel>();
         }
     }
 }

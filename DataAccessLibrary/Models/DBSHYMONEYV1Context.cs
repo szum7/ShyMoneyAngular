@@ -6,11 +6,11 @@ namespace WebApp.Models
 {
     public partial class DBSHYMONEYV1Context : DbContext
     {
-        public virtual DbSet<Option> Option { get; set; }
-        public virtual DbSet<Sum> Sum { get; set; }
-        public virtual DbSet<SumTagConn> SumTagConn { get; set; }
-        public virtual DbSet<Tag> Tag { get; set; }
-        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<OptionModel> Option { get; set; }
+        public virtual DbSet<SumModel> Sum { get; set; }
+        public virtual DbSet<SumTagConnModel> SumTagConn { get; set; }
+        public virtual DbSet<TagModel> Tag { get; set; }
+        public virtual DbSet<UserModel> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -22,7 +22,7 @@ namespace WebApp.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Option>(entity =>
+            modelBuilder.Entity<OptionModel>(entity =>
             {
                 entity.ToTable("OPTION");
 
@@ -113,7 +113,7 @@ namespace WebApp.Models
                     .HasConstraintName("FK_OWNERID");
             });
 
-            modelBuilder.Entity<Sum>(entity =>
+            modelBuilder.Entity<SumModel>(entity =>
             {
                 entity.ToTable("SUM");
 
@@ -164,9 +164,15 @@ namespace WebApp.Models
                     .HasColumnName("TITLE")
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.Property(e => e.IS_PAYED)
+                    .IsRequired()
+                    .HasColumnName("IS_PAYED")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
             });
 
-            modelBuilder.Entity<SumTagConn>(entity =>
+            modelBuilder.Entity<SumTagConnModel>(entity =>
             {
                 entity.ToTable("SUM_TAG_CONN");
 
@@ -196,7 +202,7 @@ namespace WebApp.Models
                     .HasConstraintName("FK_TAGID");
             });
 
-            modelBuilder.Entity<Tag>(entity =>
+            modelBuilder.Entity<TagModel>(entity =>
             {
                 entity.ToTable("TAG");
 
@@ -248,7 +254,7 @@ namespace WebApp.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<User>(entity =>
+            modelBuilder.Entity<UserModel>(entity =>
             {
                 entity.ToTable("USER");
 

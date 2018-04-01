@@ -16,18 +16,18 @@ namespace BusinessLibrary.Repository
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public List<SumTagConn> Get_OrderBySumId_DepthTag()
+        public List<SumTagConnModel> Get_OrderBySumId_DepthTag()
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
                 return (from d in context.SumTagConn
                         orderby d.SUM_ID ascending
-                        select new SumTagConn()
+                        select new SumTagConnModel()
                         {
                             ID = d.ID,
                             SUM_ID = d.SUM_ID,
                             TAG_ID = d.TAG_ID,
-                            TAG = new Tag()
+                            TAG = new TagModel()
                             {
                                 ID = d.TAG.ID,
                                 TITLE = d.TAG.TITLE,

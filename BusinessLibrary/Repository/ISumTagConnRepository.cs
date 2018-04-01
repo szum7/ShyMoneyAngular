@@ -7,6 +7,6 @@ namespace BusinessLibrary.Repository
 {
     public interface ISumTagConnRepository
     {
-        List<SumTagConn> Get_OrderBySumId_DepthTag();
+        List<SumTagConnModel> Get_OrderBySumId_DepthTag();
     }
 }

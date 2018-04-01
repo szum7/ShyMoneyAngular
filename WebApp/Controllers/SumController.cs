@@ -49,7 +49,7 @@ namespace WebApp.Controllers
 
         #region - Save Methods
         [HttpPost, Produces("application/json")]
-        public IActionResult Save([FromBody] Sum SUM)
+        public IActionResult Save([FromBody] SumModel SUM)
         {
             return Json(repo.Save(SUM));
         }

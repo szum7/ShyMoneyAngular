@@ -2,8 +2,8 @@
 
 export class SumsOnDay {
 
-    date?: Date;
-    data?: Array<SumModel>;
+    date: Date;
+    data: Array<SumModel>;
 
     constructor() {
         this.data = [];

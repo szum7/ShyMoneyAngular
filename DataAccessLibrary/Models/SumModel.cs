@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace WebApp.Models
 {
-    public partial class Sum
+    public partial class SumModel
     {
-        public Sum()
+        public SumModel()
         {
-            SUM_TAG_CONN = new HashSet<SumTagConn>();
-            this.tags = new List<Tag>();
+            SUM_TAG_CONN = new HashSet<SumTagConnModel>();
+            this.tags = new List<TagModel>();
         }
 
         public decimal ID { get; set; }
@@ -22,11 +22,12 @@ namespace WebApp.Models
         public decimal? CREATE_BY { get; set; }
         public DateTime? CREATE_DATE { get; set; }
         public string STATE { get; set; }
+        public string IS_PAYED { get; set; }
 
-        public ICollection<SumTagConn> SUM_TAG_CONN { get; set; }
+        public ICollection<SumTagConnModel> SUM_TAG_CONN { get; set; }
 
         #region Custom fields
-        public List<Tag> tags { get; set; }
+        public List<TagModel> tags { get; set; }
         #endregion
     }
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace WebApp.Models
 {
-    public partial class Tag
+    public partial class TagModel
     {
-        public Tag()
+        public TagModel()
         {
-            SUM_TAG_CONN = new HashSet<SumTagConn>();
+            SUM_TAG_CONN = new HashSet<SumTagConnModel>();
         }
 
         public decimal ID { get; set; }
@@ -21,6 +21,6 @@ namespace WebApp.Models
         public DateTime? CREATE_DATE { get; set; }
         public string STATE { get; set; }
 
-        public ICollection<SumTagConn> SUM_TAG_CONN { get; set; }
+        public ICollection<SumTagConnModel> SUM_TAG_CONN { get; set; }
     }
 }

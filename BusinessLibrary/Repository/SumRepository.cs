@@ -13,6 +13,8 @@ namespace BusinessLibrary.Repository
 {
     public class SumRepository : ISumRepository
     {
+        private decimal tmpUserId = 2;
+
         #region Get Methods
         public SumsOnDayWrap GetOnDates(DateTypeEnum dateType, DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
         {
@@ -31,7 +33,7 @@ namespace BusinessLibrary.Repository
             List<DateTime> dates = Global.GetDatesInRange(start, end);
 
             // Get sums
-            List<Sum> sums = new List<Sum>();
+            List<SumModel> sums = new List<SumModel>();
             if (dateType == DateTypeEnum.INPUT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.INPUT_DATE).ToList();
             else if (dateType == DateTypeEnum.ACCOUNT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.ACCOUNT_DATE).ToList();
             else if (dateType == DateTypeEnum.DUE_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.DUE_DATE).ToList();
@@ -39,7 +41,7 @@ namespace BusinessLibrary.Repository
             return this.AssableSumsWithDates(sums, dates, dateType);
         }
 
-        public List<Sum> Get(DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
+        public List<SumModel> Get(DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
         {
 
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
@@ -51,7 +53,7 @@ namespace BusinessLibrary.Repository
                           && (TO_DATE == null || d.INPUT_DATE <= TO_DATE)
                         )
                         orderby d.ID ascending
-                        select new Sum()
+                        select new SumModel()
                         {
                             ID = d.ID,
                             TITLE = d.TITLE,
@@ -68,14 +70,14 @@ namespace BusinessLibrary.Repository
             }
         }
 
-        public List<Sum> GetWithTags(DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
+        public List<SumModel> GetWithTags(DateTime? FROM_DATE = null, DateTime? TO_DATE = null)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                List<Sum> sums = this.Get(FROM_DATE, TO_DATE);
+                List<SumModel> sums = this.Get(FROM_DATE, TO_DATE);
                 ISumTagConnRepository stcRepo = new SumTagConnRepository();
-                List<SumTagConn> sumTagConn = stcRepo.Get_OrderBySumId_DepthTag();
-                foreach (Sum sumItem in sums)
+                List<SumTagConnModel> sumTagConn = stcRepo.Get_OrderBySumId_DepthTag();
+                foreach (SumModel sumItem in sums)
                 {
                     int i = 0;
                     while (i < sumTagConn.Count && sumTagConn[i].SUM_ID < sumItem.ID)
@@ -100,11 +102,11 @@ namespace BusinessLibrary.Repository
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                Sum sum = context.Sum.Where(x => x.ID == ID).FirstOrDefault();
+                SumModel sum = context.Sum.Where(x => x.ID == ID).FirstOrDefault();
                 if (sum != null)
                 {
                     DateTime now = DateTime.Now;
-                    sum.MODIFY_BY = 0;
+                    sum.MODIFY_BY = tmpUserId;
                     sum.MODIFY_DATE = now;
                     sum.STATE = "N";
                     context.SaveChanges();
@@ -119,23 +121,25 @@ namespace BusinessLibrary.Repository
         #endregion
 
         #region Save Methods
-        public Sum Save(Sum SUM)
+        public SumModel Save(SumModel SUM)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                Sum sum = context.Sum.Where(x => x.ID == SUM.ID).FirstOrDefault();
+                SumModel sum = context.Sum.Where(x => x.ID == SUM.ID).FirstOrDefault();
                 DateTime now = DateTime.Now;
                 if (sum == null)
                 {
-                    sum = new Sum()
+                    sum = new SumModel()
                     {
-                        ID = SUM.ID,
                         TITLE = SUM.TITLE,
                         SUM = SUM.SUM,                        
+                        ACCOUNT_DATE = SUM.ACCOUNT_DATE,
+                        INPUT_DATE = SUM.INPUT_DATE,
+                        DUE_DATE = SUM.DUE_DATE,                        
                         CREATE_DATE = now,
-                        CREATE_BY = SUM.CREATE_BY,
+                        CREATE_BY = tmpUserId,
                         MODIFY_DATE = now,
-                        MODIFY_BY = SUM.MODIFY_BY,
+                        MODIFY_BY = tmpUserId,
                         STATE = "Y"
                     };
                     this.ResolveDateTypeDefaults(sum, SUM);
@@ -146,12 +150,12 @@ namespace BusinessLibrary.Repository
                     sum.TITLE = SUM.TITLE;
                     sum.SUM = SUM.SUM;                    
                     sum.MODIFY_DATE = now;
-                    sum.MODIFY_BY = SUM.MODIFY_BY;
+                    sum.MODIFY_BY = tmpUserId;
                     this.ResolveDateTypeDefaults(sum, SUM);
                 }
 
                 if (context.SaveChanges() >= 1)
-                    return SUM;
+                    return sum;
                 else
                     return null;
             }
@@ -166,7 +170,7 @@ namespace BusinessLibrary.Repository
         /// <param name="dates">Requires: ordered ASC!</param>
         /// <param name="dateType"></param>
         /// <returns></returns>
-        private SumsOnDayWrap AssableSumsWithDates(List<Sum> sums, List<DateTime> dates, DateTypeEnum dateType)
+        private SumsOnDayWrap AssableSumsWithDates(List<SumModel> sums, List<DateTime> dates, DateTypeEnum dateType)
         {
             SumsOnDayWrap ret = new SumsOnDayWrap();
             if (dateType == DateTypeEnum.INPUT_DATE) ret.dateType = "INPUT_DATE";
@@ -202,10 +206,24 @@ namespace BusinessLibrary.Repository
                 i++;
                 ret.data.Add(dayData);
             }
+
+            while(i < dates.Count)
+            {
+                SumsOnDay dayData = new SumsOnDay();
+                dayData.date = dates[i].Date;
+                ret.data.Add(dayData);
+                i++;
+            }
+
             return ret;
         }
 
-        private void ResolveDateTypeDefaults(Sum setSum, Sum inputSum)
+        /// <summary>
+        /// Megakadályozza, hogy a 3 date közül bármelyik is null értéket kapjon
+        /// </summary>
+        /// <param name="setSum"></param>
+        /// <param name="inputSum"></param>
+        private void ResolveDateTypeDefaults(SumModel setSum, SumModel inputSum)
         {
             DateTime? defDate = inputSum.INPUT_DATE;
             if (defDate == null)

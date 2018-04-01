@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace WebApp.Models
 {
-    public partial class User
+    public partial class UserModel
     {
-        public User()
+        public UserModel()
         {
-            Option = new HashSet<Option>();
+            Option = new HashSet<OptionModel>();
         }
 
         public decimal Id { get; set; }
@@ -20,6 +20,6 @@ namespace WebApp.Models
         public DateTime? CreateDate { get; set; }
         public string State { get; set; }
 
-        public ICollection<Option> Option { get; set; }
+        public ICollection<OptionModel> Option { get; set; }
     }
 }

@@ -10,16 +10,21 @@
     <div class="day" *ngFor="let day of sumsOnDayWrap.data">
         <div class="header">
             <span>{{day.date}}</span>
-		    <div class="sbtn" (click)="add(day)"><span class="glyphicon glyphicon-plus"></span></div>
+		    <div class="btns float-right">
+                <div class="sh-btn green" (click)="add(day)"><span class="glyphicon glyphicon-plus"></span></div>
+                <!--<p-button label="Click" icon="glyphicon glyphicon-plus" iconPos="left" (click)="add(day)"></p-button>-->
+            </div>
         </div>
         <div class="records">
-            <div class="record" *ngFor="let sum of day.data">
+            <div class="record" *ngFor="let sum of day.data, let i = index">
                 <ul class="record-fields">
-                    <li class="field"><input type="text" placeholder="Title..." [(value)]="sum.title" /></li>
-                    <li class="field"><input type="text" placeholder="Sum..." [(value)]="sum.sum" /></li>
-                    <li class="field"><input type="text" placeholder="Input date..." [(value)]="sum.inpuT_DATE" /></li>
-                    <li class="field"><div class="sbtn" (click)="save(sum)"><span class="glyphicon glyphicon-check"></span></div></li>
-                    <li class="field"><div class="sbtn" (click)="delete(sum.id)"><span class="glyphicon glyphicon-minus"></span></div></li>
+                    <li class="field"><input type="text" placeholder="Title..." [(ngModel)]="sum.TITLE" /></li>
+                    <li class="field"><input type="text" placeholder="Sum..." [(ngModel)]="sum.SUM" /></li>
+                    <li class="field"><input type="text" placeholder="Input date..." [(ngModel)]="sum.INPUT_DATE" /></li>
+                    <li class="field"><div class="sh-btn green" (click)="save(sum)"><span class="glyphicon glyphicon-ok"></span></div></li>
+                    <li class="field"><div class="sh-btn green" (click)="delete(day, i, sum.ID)"><span class="glyphicon glyphicon-trash"></span></div></li>
+                    <!--<li class="field"><p-button label="Click" icon="glyphicon glyphicon-ok" iconPos="left" (click)="save(sum)"></p-button></li>-->
+                    <!--<li class="field"><p-button label="Click" icon="glyphicon glyphicon-trash" iconPos="left" (click)="delete(sum.id)"></p-button></li>-->
                 </ul>
             </div>
         </div>

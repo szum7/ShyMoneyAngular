@@ -6,6 +6,7 @@ import { ToastrService } from 'toastr-ng2';
 
 // models
 import { SumModel } from './../../global/summodel';
+import { SumsOnDay } from './../../global/sumsonday';
 import { SumsOnDayWrap } from './../../global/sumsondaywrap';
 
 class Ordering {
@@ -45,12 +46,24 @@ export class SumComponent implements OnInit {
 
         // Init DateRangePicker properties
         var date = new Date();
-        this.pickDateFromValue = new Date(date.getFullYear() - 1, date.getMonth(), 1);
+        this.pickDateFromValue = new Date(2018, 0, 1); //new Date(date.getFullYear() - 1, date.getMonth(), 1);
         this.pickDateToValue = new Date(2018, 2, 14);
     }
 
     ngOnInit() {
         this.loadData();
+    }
+
+    public add(day: SumsOnDay): void {
+        console.log(day);
+        if (day.data) {
+            let newSum: SumModel = new SumModel();
+            newSum.Init();
+            newSum.INPUT_DATE = day.date;
+            newSum.DUE_DATE = day.date;
+            newSum.ACCOUNT_DATE = day.date;
+            day.data.push(newSum);
+        }
     }
 
     public loadData(): void {
@@ -61,15 +74,17 @@ export class SumComponent implements OnInit {
         });
     }
 
-    public save(d: SumModel): void {
-        this.sumService.save(d).subscribe(function (response) {
-            console.log(response);
+    public save(sum: SumModel): void {
+        this.sumService.save(sum).subscribe(function (response) {
+            sum.ID = response.ID;
         });
     }
 
-    public delete(id: number): void {
+    public delete(day: SumsOnDay, index: number, id: number): void {
         this.sumService.delete(id).subscribe(function (response) {
-            console.log(response);
+            if (response) {
+                day.data.splice(index, 1);
+            }
         });
     }
 }

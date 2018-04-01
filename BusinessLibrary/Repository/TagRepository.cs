@@ -11,14 +11,14 @@ namespace BusinessLibrary.Repository
     public class TagRepository : ITagRepository
     {
         #region Get Methods
-        public List<Tag> Get()
+        public List<TagModel> Get()
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
                 return (from d in context.Tag
                         where d.STATE == "Y"
                         orderby d.ID ascending
-                        select new Tag()
+                        select new TagModel()
                         {
                             ID = d.ID,
                             TITLE = d.TITLE,
@@ -36,15 +36,15 @@ namespace BusinessLibrary.Repository
         #endregion
 
         #region Save Methods
-        public Tag Save(Tag TAG)
+        public TagModel Save(TagModel TAG)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                Tag tag = context.Tag.Where(x => x.ID == TAG.ID).FirstOrDefault();
+                TagModel tag = context.Tag.Where(x => x.ID == TAG.ID).FirstOrDefault();
                 DateTime now = DateTime.Now;
                 if (tag == null)
                 {
-                    tag = new Tag()
+                    tag = new TagModel()
                     {
                         ID = TAG.ID,
                         TITLE = TAG.TITLE,
@@ -82,7 +82,7 @@ namespace BusinessLibrary.Repository
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                Tag tag = context.Tag.Where(x => x.ID == ID).FirstOrDefault();
+                TagModel tag = context.Tag.Where(x => x.ID == ID).FirstOrDefault();
                 if (tag != null)
                 {
                     DateTime now = DateTime.Now;

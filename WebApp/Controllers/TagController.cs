@@ -28,7 +28,7 @@ namespace WebApp.Controllers
 
         #region - Save Methods
         [HttpPost, Produces("application/json")]
-        public IActionResult Save([FromBody] Tag TAG)
+        public IActionResult Save([FromBody] TagModel TAG)
         {
             return Json(repo.Save(TAG));
         }

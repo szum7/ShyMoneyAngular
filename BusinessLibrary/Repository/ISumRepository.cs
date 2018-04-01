@@ -11,9 +11,9 @@ namespace BusinessLibrary.Repository
     public interface ISumRepository
     {
         SumsOnDayWrap GetOnDates(DateTypeEnum dateType, DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
-        List<Sum> Get(DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
-        List<Sum> GetWithTags(DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
-        Sum Save(Sum model);
+        List<SumModel> Get(DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
+        List<SumModel> GetWithTags(DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
+        SumModel Save(SumModel model);
         bool Delete(int id);
     }
 }

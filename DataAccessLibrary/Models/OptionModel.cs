@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WebApp.Models
 {
-    public partial class Option
+    public partial class OptionModel
     {
         public decimal Id { get; set; }
         public decimal OwnerId { get; set; }
@@ -25,6 +25,6 @@ namespace WebApp.Models
         public DateTime? CreateDate { get; set; }
         public string State { get; set; }
 
-        public User Owner { get; set; }
+        public UserModel Owner { get; set; }
     }
 }
