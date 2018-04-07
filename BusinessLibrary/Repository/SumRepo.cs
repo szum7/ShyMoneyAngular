@@ -11,7 +11,7 @@ using BusinessLibrary.Common.Enum;
 
 namespace BusinessLibrary.Repository
 {
-    public class SumRepository : ISumRepository
+    public class SumRepo: ISumRepo
     {
         private decimal tmpUserId = 2;
 
@@ -75,7 +75,7 @@ namespace BusinessLibrary.Repository
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
                 List<SumModel> sums = this.Get(FROM_DATE, TO_DATE);
-                ISumTagConnRepository stcRepo = new SumTagConnRepository();
+                ISumTagConnRepo stcRepo = new SumTagConnRepo();
                 List<SumTagConnModel> sumTagConn = stcRepo.Get_OrderBySumId_DepthTag();
                 foreach (SumModel sumItem in sums)
                 {

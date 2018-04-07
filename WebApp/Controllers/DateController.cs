@@ -9,9 +9,9 @@ namespace WebApp.Controllers
 {
     public class DateController : Controller
     {
-        public IDateRepository repo;
+        public IDateRepo repo;
 
-        public DateController(IDateRepository repo)
+        public DateController(IDateRepo repo)
         {
             this.repo = repo;
         }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLibrary.Repository
 {
-    public class TagRepository : ITagRepository
+    public class TagRepo : ITagRepo
     {
         private decimal tmpUserId = 2;
 

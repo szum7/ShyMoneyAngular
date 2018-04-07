@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using BusinessLibrary.Repository;
+﻿using BusinessLibrary.Repository;
 using DataAccessLibrary.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers
 {
-    public class TagController : Controller
+    public class IntellisenseController: Controller
     {
-        public ITagRepo repo;
+        public IIntellisenseRepo repo;
 
-        public TagController(ITagRepo repo)
+        public IntellisenseController(IIntellisenseRepo repo)
         {
             this.repo = repo;
         }
@@ -22,15 +18,15 @@ namespace WebApp.Controllers
         public IActionResult Get()
         {
             var data = repo.Get();
-            return Json(new { result = data });
+            return Json(new { data = data });
         }
         #endregion
 
         #region - Save Methods
         [HttpPost, Produces("application/json")]
-        public IActionResult Save([FromBody] TagModel TAG)
+        public IActionResult Save([FromBody] IntellisenseModel INTELLISENSE)
         {
-            return Json(repo.Save(TAG));
+            return Json(repo.Save(INTELLISENSE));
         }
         #endregion
 

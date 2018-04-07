@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BusinessLibrary.Repository;
 using DataAccessLibrary.Models;
@@ -11,9 +8,9 @@ namespace WebApp.Controllers
 {
     public class SumController : Controller
     {
-        public ISumRepository repo;
+        public ISumRepo repo;
 
-        public SumController(ISumRepository repo)
+        public SumController(ISumRepo repo)
         {
             this.repo = repo;
         }

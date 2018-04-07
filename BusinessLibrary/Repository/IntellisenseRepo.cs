@@ -5,33 +5,66 @@ using DataAccessLibrary.Models;
 
 namespace BusinessLibrary.Repository
 {
-    public class IntellisenseRepo
+    public class IntellisenseRepo: IIntellisenseRepo
     {
         private decimal tmpUserId = 2;
 
         #region Get Methods
+        public List<IntellisenseModel> Get()
+        {
+            using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
+            {
+                List<IntellisenseModel> ret = (from d in context.Intellisense
+                                               where d.State == "Y"
+                                               orderby d.Id ascending
+                                               select new IntellisenseModel()
+                                               {
+                                                   Id = d.Id,
+                                                   Title = d.Title,
+                                                   SumSum = d.SumSum,
+                                                   SumInputDate = d.SumInputDate,
+                                                   SumAccountDate = d.SumAccountDate,
+                                                   SumDueDate = d.SumDueDate,
+                                                   IntellisenseTagConn = d.IntellisenseTagConn,
+                                                   CreateDate = d.CreateDate,
+                                                   CreateBy = d.CreateBy,
+                                                   ModifyDate = d.ModifyDate,
+                                                   ModifyBy = d.ModifyBy,
+                                                   State = d.State
+                                               }).ToList();
+
+                ret = AssembleWithTags(ret);
+
+                return ret;
+            }
+        }
+
         public List<IntellisenseModel> GetOnLike(string like)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                return (from d in context.Intellisense
-                        where d.State == "Y"
-                        orderby d.Id ascending
-                        select new IntellisenseModel()
-                        {
-                            Id = d.Id,
-                            Title = d.Title,
-                            SumSum = d.SumSum,
-                            SumInputDate = d.SumInputDate,
-                            SumAccountDate = d.SumAccountDate,
-                            SumDueDate = d.SumDueDate,
-                            Tags = null,
-                            CreateDate = d.CreateDate,
-                            CreateBy = d.CreateBy,
-                            ModifyDate = d.ModifyDate,
-                            ModifyBy = d.ModifyBy,
-                            State = d.State
-                        }).ToList();
+                List<IntellisenseModel> ret = (from d in context.Intellisense
+                                               where (d.State == "Y" && d.Title.Contains(like))
+                                               orderby d.Id ascending
+                                               select new IntellisenseModel()
+                                               {
+                                                   Id = d.Id,
+                                                   Title = d.Title,
+                                                   SumSum = d.SumSum,
+                                                   SumInputDate = d.SumInputDate,
+                                                   SumAccountDate = d.SumAccountDate,
+                                                   SumDueDate = d.SumDueDate,
+                                                   Tags = null,
+                                                   CreateDate = d.CreateDate,
+                                                   CreateBy = d.CreateBy,
+                                                   ModifyDate = d.ModifyDate,
+                                                   ModifyBy = d.ModifyBy,
+                                                   State = d.State
+                                               }).ToList();
+
+                ret = AssembleWithTags(ret);
+
+                return ret;
             }
         }
         #endregion
@@ -96,6 +129,34 @@ namespace BusinessLibrary.Repository
                 else
                     return null;
             }
+        }
+        #endregion
+
+        #region Private Methods
+        List<IntellisenseModel> AssembleWithTags(List<IntellisenseModel> intellisenses)
+        {
+            List<TagModel> tags = (new TagRepo()).Get();
+            foreach (IntellisenseModel i_Intell in intellisenses)
+            {
+                foreach (IntellisenseTagConnModel i_IntellTag in i_Intell.IntellisenseTagConn)
+                {
+                    TagModel tag = tags.Where(x => x.Id == i_IntellTag.TagId).SingleOrDefault();
+
+                    i_Intell.Tags.Add(new TagModel()
+                    {
+                        Id = tag.Id,
+                        Title = tag.Title,
+                        Description = tag.Description,
+                        Icon = tag.Icon,
+                        QuickbarPlace = tag.QuickbarPlace,
+                        ModifyDate = tag.ModifyDate,
+                        ModifyBy = tag.ModifyBy,
+                        CreateDate = tag.CreateDate,
+                        CreateBy = tag.CreateBy
+                    });
+                }
+            }
+            return intellisenses;
         }
         #endregion
     }

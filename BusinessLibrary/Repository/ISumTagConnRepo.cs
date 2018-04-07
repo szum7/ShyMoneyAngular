@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BusinessLibrary.Repository
 {
-    public interface ISumTagConnRepository
+    public interface ISumTagConnRepo
     {
         List<SumTagConnModel> Get_OrderBySumId_DepthTag();
     }

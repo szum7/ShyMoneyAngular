@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BusinessLibrary.Repository
 {
-    public interface IDateRepository
+    public interface IDateRepo
     {
         List<string> GetDateStringRange(string dateFrom, string dateTo);
     }

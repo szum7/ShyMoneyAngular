@@ -5,7 +5,7 @@ using DataAccessLibrary.Models;
 
 namespace BusinessLibrary.Repository
 {
-    public interface ITagRepository
+    public interface ITagRepo
     {
         List<TagModel> Get();
         TagModel Save(TagModel model);

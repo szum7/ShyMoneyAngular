@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLibrary.Repository
 {
-    public class SumTagConnRepository : ISumTagConnRepository
+    public class SumTagConnRepo : ISumTagConnRepo
     {
         /// <summary>
         /// Includes: properties, TAG

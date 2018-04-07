@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BusinessLibrary.Repository
 {
-    public class DateRepository : IDateRepository
+    public class DateRepo : IDateRepo
     {
         public List<string> GetDateStringRange(string dateFrom, string dateTo)
         {
