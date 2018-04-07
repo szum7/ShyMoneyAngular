@@ -2,11 +2,11 @@
 
 export class SumsOnDayWrap {
 
-    dateType?: string;
-    data?: Array<SumsOnDay>;
+    DateType?: string;
+    Data?: Array<SumsOnDay>;
 
     constructor() {
-        this.data = [];
-        this.dateType = "UNSET";
+        this.Data = [];
+        this.DateType = "UNSET";
     }
 }

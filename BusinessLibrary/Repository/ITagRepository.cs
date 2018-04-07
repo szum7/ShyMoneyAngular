@@ -1,7 +1,7 @@
-﻿using WebApp.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DataAccessLibrary.Models;
 
 namespace BusinessLibrary.Repository
 {

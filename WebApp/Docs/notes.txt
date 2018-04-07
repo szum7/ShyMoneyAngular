@@ -1,0 +1,4 @@
+﻿https://www.codeproject.com/Articles/1197953/CRUD-Operation-using-ASP-NET-CORE-and-Angular-with
+https://stackoverflow.com/questions/32518496/how-to-update-existing-entity-framework-after-adding-new-table-in-database-by-a
+
+Scaffold-DbContext "Server=DESKTOP-H9NVH5Q;Database=DBSHYMONEYV1;User Id=sa;Password=bitbit;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models

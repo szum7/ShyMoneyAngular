@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace WebApp.Models
+namespace DataAccessLibrary.Models
 {
     public partial class DBSHYMONEYV1Context : DbContext
     {
+        public virtual DbSet<IntellisenseModel> Intellisense { get; set; }
+        public virtual DbSet<IntellisenseTagConnModel> IntellisenseTagConn { get; set; }
         public virtual DbSet<OptionModel> Option { get; set; }
         public virtual DbSet<SumModel> Sum { get; set; }
         public virtual DbSet<SumTagConnModel> SumTagConn { get; set; }
@@ -16,12 +18,122 @@ namespace WebApp.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+                // To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer(@"Server=DESKTOP-H9NVH5Q;Database=DBSHYMONEYV1;User Id=sa;Password=bitbit;Trusted_Connection=True;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<IntellisenseModel>(entity =>
+            {
+                entity.ToTable("INTELLISENSE");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric(15, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.CreateBy)
+                    .HasColumnName("CREATE_BY")
+                    .HasColumnType("numeric(15, 0)");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnName("CREATE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("DESCRIPTION")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.IsDatesMatch).HasColumnName("IS_DATES_MATCH");
+
+                entity.Property(e => e.IsDatesOverwriteable)
+                    .HasColumnName("IS_DATES_OVERWRITEABLE")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.IsSaveOnSelect).HasColumnName("IS_SAVE_ON_SELECT");
+
+                entity.Property(e => e.IsTodayDates).HasColumnName("IS_TODAY_DATES");
+
+                entity.Property(e => e.ModifyBy)
+                    .HasColumnName("MODIFY_BY")
+                    .HasColumnType("numeric(15, 0)");
+
+                entity.Property(e => e.ModifyDate)
+                    .HasColumnName("MODIFY_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasColumnName("STATE")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SumAccountDate)
+                    .HasColumnName("SUM_ACCOUNT_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.SumDescription)
+                    .HasColumnName("SUM_DESCRIPTION")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SumDueDate)
+                    .HasColumnName("SUM_DUE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.SumInputDate)
+                    .HasColumnName("SUM_INPUT_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.SumSum)
+                    .HasColumnName("SUM_SUM")
+                    .HasColumnType("numeric(15, 0)");
+
+                entity.Property(e => e.SumTitle)
+                    .HasColumnName("SUM_TITLE")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasColumnName("TITLE")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<IntellisenseTagConnModel>(entity =>
+            {
+                entity.ToTable("INTELLISENSE_TAG_CONN");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric(15, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.IntellisenseId)
+                    .HasColumnName("INTELLISENSE_ID")
+                    .HasColumnType("numeric(15, 0)");
+
+                entity.Property(e => e.TagId)
+                    .HasColumnName("TAG_ID")
+                    .HasColumnType("numeric(15, 0)");
+
+                entity.HasOne(d => d.Intellisense)
+                    .WithMany(p => p.IntellisenseTagConn)
+                    .HasForeignKey(d => d.IntellisenseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ITC_INTELLISENSEID");
+
+                entity.HasOne(d => d.Tag)
+                    .WithMany(p => p.IntellisenseTagConn)
+                    .HasForeignKey(d => d.TagId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ITC_TAGID");
+            });
+
             modelBuilder.Entity<OptionModel>(entity =>
             {
                 entity.ToTable("OPTION");
@@ -117,58 +229,57 @@ namespace WebApp.Models
             {
                 entity.ToTable("SUM");
 
-                entity.Property(e => e.ID)
+                entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .HasColumnType("numeric(15, 0)")
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.CREATE_BY)
-                    .HasColumnName("CREATE_BY")
-                    .HasColumnType("numeric(15, 0)");
-
-                entity.Property(e => e.CREATE_DATE)
-                    .HasColumnName("CREATE_DATE")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.INPUT_DATE)
-                    .HasColumnName("INPUT_DATE")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.ACCOUNT_DATE)
+                entity.Property(e => e.AccountDate)
                     .HasColumnName("ACCOUNT_DATE")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.DUE_DATE)
+                entity.Property(e => e.CreateBy)
+                    .HasColumnName("CREATE_BY")
+                    .HasColumnType("numeric(15, 0)");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnName("CREATE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.DueDate)
                     .HasColumnName("DUE_DATE")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.MODIFY_BY)
+                entity.Property(e => e.InputDate)
+                    .HasColumnName("INPUT_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.IsPayed)
+                    .HasColumnName("IS_PAYED")
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifyBy)
                     .HasColumnName("MODIFY_BY")
                     .HasColumnType("numeric(15, 0)");
 
-                entity.Property(e => e.MODIFY_DATE)
+                entity.Property(e => e.ModifyDate)
                     .HasColumnName("MODIFY_DATE")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.STATE)
+                entity.Property(e => e.State)
                     .IsRequired()
                     .HasColumnName("STATE")
                     .HasMaxLength(1)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SUM)
+                entity.Property(e => e.Sum)
                     .HasColumnName("SUM")
                     .HasColumnType("numeric(15, 0)");
 
-                entity.Property(e => e.TITLE)
+                entity.Property(e => e.Title)
                     .HasColumnName("TITLE")
                     .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IS_PAYED)
-                    .IsRequired()
-                    .HasColumnName("IS_PAYED")
-                    .HasMaxLength(1)
                     .IsUnicode(false);
             });
 
@@ -176,28 +287,28 @@ namespace WebApp.Models
             {
                 entity.ToTable("SUM_TAG_CONN");
 
-                entity.Property(e => e.ID)
+                entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .HasColumnType("numeric(15, 0)")
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.SUM_ID)
+                entity.Property(e => e.SumId)
                     .HasColumnName("SUM_ID")
                     .HasColumnType("numeric(15, 0)");
 
-                entity.Property(e => e.TAG_ID)
+                entity.Property(e => e.TagId)
                     .HasColumnName("TAG_ID")
                     .HasColumnType("numeric(15, 0)");
 
-                entity.HasOne(d => d.SUM)
-                    .WithMany(p => p.SUM_TAG_CONN)
-                    .HasForeignKey(d => d.SUM_ID)
+                entity.HasOne(d => d.Sum)
+                    .WithMany(p => p.SumTagConn)
+                    .HasForeignKey(d => d.SumId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SUMID");
 
-                entity.HasOne(d => d.TAG)
-                    .WithMany(p => p.SUM_TAG_CONN)
-                    .HasForeignKey(d => d.TAG_ID)
+                entity.HasOne(d => d.Tag)
+                    .WithMany(p => p.SumTagConn)
+                    .HasForeignKey(d => d.TagId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_TAGID");
             });
@@ -206,48 +317,48 @@ namespace WebApp.Models
             {
                 entity.ToTable("TAG");
 
-                entity.Property(e => e.ID)
+                entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .HasColumnType("numeric(15, 0)")
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.CREATE_BY)
+                entity.Property(e => e.CreateBy)
                     .HasColumnName("CREATE_BY")
                     .HasColumnType("numeric(15, 0)");
 
-                entity.Property(e => e.CREATE_DATE)
+                entity.Property(e => e.CreateDate)
                     .HasColumnName("CREATE_DATE")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.DESCRIPTION)
+                entity.Property(e => e.Description)
                     .HasColumnName("DESCRIPTION")
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ICON)
+                entity.Property(e => e.Icon)
                     .HasColumnName("ICON")
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.MODIFY_BY)
+                entity.Property(e => e.ModifyBy)
                     .HasColumnName("MODIFY_BY")
                     .HasColumnType("numeric(15, 0)");
 
-                entity.Property(e => e.MODIFY_DATE)
+                entity.Property(e => e.ModifyDate)
                     .HasColumnName("MODIFY_DATE")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.QUICKBAR_PLACE)
+                entity.Property(e => e.QuickbarPlace)
                     .HasColumnName("QUICKBAR_PLACE")
                     .HasColumnType("numeric(5, 0)");
 
-                entity.Property(e => e.STATE)
+                entity.Property(e => e.State)
                     .IsRequired()
                     .HasColumnName("STATE")
                     .HasMaxLength(1)
                     .IsUnicode(false);
 
-                entity.Property(e => e.TITLE)
+                entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnName("TITLE")
                     .HasMaxLength(255)

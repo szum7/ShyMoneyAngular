@@ -56,13 +56,13 @@ export class SumComponent implements OnInit {
 
     public add(day: SumsOnDay): void {
         console.log(day);
-        if (day.data) {
+        if (day.Data) {
             let newSum: SumModel = new SumModel();
             newSum.Init();
-            newSum.INPUT_DATE = day.date;
-            newSum.DUE_DATE = day.date;
-            newSum.ACCOUNT_DATE = day.date;
-            day.data.push(newSum);
+            newSum.InputDate = day.Date;
+            newSum.DueDate = day.Date;
+            newSum.AccountDate = day.Date;
+            day.Data.push(newSum);
         }
     }
 
@@ -76,14 +76,14 @@ export class SumComponent implements OnInit {
 
     public save(sum: SumModel): void {
         this.sumService.save(sum).subscribe(function (response) {
-            sum.ID = response.ID;
+            sum.Id = response.Id;
         });
     }
 
     public delete(day: SumsOnDay, index: number, id: number): void {
         this.sumService.delete(id).subscribe(function (response) {
             if (response) {
-                day.data.splice(index, 1);
+                day.Data.splice(index, 1);
             }
         });
     }

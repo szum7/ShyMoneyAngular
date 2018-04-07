@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BusinessLibrary.Repository;
-using WebApp.Models;
+using DataAccessLibrary.Models;
 
 namespace WebApp.Controllers
 {

@@ -18,11 +18,11 @@
         <div class="records">
             <div class="record" *ngFor="let sum of day.data, let i = index">
                 <ul class="record-fields">
-                    <li class="field"><input type="text" placeholder="Title..." [(ngModel)]="sum.TITLE" /></li>
-                    <li class="field"><input type="text" placeholder="Sum..." [(ngModel)]="sum.SUM" /></li>
-                    <li class="field"><input type="text" placeholder="Input date..." [(ngModel)]="sum.INPUT_DATE" /></li>
+                    <li class="field"><input type="text" placeholder="Title..." [(ngModel)]="sum.Title" /></li>
+                    <li class="field"><input type="text" placeholder="Sum..." [(ngModel)]="sum.Sum" /></li>
+                    <li class="field"><input type="text" placeholder="Input date..." [(ngModel)]="sum.InputDate" /></li>
                     <li class="field"><div class="sh-btn green" (click)="save(sum)"><span class="glyphicon glyphicon-ok"></span></div></li>
-                    <li class="field"><div class="sh-btn green" (click)="delete(day, i, sum.ID)"><span class="glyphicon glyphicon-trash"></span></div></li>
+                    <li class="field"><div class="sh-btn green" (click)="delete(day, i, sum.Id)"><span class="glyphicon glyphicon-trash"></span></div></li>
                     <!--<li class="field"><p-button label="Click" icon="glyphicon glyphicon-ok" iconPos="left" (click)="save(sum)"></p-button></li>-->
                     <!--<li class="field"><p-button label="Click" icon="glyphicon glyphicon-trash" iconPos="left" (click)="delete(sum.id)"></p-button></li>-->
                 </ul>

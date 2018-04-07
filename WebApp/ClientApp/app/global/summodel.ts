@@ -2,18 +2,18 @@
 import { ModelBase } from "./modelbase";
 
 export class SumModel extends ModelBase {
-    ID: number;
-    TITLE: string;
-    INPUT_DATE: Date;
-    ACCOUNT_DATE: Date;
-    DUE_DATE: Date;
-    SUM: number;
-    tags: Array<TagModel>;
+    Id: number;
+    Title: string;
+    InputDate: Date;
+    AccountDate: Date;
+    DueDate: Date;
+    Sum: number;
+    Tags: Array<TagModel>;
 
     public Init() {
-        this.ID = -1;
-        this.TITLE = "";
-        this.SUM = 0;
-        this.tags = [];
+        this.Id = -1;
+        this.Title = "";
+        this.Sum = 0;
+        this.Tags = [];
     }
 }

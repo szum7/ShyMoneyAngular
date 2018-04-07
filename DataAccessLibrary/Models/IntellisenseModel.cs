@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DataAccessLibrary.Models
 {
-    public partial class SumModel
+    public partial class IntellisenseModel
     {
         public List<TagModel> Tags { get; set; }
 
-        public SumModel()
+        public IntellisenseModel()
         {
+            this.IntellisenseTagConn = new HashSet<IntellisenseTagConnModel>();
             this.Tags = new List<TagModel>();
-            SumTagConn = new HashSet<SumTagConnModel>();
         }
     }
 }

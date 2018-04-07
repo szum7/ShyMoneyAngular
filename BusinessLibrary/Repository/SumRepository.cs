@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using WebApp.Models;
+using DataAccessLibrary.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using BusinessLibrary.Common;
@@ -34,9 +34,9 @@ namespace BusinessLibrary.Repository
 
             // Get sums
             List<SumModel> sums = new List<SumModel>();
-            if (dateType == DateTypeEnum.INPUT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.INPUT_DATE).ToList();
-            else if (dateType == DateTypeEnum.ACCOUNT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.ACCOUNT_DATE).ToList();
-            else if (dateType == DateTypeEnum.DUE_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.DUE_DATE).ToList();
+            if (dateType == DateTypeEnum.INPUT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.InputDate).ToList();
+            else if (dateType == DateTypeEnum.ACCOUNT_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.AccountDate).ToList();
+            else if (dateType == DateTypeEnum.DUE_DATE) sums = this.GetWithTags(start, end).OrderBy(x => x.DueDate).ToList();
 
             return this.AssableSumsWithDates(sums, dates, dateType);
         }
@@ -48,24 +48,24 @@ namespace BusinessLibrary.Repository
             {
                 return (from d in context.Sum
                         where (
-                          (d.STATE == "Y")
-                          && (FROM_DATE == null || d.INPUT_DATE >= FROM_DATE)
-                          && (TO_DATE == null || d.INPUT_DATE <= TO_DATE)
+                          (d.State == "Y")
+                          && (FROM_DATE == null || d.InputDate >= FROM_DATE)
+                          && (TO_DATE == null || d.InputDate <= TO_DATE)
                         )
-                        orderby d.ID ascending
+                        orderby d.Id ascending
                         select new SumModel()
                         {
-                            ID = d.ID,
-                            TITLE = d.TITLE,
-                            SUM = d.SUM,
-                            INPUT_DATE = d.INPUT_DATE,
-                            ACCOUNT_DATE = d.ACCOUNT_DATE,
-                            DUE_DATE = d.DUE_DATE,
-                            CREATE_DATE = d.CREATE_DATE,
-                            CREATE_BY = d.CREATE_BY,
-                            MODIFY_DATE = d.MODIFY_DATE,
-                            MODIFY_BY = d.MODIFY_BY,
-                            STATE = d.STATE
+                            Id = d.Id,
+                            Title = d.Title,
+                            Sum = d.Sum,
+                            InputDate = d.InputDate,
+                            AccountDate = d.AccountDate,
+                            DueDate = d.DueDate,
+                            CreateDate = d.CreateDate,
+                            CreateBy = d.CreateBy,
+                            ModifyDate = d.ModifyDate,
+                            ModifyBy = d.ModifyBy,
+                            State = d.State
                         }).ToList();
             }
         }
@@ -80,14 +80,14 @@ namespace BusinessLibrary.Repository
                 foreach (SumModel sumItem in sums)
                 {
                     int i = 0;
-                    while (i < sumTagConn.Count && sumTagConn[i].SUM_ID < sumItem.ID)
+                    while (i < sumTagConn.Count && sumTagConn[i].SumId < sumItem.Id)
                         i++;
-                    while (i < sumTagConn.Count && sumTagConn[i].SUM_ID == sumItem.ID)
+                    while (i < sumTagConn.Count && sumTagConn[i].SumId == sumItem.Id)
                     {
-                        if (sumTagConn[i].TAG == null)
+                        if (sumTagConn[i].Tag == null)
                             throw new Exception("Property tag shouldn't be null!");
 
-                        sumItem.tags.Add(sumTagConn[i].TAG);
+                        sumItem.Tags.Add(sumTagConn[i].Tag);
                         sumTagConn.RemoveAt(i); // i is "increased" because RemoveAt
                     }
                 }
@@ -102,13 +102,13 @@ namespace BusinessLibrary.Repository
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                SumModel sum = context.Sum.Where(x => x.ID == ID).FirstOrDefault();
+                SumModel sum = context.Sum.Where(x => x.Id == ID).FirstOrDefault();
                 if (sum != null)
                 {
                     DateTime now = DateTime.Now;
-                    sum.MODIFY_BY = tmpUserId;
-                    sum.MODIFY_DATE = now;
-                    sum.STATE = "N";
+                    sum.ModifyDate = now;
+                    sum.ModifyBy = tmpUserId;
+                    sum.State = "N";
                     context.SaveChanges();
                     return true;
                 }
@@ -125,32 +125,32 @@ namespace BusinessLibrary.Repository
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                SumModel sum = context.Sum.Where(x => x.ID == SUM.ID).FirstOrDefault();
+                SumModel sum = context.Sum.Where(x => x.Id == SUM.Id).FirstOrDefault();
                 DateTime now = DateTime.Now;
                 if (sum == null)
                 {
                     sum = new SumModel()
                     {
-                        TITLE = SUM.TITLE,
-                        SUM = SUM.SUM,                        
-                        ACCOUNT_DATE = SUM.ACCOUNT_DATE,
-                        INPUT_DATE = SUM.INPUT_DATE,
-                        DUE_DATE = SUM.DUE_DATE,                        
-                        CREATE_DATE = now,
-                        CREATE_BY = tmpUserId,
-                        MODIFY_DATE = now,
-                        MODIFY_BY = tmpUserId,
-                        STATE = "Y"
+                        Title = SUM.Title,
+                        Sum = SUM.Sum,                        
+                        AccountDate = SUM.AccountDate,
+                        InputDate = SUM.InputDate,
+                        DueDate = SUM.DueDate,                        
+                        CreateDate = now,
+                        CreateBy = tmpUserId,
+                        ModifyDate = now,
+                        ModifyBy = tmpUserId,
+                        State = "Y"
                     };
                     this.ResolveDateTypeDefaults(sum, SUM);
                     context.Sum.Add(sum);
                 }
                 else
                 {
-                    sum.TITLE = SUM.TITLE;
-                    sum.SUM = SUM.SUM;                    
-                    sum.MODIFY_DATE = now;
-                    sum.MODIFY_BY = tmpUserId;
+                    sum.Title = SUM.Title;
+                    sum.Sum = SUM.Sum;                    
+                    sum.ModifyDate = now;
+                    sum.ModifyBy = tmpUserId;
                     this.ResolveDateTypeDefaults(sum, SUM);
                 }
 
@@ -184,9 +184,9 @@ namespace BusinessLibrary.Repository
                 SumsOnDay dayData = new SumsOnDay();
                 dayData.date = dates[i].Date;
 
-                DateTime sumDate = sums[j].INPUT_DATE.Value; // default set
-                if (dateType == DateTypeEnum.ACCOUNT_DATE) sumDate = sums[j].ACCOUNT_DATE.Value;
-                else if (dateType == DateTypeEnum.DUE_DATE) sumDate = sums[j].DUE_DATE.Value;
+                DateTime sumDate = sums[j].InputDate.Value; // default set
+                if (dateType == DateTypeEnum.ACCOUNT_DATE) sumDate = sums[j].AccountDate.Value;
+                else if (dateType == DateTypeEnum.DUE_DATE) sumDate = sums[j].DueDate.Value;
 
                 if (dayData.date == sumDate.Date)
                 {
@@ -197,9 +197,9 @@ namespace BusinessLibrary.Repository
 
                         if(j < sums.Count)
                         {
-                            sumDate = sums[j].INPUT_DATE.Value; // default set
-                            if (dateType == DateTypeEnum.ACCOUNT_DATE) sumDate = sums[j].ACCOUNT_DATE.Value;
-                            else if (dateType == DateTypeEnum.DUE_DATE) sumDate = sums[j].DUE_DATE.Value;
+                            sumDate = sums[j].InputDate.Value; // default set
+                            if (dateType == DateTypeEnum.ACCOUNT_DATE) sumDate = sums[j].AccountDate.Value;
+                            else if (dateType == DateTypeEnum.DUE_DATE) sumDate = sums[j].DueDate.Value;
                         }
                     }
                 }
@@ -225,20 +225,20 @@ namespace BusinessLibrary.Repository
         /// <param name="inputSum"></param>
         private void ResolveDateTypeDefaults(SumModel setSum, SumModel inputSum)
         {
-            DateTime? defDate = inputSum.INPUT_DATE;
+            DateTime? defDate = inputSum.InputDate;
             if (defDate == null)
-                defDate = inputSum.ACCOUNT_DATE;
+                defDate = inputSum.AccountDate;
             if (defDate == null)
-                defDate = inputSum.DUE_DATE;
+                defDate = inputSum.DueDate;
             if (defDate == null)
                 throw new Exception("At least one date should be not null.");
 
-            if (inputSum.INPUT_DATE == null)
-                setSum.INPUT_DATE = defDate;
-            if (inputSum.ACCOUNT_DATE == null)
-                setSum.ACCOUNT_DATE = defDate;
-            if (inputSum.DUE_DATE == null)
-                setSum.DUE_DATE = defDate;
+            if (inputSum.InputDate == null)
+                setSum.InputDate = defDate;
+            if (inputSum.AccountDate == null)
+                setSum.AccountDate = defDate;
+            if (inputSum.DueDate == null)
+                setSum.DueDate = defDate;
         }
         #endregion
     }

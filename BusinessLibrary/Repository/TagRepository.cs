@@ -1,4 +1,4 @@
-﻿using WebApp.Models;
+﻿using DataAccessLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,26 +10,28 @@ namespace BusinessLibrary.Repository
 {
     public class TagRepository : ITagRepository
     {
+        private decimal tmpUserId = 2;
+
         #region Get Methods
         public List<TagModel> Get()
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
                 return (from d in context.Tag
-                        where d.STATE == "Y"
-                        orderby d.ID ascending
+                        where d.State == "Y"
+                        orderby d.Id ascending
                         select new TagModel()
                         {
-                            ID = d.ID,
-                            TITLE = d.TITLE,
-                            DESCRIPTION = d.DESCRIPTION,
-                            ICON = d.ICON,
-                            QUICKBAR_PLACE = d.QUICKBAR_PLACE,
-                            CREATE_DATE = d.CREATE_DATE,
-                            CREATE_BY = d.CREATE_BY,
-                            MODIFY_DATE = d.MODIFY_DATE,
-                            MODIFY_BY = d.MODIFY_BY,
-                            STATE = d.STATE
+                            Id = d.Id,
+                            Title = d.Title,
+                            Description = d.Description,
+                            Icon = d.Icon,
+                            QuickbarPlace = d.QuickbarPlace,
+                            CreateDate = d.CreateDate,
+                            CreateBy = d.CreateBy,
+                            ModifyDate = d.ModifyDate,
+                            ModifyBy = d.ModifyBy,
+                            State = d.State
                         }).ToList();
             }
         }
@@ -40,33 +42,33 @@ namespace BusinessLibrary.Repository
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                TagModel tag = context.Tag.Where(x => x.ID == TAG.ID).FirstOrDefault();
+                TagModel tag = context.Tag.Where(x => x.Id == TAG.Id).FirstOrDefault();
                 DateTime now = DateTime.Now;
                 if (tag == null)
                 {
                     tag = new TagModel()
                     {
-                        ID = TAG.ID,
-                        TITLE = TAG.TITLE,
-                        DESCRIPTION = TAG.DESCRIPTION,
-                        ICON = TAG.ICON,
-                        QUICKBAR_PLACE = TAG.QUICKBAR_PLACE,
-                        CREATE_DATE = now,
-                        CREATE_BY = TAG.CREATE_BY,
-                        MODIFY_DATE = now,
-                        MODIFY_BY = TAG.MODIFY_BY,
-                        STATE = "Y"
+                        Id = TAG.Id,
+                        Title = TAG.Title,
+                        Description = TAG.Description,
+                        Icon = TAG.Icon,
+                        QuickbarPlace = TAG.QuickbarPlace,
+                        CreateDate = now,
+                        CreateBy = tmpUserId,
+                        ModifyDate = now,
+                        ModifyBy = tmpUserId,
+                        State = "Y"
                     };
                     context.Tag.Add(tag);
                 }
                 else
                 {
-                    tag.TITLE = TAG.TITLE;
-                    tag.DESCRIPTION = TAG.DESCRIPTION;
-                    tag.ICON = TAG.ICON;
-                    tag.QUICKBAR_PLACE = TAG.QUICKBAR_PLACE;
-                    tag.MODIFY_DATE = now;
-                    tag.MODIFY_BY = TAG.MODIFY_BY;
+                    tag.Title = TAG.Title;
+                    tag.Description = TAG.Description;
+                    tag.Icon = TAG.Icon;
+                    tag.QuickbarPlace = TAG.QuickbarPlace;
+                    tag.ModifyDate = now;
+                    tag.ModifyBy = tmpUserId;
                 }
 
                 if (context.SaveChanges() >= 1)
@@ -82,13 +84,13 @@ namespace BusinessLibrary.Repository
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                TagModel tag = context.Tag.Where(x => x.ID == ID).FirstOrDefault();
+                TagModel tag = context.Tag.Where(x => x.Id == ID).FirstOrDefault();
                 if (tag != null)
                 {
                     DateTime now = DateTime.Now;
-                    tag.MODIFY_BY = 0;
-                    tag.MODIFY_DATE = now;
-                    tag.STATE = "N";
+                    tag.ModifyBy = tmpUserId;
+                    tag.ModifyDate = now;
+                    tag.State = "N";
                     context.SaveChanges();
                     return true;
                 }
