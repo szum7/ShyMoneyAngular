@@ -11,12 +11,12 @@ export class SumService {
     constructor(private http: Http) {
     }
 
-    getOnDates(dateType: string, FROM_DATE?: Date, TO_DATE?: Date) {
+    getOnDates(DateType: string, FROM_DATE?: Date, TO_DATE?: Date) {
         var headers = new Headers();
         headers.append("If-Modified-Since", "Tue, 24 July 2017 00:00:00 GMT");
 
         var url = "/Sum/GetOnDates";
-        url += "?dateType=" + dateType;
+        url += "?DateType=" + DateType;
         if (FROM_DATE != null) {
             url += "&";
             url += "FROM_DATE=" + FROM_DATE.toJSON();

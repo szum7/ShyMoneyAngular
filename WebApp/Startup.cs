@@ -26,6 +26,8 @@ namespace CRUD
         {
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
             services.AddTransient<ISumRepo, SumRepo>();
+            services.AddTransient<IIntellisenseRepo, IntellisenseRepo>();
+            services.AddTransient<ITagRepo, TagRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

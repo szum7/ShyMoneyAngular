@@ -7,11 +7,11 @@ namespace DataAccessLibrary.CustomModels
 {
     public class SumsOnDay
     {
-        public DateTime date { get; set; }
-        public List<SumModel> data { get; set; }
+        public DateTime Date { get; set; }
+        public List<SumModel> Data { get; set; }
         public SumsOnDay()
         {
-            this.data = new List<SumModel>();
+            this.Data = new List<SumModel>();
         }
     }
 }

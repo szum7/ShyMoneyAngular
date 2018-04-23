@@ -6,7 +6,7 @@ import { HttpModule, Headers, RequestOptions, BaseRequestOptions } from '@angula
 import { APP_BASE_HREF, CommonModule, Location, LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 import { ToastrModule } from 'toastr-ng2'; // third party module to display toast
-import { InputTextModule, DataTableModule, ButtonModule, DialogModule, CalendarModule } from 'primeng/primeng';
+import { InputTextModule, DataTableModule, ButtonModule, DialogModule, CalendarModule, AutoCompleteModule, MultiSelectModule } from 'primeng/primeng';
 import { SliderModule } from 'primeng/slider';
 //import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
@@ -16,7 +16,7 @@ import { SumComponent } from './components/sum/sum.component';
 //import { CounterComponent } from './components/counter/counter.component';
 import { DateRangePickerComponent } from './components/daterangepicker/daterangepicker.component';
 
-import { SumService } from './_services/index';
+import { SumService, IntellisenseService, TagService } from './_services/index';
 
 class AppBaseRequestOptions extends BaseRequestOptions {
     headers: Headers = new Headers();
@@ -38,6 +38,8 @@ class AppBaseRequestOptions extends BaseRequestOptions {
     ],
     providers: [
         SumService,
+        IntellisenseService,
+        TagService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         { provide: RequestOptions, useClass: AppBaseRequestOptions }
     ],
@@ -47,7 +49,7 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         FormsModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
-        InputTextModule, DataTableModule, ButtonModule, DialogModule, SliderModule, CalendarModule, 
+        InputTextModule, DataTableModule, ButtonModule, DialogModule, SliderModule, CalendarModule, AutoCompleteModule, MultiSelectModule, 
         //Angular2FontawesomeModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'sum', pathMatch: 'full' },

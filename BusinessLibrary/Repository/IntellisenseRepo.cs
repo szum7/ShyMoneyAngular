@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataAccessLibrary.Models;
+using BusinessLibrary.Common;
 
 namespace BusinessLibrary.Repository
 {
@@ -21,6 +22,8 @@ namespace BusinessLibrary.Repository
                                                {
                                                    Id = d.Id,
                                                    Title = d.Title,
+                                                   SumTitle = d.SumTitle,
+                                                   SumDescription = d.SumDescription,
                                                    SumSum = d.SumSum,
                                                    SumInputDate = d.SumInputDate,
                                                    SumAccountDate = d.SumAccountDate,
@@ -29,11 +32,16 @@ namespace BusinessLibrary.Repository
                                                    CreateDate = d.CreateDate,
                                                    CreateBy = d.CreateBy,
                                                    ModifyDate = d.ModifyDate,
-                                                   ModifyBy = d.ModifyBy,
-                                                   State = d.State
+                                                   ModifyBy = d.ModifyBy
                                                }).ToList();
 
                 ret = AssembleWithTags(ret);
+
+                // Strip models to JSON conversion
+                foreach (IntellisenseModel item in ret)
+                {
+                    item.IntellisenseTagConn = null;
+                }
 
                 return ret;
             }
@@ -50,6 +58,8 @@ namespace BusinessLibrary.Repository
                                                {
                                                    Id = d.Id,
                                                    Title = d.Title,
+                                                   SumTitle = d.SumTitle,
+                                                   SumDescription = d.SumDescription,
                                                    SumSum = d.SumSum,
                                                    SumInputDate = d.SumInputDate,
                                                    SumAccountDate = d.SumAccountDate,
@@ -58,11 +68,16 @@ namespace BusinessLibrary.Repository
                                                    CreateDate = d.CreateDate,
                                                    CreateBy = d.CreateBy,
                                                    ModifyDate = d.ModifyDate,
-                                                   ModifyBy = d.ModifyBy,
-                                                   State = d.State
+                                                   ModifyBy = d.ModifyBy
                                                }).ToList();
 
                 ret = AssembleWithTags(ret);
+
+                // Strip models to JSON conversion
+                foreach (IntellisenseModel item in ret)
+                {
+                    item.IntellisenseTagConn = null;
+                }
 
                 return ret;
             }

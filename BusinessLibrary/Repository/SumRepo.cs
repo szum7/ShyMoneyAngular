@@ -121,37 +121,59 @@ namespace BusinessLibrary.Repository
         #endregion
 
         #region Save Methods
-        public SumModel Save(SumModel SUM)
+        public SumModel Save(SumModel p_sum)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                SumModel sum = context.Sum.Where(x => x.Id == SUM.Id).FirstOrDefault();
+                SumModel sum = context.Sum.Where(x => x.Id == p_sum.Id).FirstOrDefault();
                 DateTime now = DateTime.Now;
                 if (sum == null)
                 {
                     sum = new SumModel()
                     {
-                        Title = SUM.Title,
-                        Sum = SUM.Sum,                        
-                        AccountDate = SUM.AccountDate,
-                        InputDate = SUM.InputDate,
-                        DueDate = SUM.DueDate,                        
+                        Title = p_sum.Title,
+                        Sum = p_sum.Sum,                        
+                        AccountDate = p_sum.AccountDate,
+                        InputDate = p_sum.InputDate,
+                        DueDate = p_sum.DueDate,                        
                         CreateDate = now,
                         CreateBy = tmpUserId,
                         ModifyDate = now,
                         ModifyBy = tmpUserId,
                         State = "Y"
                     };
-                    this.ResolveDateTypeDefaults(sum, SUM);
+                    this.ResolveDateTypeDefaults(sum, p_sum);
                     context.Sum.Add(sum);
                 }
                 else
                 {
-                    sum.Title = SUM.Title;
-                    sum.Sum = SUM.Sum;                    
+                    sum.Title = p_sum.Title;
+                    sum.Sum = p_sum.Sum;                    
                     sum.ModifyDate = now;
                     sum.ModifyBy = tmpUserId;
-                    this.ResolveDateTypeDefaults(sum, SUM);
+                    this.ResolveDateTypeDefaults(sum, p_sum);
+
+                    // remove old tag connections
+                    if (sum.Tags != null)
+                    {
+                        foreach (TagModel tag in sum.Tags)
+                        {
+                            context.SumTagConn.RemoveRange(context.SumTagConn.Where(x => x.SumId == sum.Id));
+                        }
+                    }
+                }
+
+                // add tag connections
+                if (p_sum.Tags != null)
+                {
+                    foreach (TagModel tag in p_sum.Tags)
+                    {
+                        context.SumTagConn.Add(new SumTagConnModel()
+                        {
+                            SumId = sum.Id,
+                            TagId = tag.Id
+                        });
+                    }
                 }
 
                 if (context.SaveChanges() >= 1)
@@ -173,26 +195,26 @@ namespace BusinessLibrary.Repository
         private SumsOnDayWrap AssableSumsWithDates(List<SumModel> sums, List<DateTime> dates, DateTypeEnum dateType)
         {
             SumsOnDayWrap ret = new SumsOnDayWrap();
-            if (dateType == DateTypeEnum.INPUT_DATE) ret.dateType = "INPUT_DATE";
-            else if (dateType == DateTypeEnum.ACCOUNT_DATE) ret.dateType = "ACCOUNT_DATE";
-            else if (dateType == DateTypeEnum.DUE_DATE) ret.dateType = "DUE_DATE";
+            if (dateType == DateTypeEnum.INPUT_DATE) ret.DateType = "INPUT_DATE";
+            else if (dateType == DateTypeEnum.ACCOUNT_DATE) ret.DateType = "ACCOUNT_DATE";
+            else if (dateType == DateTypeEnum.DUE_DATE) ret.DateType = "DUE_DATE";
 
             int i = 0;
             int j = 0;
             while (i < dates.Count && j < sums.Count)
             {
                 SumsOnDay dayData = new SumsOnDay();
-                dayData.date = dates[i].Date;
+                dayData.Date = dates[i].Date;
 
                 DateTime sumDate = sums[j].InputDate.Value; // default set
                 if (dateType == DateTypeEnum.ACCOUNT_DATE) sumDate = sums[j].AccountDate.Value;
                 else if (dateType == DateTypeEnum.DUE_DATE) sumDate = sums[j].DueDate.Value;
 
-                if (dayData.date == sumDate.Date)
+                if (dayData.Date == sumDate.Date)
                 {
-                    while(j < sums.Count && dayData.date == sumDate.Date)
+                    while(j < sums.Count && dayData.Date == sumDate.Date)
                     {
-                        dayData.data.Add(sums[j]);
+                        dayData.Data.Add(sums[j]);
                         j++;
 
                         if(j < sums.Count)
@@ -204,14 +226,14 @@ namespace BusinessLibrary.Repository
                     }
                 }
                 i++;
-                ret.data.Add(dayData);
+                ret.Data.Add(dayData);
             }
 
             while(i < dates.Count)
             {
                 SumsOnDay dayData = new SumsOnDay();
-                dayData.date = dates[i].Date;
-                ret.data.Add(dayData);
+                dayData.Date = dates[i].Date;
+                ret.Data.Add(dayData);
                 i++;
             }
 

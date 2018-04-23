@@ -52,6 +52,7 @@
     <TypeScriptCompile Include="ClientApp\app\global\sumsondaywrap.ts" />
     <TypeScriptCompile Include="ClientApp\app\_services\index.ts" />
     <TypeScriptCompile Include="ClientApp\app\_services\intellisense.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\_services\tag.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\_services\sum.service.ts" />
   </ItemGroup>
 

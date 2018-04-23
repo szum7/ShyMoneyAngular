@@ -7,20 +7,29 @@
 </div>
 
 <div class="header2-padd">
-    <div class="day" *ngFor="let day of sumsOnDayWrap.data">
+    <div class="day" *ngFor="let day of sumsOnDayWrap.Data">
         <div class="header">
-            <span>{{day.date}}</span>
+            <span>{{formatDate(day.Date)}}</span>
 		    <div class="btns float-right">
                 <div class="sh-btn green" (click)="add(day)"><span class="glyphicon glyphicon-plus"></span></div>
                 <!--<p-button label="Click" icon="glyphicon glyphicon-plus" iconPos="left" (click)="add(day)"></p-button>-->
             </div>
         </div>
         <div class="records">
-            <div class="record" *ngFor="let sum of day.data, let i = index">
+            <div class="record" *ngFor="let sum of day.Data, let i = index">
                 <ul class="record-fields">
+                    <li class="field"><p-autoComplete [(ngModel)]="sum.IntellisenseTitle" [suggestions]="intellisenseResults" (completeMethod)="searchIntellisense($event, sum)" field="SumTitle" (onSelect)="setSumOnIntellisense($event, sum)"></p-autoComplete></li>
                     <li class="field"><input type="text" placeholder="Title..." [(ngModel)]="sum.Title" /></li>
                     <li class="field"><input type="text" placeholder="Sum..." [(ngModel)]="sum.Sum" /></li>
                     <li class="field"><input type="text" placeholder="Input date..." [(ngModel)]="sum.InputDate" /></li>
+                    <li class="field">
+                        <!--<div class="ib padd5" *ngFor="let tag of sum.Tags, let i = index">
+                            <span>{{tag.Title}}</span>
+                        </div>-->
+                        <p-multiSelect [options]="tags" [(ngModel)]="sum.Tags" [panelStyle]="{minWidth:'12em'}" optionLabel="Title"></p-multiSelect>
+                        <span *ngFor="let tag of sum.Tags">{{tag.Title}}&nbsp;</span>
+                    </li>
+
                     <li class="field"><div class="sh-btn green" (click)="save(sum)"><span class="glyphicon glyphicon-ok"></span></div></li>
                     <li class="field"><div class="sh-btn green" (click)="delete(day, i, sum.Id)"><span class="glyphicon glyphicon-trash"></span></div></li>
                     <!--<li class="field"><p-button label="Click" icon="glyphicon glyphicon-ok" iconPos="left" (click)="save(sum)"></p-button></li>-->

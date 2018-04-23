@@ -10,6 +10,8 @@ export class SumModel extends ModelBase {
     Sum: number;
     Tags: Array<TagModel>;
 
+    IntellisenseTitle: string;
+
     public Init() {
         this.Id = -1;
         this.Title = "";

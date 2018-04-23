@@ -22,7 +22,7 @@ namespace WebApp.Controllers
         public IActionResult Get()
         {
             var data = repo.Get();
-            return Json(new { result = data });
+            return Json(data);
         }
         #endregion
 

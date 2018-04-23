@@ -1,10 +1,12 @@
-﻿using BusinessLibrary.Repository;
+﻿using System;
+using BusinessLibrary.Repository;
 using DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace WebApp.Controllers
 {
-    public class IntellisenseController: Controller
+    public class IntellisenseController : Controller
     {
         public IIntellisenseRepo repo;
 
@@ -17,8 +19,7 @@ namespace WebApp.Controllers
         [HttpGet, Produces("application/json")]
         public IActionResult Get()
         {
-            var data = repo.Get();
-            return Json(new { data = data });
+            return Json(repo.Get());
         }
         #endregion
 
