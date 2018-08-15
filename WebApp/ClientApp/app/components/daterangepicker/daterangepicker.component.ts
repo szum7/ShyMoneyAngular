@@ -7,7 +7,7 @@
 })
 export class DateRangePickerComponent implements OnInit {
 
-    pickDateFromValue: Date;
+    pickDateFromValue?: Date;
     @Input() get pickDateFrom() { return this.pickDateFromValue; }
     @Output() pickDateFromChange = new EventEmitter();
     set pickDateFrom(val) {
@@ -15,7 +15,7 @@ export class DateRangePickerComponent implements OnInit {
         this.pickDateFromChange.emit(this.pickDateFromValue);
     }
 
-    pickDateToValue: Date;
+    pickDateToValue?: Date;
     @Input() get pickDateTo() { return this.pickDateToValue; }
     @Output() pickDateToChange = new EventEmitter();
     set pickDateTo(val) {
@@ -31,7 +31,7 @@ export class DateRangePickerComponent implements OnInit {
     //    this.minDateValue = val;
     //    this.minDateChange.emit(this.minDateValue);
     //}
-    
+
     maxDate: number = (new Date()).getTime();
     //maxDateValue: number;
     //@Input() get maxDate() { return this.maxDateValue; }
@@ -44,9 +44,15 @@ export class DateRangePickerComponent implements OnInit {
     public dateRange: Array<number>;
     public sliderStep: number;
 
-    constructor() {        
+    constructor() {
         this.setDefaultMinMaxDate();
         this.setDefaultFromTo();
+
+        if (!this.pickDateFrom)
+            this.pickDateFrom = new Date(2000, 1, 1);
+
+        if (!this.pickDateTo)
+            this.pickDateTo = new Date(2001, 1, 1);
 
         this.dateRange = [this.pickDateFrom.getTime(), this.pickDateTo.getTime()];
         this.sliderStep = 86400000;
@@ -78,18 +84,24 @@ export class DateRangePickerComponent implements OnInit {
     }
 
     public getMonthsInRange(): string {
-        var months;
-        months = (this.pickDateTo.getFullYear() - this.pickDateFrom.getFullYear()) * 12;
-        months -= this.pickDateFrom.getMonth() + 1;
-        months += this.pickDateTo.getMonth();
-        //return (months <= 0 ? 0 : months) + " months";
-        return (this.pickDateTo.getMonth() - this.pickDateFrom.getMonth() + (12 * (this.pickDateTo.getFullYear() - this.pickDateFrom.getFullYear()))) + " months";
+        if (this.pickDateTo && this.pickDateFrom) {
+            var months;
+            months = (this.pickDateTo.getFullYear() - this.pickDateFrom.getFullYear()) * 12;
+            months -= this.pickDateFrom.getMonth() + 1;
+            months += this.pickDateTo.getMonth();
+            //return (months <= 0 ? 0 : months) + " months";
+            return (this.pickDateTo.getMonth() - this.pickDateFrom.getMonth() + (12 * (this.pickDateTo.getFullYear() - this.pickDateFrom.getFullYear()))) + " months";
+        }
+        return "";
     }
 
     public getYearsInRange(): string {
-        var ageDifMs = (this.pickDateTo as any) - this.pickDateFrom.getTime();
-        var ageDate = new Date(ageDifMs); // miliseconds from epoch
-        return Math.abs(ageDate.getUTCFullYear() - 1970) + " years";
+        if (this.pickDateTo && this.pickDateFrom) {
+            var ageDifMs = (this.pickDateTo as any) - this.pickDateFrom.getTime();
+            var ageDate = new Date(ageDifMs); // miliseconds from epoch
+            return Math.abs(ageDate.getUTCFullYear() - 1970) + " years";
+        }
+        return "";
     }
 
     public getMarginInputFromDateCss(): string {
@@ -101,7 +113,9 @@ export class DateRangePickerComponent implements OnInit {
     }
 
     public dateInputChanged(): void {
-        this.dateRange = [this.pickDateFrom.getTime(), this.pickDateTo.getTime()];
+        if (this.pickDateTo && this.pickDateFrom) {
+            this.dateRange = [this.pickDateFrom.getTime(), this.pickDateTo.getTime()];
+        }
     }
 
     public sliderInputChanged(): void {

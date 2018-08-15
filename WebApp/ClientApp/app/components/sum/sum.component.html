@@ -2,39 +2,37 @@
     <div class="calc-mw-200 ib vertical-top">
         <date-range-picker [(pickDateFrom)]="pickDateFromValue" [(pickDateTo)]="pickDateToValue"></date-range-picker>
     </div><div class="w-200 ib vertical-top">
-        <p-button label="OK" (click)="loadData()"></p-button>
+        <p-button label="OK" (click)="loadSums()"></p-button>
     </div>
 </div>
 
 <div class="header2-padd">
-    <div class="day" *ngFor="let day of sumsOnDayWrap.Data">
-        <div class="header">
-            <span>{{formatDate(day.Date)}}</span>
-		    <div class="btns float-right">
-                <div class="sh-btn green" (click)="add(day)"><span class="glyphicon glyphicon-plus"></span></div>
-                <!--<p-button label="Click" icon="glyphicon glyphicon-plus" iconPos="left" (click)="add(day)"></p-button>-->
+    <div class="days mt10" (window:keydown)="handleKeyPress($event)">
+        <div class="day" *ngFor="let day of sumsOnDayWrap.Data">
+            <div class="header">
+		        <div class="btns ib">
+                    <div class="sh-btn green" (click)="add(day)"><span class="glyphicon glyphicon-plus"></span></div>
+                </div>
+                <span class="stitle">{{formatDate(day.Date)}}</span>
             </div>
-        </div>
-        <div class="records">
-            <div class="record" *ngFor="let sum of day.Data, let i = index">
-                <ul class="record-fields">
-                    <li class="field"><p-autoComplete [(ngModel)]="sum.IntellisenseTitle" [suggestions]="intellisenseResults" (completeMethod)="searchIntellisense($event, sum)" field="SumTitle" (onSelect)="setSumOnIntellisense($event, sum)"></p-autoComplete></li>
-                    <li class="field"><input type="text" placeholder="Title..." [(ngModel)]="sum.Title" /></li>
-                    <li class="field"><input type="text" placeholder="Sum..." [(ngModel)]="sum.Sum" /></li>
-                    <li class="field"><input type="text" placeholder="Input date..." [(ngModel)]="sum.InputDate" /></li>
-                    <li class="field">
-                        <!--<div class="ib padd5" *ngFor="let tag of sum.Tags, let i = index">
-                            <span>{{tag.Title}}</span>
-                        </div>-->
-                        <p-multiSelect [options]="tags" [(ngModel)]="sum.Tags" [panelStyle]="{minWidth:'12em'}" optionLabel="Title"></p-multiSelect>
-                        <span *ngFor="let tag of sum.Tags">{{tag.Title}}&nbsp;</span>
-                    </li>
-
-                    <li class="field"><div class="sh-btn green" (click)="save(sum)"><span class="glyphicon glyphicon-ok"></span></div></li>
-                    <li class="field"><div class="sh-btn green" (click)="delete(day, i, sum.Id)"><span class="glyphicon glyphicon-trash"></span></div></li>
-                    <!--<li class="field"><p-button label="Click" icon="glyphicon glyphicon-ok" iconPos="left" (click)="save(sum)"></p-button></li>-->
-                    <!--<li class="field"><p-button label="Click" icon="glyphicon glyphicon-trash" iconPos="left" (click)="delete(sum.id)"></p-button></li>-->
-                </ul>
+            <div class="records">
+                <div class="record" *ngFor="let sum of day.Data, let i = index">
+                    <ul class="record-fields">
+                        <li class="field"><div class="sh-btn green" (click)="save(sum)"><span class="glyphicon glyphicon-ok"></span></div></li>
+                        <li class="field" *ngIf="sum.Id > 0"><div class="sh-btn blue" (dblclick)="reset(day, i, sum.Id)"><span class="glyphicon glyphicon-repeat"></span></div></li>
+                        <li class="field"><div class="sh-btn red" (dblclick)="delete(day, i, sum.Id)"><span class="glyphicon glyphicon-trash"></span></div></li>
+                        <li class="field"><p-autoComplete [(ngModel)]="sum.IntellisenseTitle" [suggestions]="intellisenseResults" (completeMethod)="searchIntellisense($event, sum)" field="SumTitle" (onSelect)="setSumOnIntellisense($event, sum)"></p-autoComplete></li>
+                        <li class="field"><input type="text" placeholder="Title..." [(ngModel)]="sum.Title" /></li>
+                        <li class="field"><input type="text" placeholder="Sum..." [(ngModel)]="sum.Sum" /></li>
+                        <li class="field"><input type="text" placeholder="Input date..." [(ngModel)]="sum.InputDate" /></li>
+                        <li class="field">
+                            <p-multiSelect [options]="tags" [(ngModel)]="sum.Tags" [panelStyle]="{minWidth:'12em'}" optionLabel="Title"></p-multiSelect>
+                        </li>
+                        <li class="field pt5">
+                            <span *ngFor="let tag of sum.Tags" class="grayish">({{tag.Title}}) </span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule, Headers, RequestOptions, BaseRequestOptions } from '@angular/http';
 import { APP_BASE_HREF, CommonModule, Location, LocationStrategy, HashLocationStrategy } from '@angular/common';
@@ -15,6 +15,7 @@ import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { SumComponent } from './components/sum/sum.component';
 //import { CounterComponent } from './components/counter/counter.component';
 import { DateRangePickerComponent } from './components/daterangepicker/daterangepicker.component';
+import { HomeComponent } from './components/home/home.component';
 
 import { SumService, IntellisenseService, TagService } from './_services/index';
 
@@ -33,8 +34,8 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         AppComponent,
         NavMenuComponent,
         SumComponent,
-        //CounterComponent,
-        DateRangePickerComponent
+        DateRangePickerComponent,
+        HomeComponent
     ],
     providers: [
         SumService,
@@ -52,9 +53,10 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         InputTextModule, DataTableModule, ButtonModule, DialogModule, SliderModule, CalendarModule, AutoCompleteModule, MultiSelectModule, 
         //Angular2FontawesomeModule,
         RouterModule.forRoot([
-            { path: '', redirectTo: 'sum', pathMatch: 'full' },
             { path: 'sum', component: SumComponent },
-            { path: '**', redirectTo: 'sum' }
+            { path: 'home', component: HomeComponent },
+            { path: '**'/*<-any url*/, redirectTo: 'sum' }
+            //{ path: '', redirectTo: 'sum', pathMatch: 'full' },
         ])
     ]
 })

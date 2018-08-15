@@ -140,7 +140,8 @@ namespace BusinessLibrary.Repository
                         CreateBy = tmpUserId,
                         ModifyDate = now,
                         ModifyBy = tmpUserId,
-                        State = "Y"
+                        State = "Y",
+                        IsPayed = "Y"                        
                     };
                     this.ResolveDateTypeDefaults(sum, p_sum);
                     context.Sum.Add(sum);

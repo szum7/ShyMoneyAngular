@@ -11,7 +11,7 @@ export class SumService {
     constructor(private http: Http) {
     }
 
-    getOnDates(DateType: string, FROM_DATE?: Date, TO_DATE?: Date) {
+    getOnDates(DateType?: string, FROM_DATE?: Date, TO_DATE?: Date) {
         var headers = new Headers();
         headers.append("If-Modified-Since", "Tue, 24 July 2017 00:00:00 GMT");
 

@@ -11,7 +11,7 @@ namespace DataAccessLibrary.Models
         public SumModel()
         {
             this.Tags = new List<TagModel>();
-            SumTagConn = new HashSet<SumTagConnModel>();
+            this.SumTagConn = new List<SumTagConnModel>();
         }
     }
 }

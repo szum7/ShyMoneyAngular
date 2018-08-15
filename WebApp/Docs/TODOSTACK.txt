@@ -3,3 +3,9 @@ o 3 dátum felvétele SUM hoz (+2)
 o dátum szerint rendezze a kapott sum tömböt
 o tesztelni, hogy async hívás nélkül is megy-e
 - átállni session használatára. Minden db műveletnél kötelező session paraméter (min user adatai legyenek a sessionben)
+- mégse gomb és működés sum rekordokhoz - vissza lehessen állítani az eredeti értéket
+- visszajelezni, ha elmentettünk egy sum rekordot
+- mentés szerver hiba
+- új cimkéket felvenni: kölcsön, tartozás, borsos gergely, lovaglás, clothes
+- felső menü becsukható legyen (ne zavarja a képernyőt feleslegesen)
+- tag conn-t megkétszerezi szerkesztés-mentésnél

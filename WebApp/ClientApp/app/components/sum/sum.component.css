@@ -1,17 +1,30 @@
-﻿.day .header{
-    padding:5px 10px;
-    border:1px solid #ddd;
-    margin-bottom:1px;
-    vertical-align:top;
+﻿.day{
+    padding:0 2px;
+    background-color:#eee;
 }
-.day .header .btns{
-    margin-top:-3px;
-}
+    .day .header {
+        padding: 0px;
+        border: 1px solid #ddd;
+        margin-bottom: 3px;
+        vertical-align: top;
+        background-color:#fff;
+    }
+        .day .header .record{
+            margin-top:-1px;
+        }
+        .day .header span.stitle {
+            padding: 5px;
+            display: inline-block;
+        }
+        .day .header .btns {
+            border-right:1px solid #ddd;
+        }
 
 
 .record-fields {
     list-style:none;
     margin:0px;
+    padding:0 0 0 30px;
 }
 .record-fields li {
     display:inline-block;
