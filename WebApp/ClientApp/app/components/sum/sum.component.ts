@@ -1,40 +1,27 @@
-// external libraries
-import { Component, OnInit } from '@angular/core';
-import { SumService, IntellisenseService, TagService } from '../../_services/index';
+// Core modules
+import { Component, OnInit, HostListener } from '@angular/core';
+
+// Addons
 import { ToastrService } from 'toastr-ng2';
 //import { InputTextModule, DataTableModule, ButtonModule, DialogModule } from 'primeng/primeng';
-import { HostListener } from '@angular/core';
 
-// models
+// Services
+import { SumService, IntellisenseService, TagService } from '../../_services/index';
+
+// Models
 import { SumModel } from './../../global/summodel';
 import { TagModel } from './../../global/tagmodel';
 import { SumsOnDay } from './../../global/sumsonday';
 import { SumsOnDayWrap } from './../../global/sumsondaywrap';
 import { IntellisenseModel } from './../../global/intellisensemodel';
 
+// Classes
+import { TableSheet } from './core/TableSheet';
+import { Control } from './core/Control';
+
 class Ordering {
     public orderBy?: string;
     public steep?: string;
-}
-
-class ControlNavigation {
-    // NOTE: ezek akkor kellenek, ha nem tudok DOM szerint lépkedni, hanem külön listát kell vezetnem
-    public controlList: Array<any/*DOM*/>;
-    public actControl: any/*DOM*/;
-    public actIndex?: number;
-
-    public constructor(){
-        this.controlList = [];
-    }
-
-    public addControl() {
-
-    }
-
-    public focusNextControl(event: any): void {
-        console.log(event);
-        console.log(document.activeElement);
-    }
 }
 
 @Component({
@@ -44,22 +31,24 @@ class ControlNavigation {
 })
 export class SumComponent implements OnInit {
         
-    public ordering: Ordering;
-    public sumsOnDayWrap: SumsOnDayWrap;
+    ordering: Ordering;
 
     // DateRangePicker properties
-    public pickDateFromValue: Date;
-    public pickDateToValue: Date;
-    //public minDate: number = (new Date(2017, 1, 1)).getTime();
-    //public maxDate: number = (new Date()).getTime();
+    pickDateFromValue: Date;
+    pickDateToValue: Date;
+    //minDate: number = (new Date(2017, 1, 1)).getTime();
+    //maxDate: number = (new Date()).getTime();
 
-    public intellisenses: Array<IntellisenseModel>;
-    public intellisenseResults: Array<IntellisenseModel>;
+    intellisenses: Array<IntellisenseModel>;
+    intellisenseResults: Array<IntellisenseModel>;
 
-    public tags: Array<TagModel>;
+    tags: Array<TagModel>;
+    
+    ctrl: Control;
 
-    private controlNavigation: ControlNavigation;
-
+    tableSheet: TableSheet;
+    structure: any;
+    
     // BEGIN test
     // END test
 
@@ -74,18 +63,69 @@ export class SumComponent implements OnInit {
         this.intellisenses = [];
         this.intellisenseResults = [];
         this.tags = [];
-        this.sumsOnDayWrap = new SumsOnDayWrap(); 
         this.ordering = new Ordering();
-        this.controlNavigation = new ControlNavigation();
         
-        // set defaults
+        // Set defaults
         this.ordering.orderBy = "INPUT_DATE";        
         this.ordering.steep = "ASC";
 
         // Init DateRangePicker properties
-        var date = new Date();
+        //var date = new Date();
         this.pickDateFromValue = new Date(2018, 0, 1); //new Date(date.getFullYear() - 1, date.getMonth(), 1);
         this.pickDateToValue = new Date(2018, 2, 14);
+        
+        this.structure  = {
+            levels: [
+                {
+                    title: null, // root
+                    childArray: 'Data',
+                    fields: [
+                        { title: 'Add', type: 'button', readonly: false },
+                        { title: 'Date', type: 'date', readonly: true }
+                    ]
+                },
+                {
+                    title: 'Data',
+                    childArray: null,
+                    fields: [
+                        { title: 'Remove', type: 'button', readonly: false },
+                        { title: 'Save', type: 'button', readonly: false },
+                        { title: 'Id', type: 'int', readonly: true },
+                        { title: 'Title', type: 'text', readonly: false },
+                        { title: 'InputDate', type: 'date', readonly: false },
+                        { title: 'AccountDate', type: 'date', readonly: false },
+                        { title: 'DueDate', type: 'date', readonly: false },
+                        { title: 'Sum', type: 'int', readonly: false },
+                        { title: 'Tags', type: 'ddl', readonly: false }
+                    ]
+                }
+            ]
+        };
+
+        this.ctrl = new Control(this.sumService);
+        this.tableSheet = new TableSheet(this.structure);
+
+        // Add new sum
+        this.structure.levels[0].fields[0].action = (function (_this: any) {
+            _this.push({
+                Id: null,
+                Title: null,
+                Sum: null,
+                Tags: []
+            });
+            // TODO
+        });
+        // Delete sum
+        this.structure.levels[1].fields[0].action = (function (_this: any) {
+            if (confirm("Delete row?")) {
+                _this.splice(_this.selectedSum, 1);
+                // TODO
+            }
+        });
+        // Save sum
+        this.structure.levels[1].fields[1].action = (function (_this: any) {
+            // TODO
+        });
     }
 
     ngOnInit() {
@@ -100,27 +140,6 @@ export class SumComponent implements OnInit {
         _this.loadTags(function () {
 
         });
-    }
-
-    @HostListener('document:keypress', ['$event'])
-    handleKeyboardEvent(event: KeyboardEvent) {
-        //console.log(event.DOM_KEY_LOCATION_RIGHT);
-        //if (event.getModifierState && event.getModifierState('Control') && event.keyCode == 37) {
-        //    console.log("IN");
-        //    console.log(event);
-        //}
-    }
-    
-    public handleKeyPress(event: any): void {
-        if (event.ctrlKey && (event.keyCode >= 37 && event.keyCode <= 40)) {
-            this.controlNavigation.focusNextControl(event);
-        }
-    }
-
-    
-
-    public formatDate(date: any) {
-        return date.substring(0, 10);
     }
 
     public setSumOnIntellisense(event: IntellisenseModel, sum: SumModel): void {
@@ -149,36 +168,6 @@ export class SumComponent implements OnInit {
         }
     }
 
-    public add(day: SumsOnDay): void {
-        console.log(day);
-        if (day.Data) {
-            let newSum: SumModel = new SumModel();
-            newSum.Init();
-            newSum.InputDate = day.Date;
-            newSum.DueDate = day.Date;
-            newSum.AccountDate = day.Date;
-            day.Data.push(newSum);
-        }
-    }
-
-    public save(sum: SumModel): void {
-        this.sumService.save(sum).subscribe(function (response) {
-            sum.Id = response.Id;
-        });
-    }
-
-    public delete(day: SumsOnDay, index: number, id: number): void {
-        if (id >= 0) {
-            this.sumService.delete(id).subscribe(function (response) {
-                if (response) {
-                    day.Data.splice(index, 1);
-                }
-            });
-        } else {
-            day.Data.splice(index, 1);
-        }
-    }
-
     loadIntellisenses(callback: Function): void {
         callback = (typeof callback === 'undefined') ? (function () { }) : callback;
 
@@ -198,8 +187,7 @@ export class SumComponent implements OnInit {
         let _this = this;
         this.sumService.getOnDates(_this.ordering.orderBy, _this.pickDateFromValue, _this.pickDateToValue).subscribe(function (response) {
             console.log(response);
-            _this.sumsOnDayWrap = response;
-
+            _this.tableSheet.input = response.Data;
             // END
             callback();
         });
@@ -218,21 +206,14 @@ export class SumComponent implements OnInit {
         });
     }
 
-    deleteFromDay(day: SumsOnDay, sumId: number): boolean {
-        var i: number = 0;
-        while (i < day.Data.length && day.Data[i].Id != sumId)
-            i++;
-        if (i < day.Data.length) {
-            day.Data.splice(i, 1);
-            return true;
-        }
-        return false;
-    }
-
     isInArray(arr: any, id: any): boolean {
         var i = 0;
         while (i < arr.length && arr[i].Id != id)
             i++;
         return i < arr.length;
+    }
+
+    public formatDate(date: any): string { // 2010-10-01 12:00:00 -> 2010-10-01
+        return date.substring(0, 10);
     }
 }

@@ -2,8 +2,8 @@
 
 export class SumsOnDayWrap {
 
-    DateType?: string;
-    Data?: Array<SumsOnDay>;
+    DateType: string;
+    Data: Array<SumsOnDay>;
 
     constructor() {
         this.Data = [];

@@ -24,6 +24,8 @@
   <ItemGroup>
     <None Remove="ClientApp\app\components\daterangepicker\daterangepicker.component.ts" />
     <None Remove="ClientApp\app\components\sum\sum.component.ts" />
+    <None Remove="ClientApp\app\components\sum\core\TableSheet.ts" />
+    <None Remove="ClientApp\app\direcitves\focus.directive.ts" />
     <None Remove="ClientApp\app\global\intellisensemodel.ts" />
     <None Remove="ClientApp\app\global\models.ts" />
     <None Remove="ClientApp\app\_services\index.ts" />
@@ -43,7 +45,10 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\daterangepicker\daterangepicker.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\sum\core\Control.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\sum\sum.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\sum\core\TableSheet.ts" />
+    <TypeScriptCompile Include="ClientApp\app\direcitves\focus.directive.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\intellisensemodel.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\summodel.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\modelbase.ts" />
