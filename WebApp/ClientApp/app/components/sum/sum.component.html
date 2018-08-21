@@ -67,19 +67,34 @@
                         [ngClass]="{'selected': tableSheet.selectedField == field2 && tableSheet.selectedDate == i && tableSheet.selectedSum == j}"> <!-- cols -->
                         <div [ngSwitch]="field2.type">
                             <div *ngSwitchCase="'text'">
-                                <label>{{field2.title}}</label>
-                                <input type="text" placeholder="Text..." [(ngModel)]="sum[field2.title]" [sFocus]="tableSheet.selectedField == field2 && tableSheet.selectedDate == i && tableSheet.selectedSum == j" />
+                                <input type="text" placeholder="Text..." 
+                                       [(ngModel)]="sum[field2.title]" 
+                                       [sFocus]="tableSheet.selectedField == field2 && tableSheet.selectedDate == i && tableSheet.selectedSum == j" />
                             </div>
                             <div *ngSwitchCase="'int'">
-                                <label>{{field2.title}}</label>
-                                <input type="text" placeholder="Int..." [(ngModel)]="sum[field2.title]" [sFocus]="tableSheet.selectedField == field2 && tableSheet.selectedDate == i && tableSheet.selectedSum == j" />
+                                <input type="text" placeholder="Int..." 
+                                       [(ngModel)]="sum[field2.title]" 
+                                       [sFocus]="tableSheet.selectedField == field2 && tableSheet.selectedDate == i && tableSheet.selectedSum == j" />
                             </div>
                             <div *ngSwitchCase="'date'">
-                                <label>{{field2.title}}</label>
-                                <input type="text" placeholder="Date..." [(ngModel)]="sum[field2.title]" [sFocus]="tableSheet.selectedField == field2 && tableSheet.selectedDate == i && tableSheet.selectedSum == j" />
+                                <input type="text" placeholder="Date..." 
+                                       [(ngModel)]="sum[field2.title]" 
+                                       [sFocus]="tableSheet.selectedField == field2 && tableSheet.selectedDate == i && tableSheet.selectedSum == j" />
                             </div>
                             <div *ngSwitchCase="'ddl'">
-                                <label>{{field2.title}}</label>
+                                <p-multiSelect optionLabel="Title" 
+                                               [options]="tags" 
+                                               [(ngModel)]="sum[field2.title]" 
+                                               [panelStyle]="{minWidth:'12em'}" 
+                                               [sFocus]="tableSheet.selectedField == field2 && tableSheet.selectedDate == i && tableSheet.selectedSum == j"></p-multiSelect>
+                            </div>
+                            <div *ngSwitchCase="'intellisense'">
+                                <p-autoComplete field="SumTitle" 
+                                                [(ngModel)]="sum.IntellisenseTitle" 
+                                                [suggestions]="intellisenseResults" 
+                                                [sFocus]="tableSheet.selectedField == field2 && tableSheet.selectedDate == i && tableSheet.selectedSum == j"
+                                                (completeMethod)="searchIntellisense($event, sum)" 
+                                                (onSelect)="setSumOnIntellisense($event, sum)"></p-autoComplete>
                             </div>
                             <div *ngSwitchCase="'button'">
                                 <div class="sh-btn green">{{field2.title}}</div>

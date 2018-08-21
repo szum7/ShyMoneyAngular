@@ -90,11 +90,12 @@ export class SumComponent implements OnInit {
                     fields: [
                         { title: 'Remove', type: 'button', readonly: false },
                         { title: 'Save', type: 'button', readonly: false },
-                        { title: 'Id', type: 'int', readonly: true },
+                        { title: '', type: 'intellisense', readonly: false },
+                        //{ title: 'Id', type: 'int', readonly: true },
                         { title: 'Title', type: 'text', readonly: false },
-                        { title: 'InputDate', type: 'date', readonly: false },
-                        { title: 'AccountDate', type: 'date', readonly: false },
-                        { title: 'DueDate', type: 'date', readonly: false },
+                        //{ title: 'InputDate', type: 'date', readonly: false },
+                        //{ title: 'AccountDate', type: 'date', readonly: false },
+                        //{ title: 'DueDate', type: 'date', readonly: false },
                         { title: 'Sum', type: 'int', readonly: false },
                         { title: 'Tags', type: 'ddl', readonly: false }
                     ]
