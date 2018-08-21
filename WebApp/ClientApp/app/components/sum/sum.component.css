@@ -20,15 +20,13 @@
             border-right:1px solid #ddd;
         }
 
-.record-field {
+
+.record-fields {
+    list-style:none;
+    margin:0px;
+    padding:0 0 0 30px;
+}
+.record-fields li {
     display:inline-block;
     vertical-align:top;
-}
-
-.ib{
-    display: inline-block;
-}
-
-.selected{
-    border:1px solid red;
 }

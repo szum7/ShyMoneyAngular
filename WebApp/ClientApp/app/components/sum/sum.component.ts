@@ -1,12 +1,12 @@
 // Core modules
 import { Component, OnInit, HostListener } from '@angular/core';
-
-// Addons
-import { ToastrService } from 'toastr-ng2';
 //import { InputTextModule, DataTableModule, ButtonModule, DialogModule } from 'primeng/primeng';
 
 // Services
 import { SumService, IntellisenseService, TagService } from '../../_services/index';
+
+// Addons
+import { ToastrService } from 'toastr-ng2';
 
 // Models
 import { SumModel } from './../../global/summodel';
@@ -14,9 +14,9 @@ import { TagModel } from './../../global/tagmodel';
 import { SumsOnDay } from './../../global/sumsonday';
 import { SumsOnDayWrap } from './../../global/sumsondaywrap';
 import { IntellisenseModel } from './../../global/intellisensemodel';
+// export * from './sum.service'; 
 
-// Classes
-import { TableSheet } from './core/TableSheet';
+// Core
 import { Control } from './core/Control';
 
 class Ordering {
@@ -30,25 +30,25 @@ class Ordering {
     styleUrls: ['./sum.component.css']
 })
 export class SumComponent implements OnInit {
-        
-    ordering: Ordering;
+
+    // Core
+    private ctrl: Control;
+
+    // Data holders
+    public sumsOnDayWrap: SumsOnDayWrap;
+    public intellisenses: Array<IntellisenseModel>;
+    public intellisenseResults: Array<IntellisenseModel>;
+    public tags: Array<TagModel>;
+
+    // Settings
+    public ordering: Ordering;
 
     // DateRangePicker properties
-    pickDateFromValue: Date;
-    pickDateToValue: Date;
-    //minDate: number = (new Date(2017, 1, 1)).getTime();
-    //maxDate: number = (new Date()).getTime();
+    public pickDateFromValue: Date;
+    public pickDateToValue: Date;
+    //public minDate: number = (new Date(2017, 1, 1)).getTime();
+    //public maxDate: number = (new Date()).getTime();
 
-    intellisenses: Array<IntellisenseModel>;
-    intellisenseResults: Array<IntellisenseModel>;
-
-    tags: Array<TagModel>;
-    
-    ctrl: Control;
-
-    tableSheet: TableSheet;
-    structure: any;
-    
     // BEGIN test
     // END test
 
@@ -58,75 +58,25 @@ export class SumComponent implements OnInit {
         private tagService: TagService,
         private toastrService: ToastrService) {
 
+        this.ctrl = new Control(this.sumService);
+
         // TODO megszerezni user beállításaiból adatbázisból
 
+        // Data holders
         this.intellisenses = [];
         this.intellisenseResults = [];
         this.tags = [];
+        this.sumsOnDayWrap = new SumsOnDayWrap(); 
+
+        // Settings
         this.ordering = new Ordering();
-        
-        // Set defaults
         this.ordering.orderBy = "INPUT_DATE";        
         this.ordering.steep = "ASC";
 
         // Init DateRangePicker properties
-        //var date = new Date();
+        var date = new Date();
         this.pickDateFromValue = new Date(2018, 0, 1); //new Date(date.getFullYear() - 1, date.getMonth(), 1);
         this.pickDateToValue = new Date(2018, 2, 14);
-        
-        this.structure  = {
-            levels: [
-                {
-                    title: null, // root
-                    childArray: 'Data',
-                    fields: [
-                        { title: 'Add', type: 'button', readonly: false },
-                        { title: 'Date', type: 'date', readonly: true }
-                    ]
-                },
-                {
-                    title: 'Data',
-                    childArray: null,
-                    fields: [
-                        { title: 'Remove', type: 'button', readonly: false },
-                        { title: 'Save', type: 'button', readonly: false },
-                        { title: '', type: 'intellisense', readonly: false },
-                        //{ title: 'Id', type: 'int', readonly: true },
-                        { title: 'Title', type: 'text', readonly: false },
-                        //{ title: 'InputDate', type: 'date', readonly: false },
-                        //{ title: 'AccountDate', type: 'date', readonly: false },
-                        //{ title: 'DueDate', type: 'date', readonly: false },
-                        { title: 'Sum', type: 'int', readonly: false },
-                        { title: 'Tags', type: 'ddl', readonly: false }
-                    ]
-                }
-            ]
-        };
-
-        this.ctrl = new Control(this.sumService);
-        this.tableSheet = new TableSheet(this.structure);
-
-        // Add new sum
-        this.structure.levels[0].fields[0].action = (function (_this: any) {
-            _this.push({
-                Id: null,
-                Title: null,
-                Sum: null,
-                Tags: []
-            });
-            // TODO
-        });
-        // Delete sum
-        this.structure.levels[1].fields[0].action = (function (_this: any) {
-            if (confirm("Delete row?")) {
-                _this.splice(_this.selectedSum, 1);
-                // TODO
-            }
-        });
-        // Save sum
-        this.structure.levels[1].fields[1].action = (function (_this: any) {
-            // TODO
-        });
     }
 
     ngOnInit() {
@@ -141,9 +91,14 @@ export class SumComponent implements OnInit {
         _this.loadTags(function () {
 
         });
-    }
+    }    
 
-    public setSumOnIntellisense(event: IntellisenseModel, sum: SumModel): void {
+
+    /**
+     * Methods
+     */
+
+    setSumOnIntellisense(event: IntellisenseModel, sum: SumModel): void {
         if (event.SumSum)
             sum.Sum = event.SumSum;
         if (event.SumTitle)
@@ -159,7 +114,7 @@ export class SumComponent implements OnInit {
         sum.Tags = this.tags.filter(a => _this.isInArray(event.Tags, a.Id));
     }
 
-    public searchIntellisense(event: any, sum: SumModel): void {
+    searchIntellisense(event: any, sum: SumModel): void {
         this.intellisenseResults = [];
         for (var i = 0; i < this.intellisenses.length; i++) {
             let title = this.intellisenses[i].Title.toLowerCase();
@@ -169,7 +124,12 @@ export class SumComponent implements OnInit {
         }
     }
 
-    loadIntellisenses(callback: Function): void {
+
+    /**
+     * Loaders
+     */
+
+    private loadIntellisenses(callback: Function): void {
         callback = (typeof callback === 'undefined') ? (function () { }) : callback;
 
         let _this = this;
@@ -182,19 +142,20 @@ export class SumComponent implements OnInit {
         });
     }
 
-    loadSums(callback: Function): void {
+    private loadSums(callback: Function): void {
         callback = (typeof callback === 'undefined') ? (function () { }) : callback;
 
         let _this = this;
         this.sumService.getOnDates(_this.ordering.orderBy, _this.pickDateFromValue, _this.pickDateToValue).subscribe(function (response) {
             console.log(response);
-            _this.tableSheet.input = response.Data;
+            _this.sumsOnDayWrap = response;
+
             // END
             callback();
         });
     }
 
-    loadTags(callback: Function): void {
+    private loadTags(callback: Function): void {
         callback = (typeof callback === 'undefined') ? (function () { }) : callback;
 
         let _this = this;
@@ -207,14 +168,19 @@ export class SumComponent implements OnInit {
         });
     }
 
-    isInArray(arr: any, id: any): boolean {
+
+    /**
+     * Misc
+     */
+
+    private isInArray(arr: any, id: any): boolean {
         var i = 0;
         while (i < arr.length && arr[i].Id != id)
             i++;
         return i < arr.length;
     }
 
-    public formatDate(date: any): string { // 2010-10-01 12:00:00 -> 2010-10-01
+    formatDate(date: any) {
         return date.substring(0, 10);
     }
 }
