@@ -18,12 +18,14 @@ import { FocusDirective } from "./direcitves/focus.directive";
 // Components
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
-import { SumComponent } from './components/sum/sum.component';
 import { DateRangePickerComponent } from './components/daterangepicker/daterangepicker.component';
-import { HomeComponent } from './components/home/home.component';
+
+// Pages
+import { EditSumsPage } from './pages/EditSums/editsums.page';
+import { HomePage } from './pages/Home/home.page';
 
 // Services
-import { SumService, IntellisenseService, TagService } from './_services/index';
+import { SumService, IntellisenseService, TagService } from './services/index';
 
 class AppBaseRequestOptions extends BaseRequestOptions {
     headers: Headers = new Headers();
@@ -35,14 +37,16 @@ class AppBaseRequestOptions extends BaseRequestOptions {
 }
 
 @NgModule({
-    declarations: [
+    declarations: [  
+        // Directives      
         FocusDirective,
-        NavMenuComponent,
+        // Components
         AppComponent,
         NavMenuComponent,
-        SumComponent,
         DateRangePickerComponent,
-        HomeComponent
+        // Pages
+        EditSumsPage,
+        HomePage
     ],
     providers: [
         SumService,
@@ -60,9 +64,9 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         InputTextModule, DataTableModule, ButtonModule, DialogModule, SliderModule, CalendarModule, AutoCompleteModule, MultiSelectModule, 
         //Angular2FontawesomeModule,
         RouterModule.forRoot([
-            { path: 'sum', component: SumComponent },
-            { path: 'home', component: HomeComponent },
-            { path: '**'/*<-any url*/, redirectTo: 'sum' }
+            { path: 'EditSumsPage', component: EditSumsPage },
+            { path: 'Home', component: HomePage },
+            { path: '**'/*<-any url*/, redirectTo: 'EditSumsPage' }
             //{ path: '', redirectTo: 'sum', pathMatch: 'full' },
         ])
     ]

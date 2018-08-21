@@ -18,19 +18,20 @@
 
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Compile Remove="ClientApp\app\components\sum\**" />
+    <Compile Remove="ClientApp\app\_services\**" />
     <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\app\components\sum\**" />
+    <EmbeddedResource Remove="ClientApp\app\_services\**" />
+    <None Remove="ClientApp\app\components\sum\**" />
+    <None Remove="ClientApp\app\_services\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="ClientApp\app\components\daterangepicker\daterangepicker.component.ts" />
-    <None Remove="ClientApp\app\components\sum\sum.component.ts" />
-    <None Remove="ClientApp\app\components\sum\core\TableSheet.ts" />
     <None Remove="ClientApp\app\direcitves\focus.directive.ts" />
     <None Remove="ClientApp\app\global\intellisensemodel.ts" />
     <None Remove="ClientApp\app\global\models.ts" />
-    <None Remove="ClientApp\app\_services\index.ts" />
-    <None Remove="ClientApp\app\_services\intellisense.service.ts" />
-    <None Remove="ClientApp\app\_services\sum.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,9 +46,6 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\components\daterangepicker\daterangepicker.component.ts" />
-    <TypeScriptCompile Include="ClientApp\app\components\sum\core\Control.ts" />
-    <TypeScriptCompile Include="ClientApp\app\components\sum\sum.component.ts" />
-    <TypeScriptCompile Include="ClientApp\app\components\sum\core\TableSheet.ts" />
     <TypeScriptCompile Include="ClientApp\app\direcitves\focus.directive.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\intellisensemodel.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\summodel.ts" />
@@ -55,10 +53,6 @@
     <TypeScriptCompile Include="ClientApp\app\global\tagmodel.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\sumsonday.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\sumsondaywrap.ts" />
-    <TypeScriptCompile Include="ClientApp\app\_services\index.ts" />
-    <TypeScriptCompile Include="ClientApp\app\_services\intellisense.service.ts" />
-    <TypeScriptCompile Include="ClientApp\app\_services\tag.service.ts" />
-    <TypeScriptCompile Include="ClientApp\app\_services\sum.service.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

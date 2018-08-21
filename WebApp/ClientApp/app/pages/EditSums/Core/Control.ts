@@ -1,5 +1,5 @@
 ﻿// Services
-import { SumService, IntellisenseService, TagService } from '../../../_services/index';
+import { SumService } from '../../../services/index';
 
 // Models
 import { SumModel } from './../../../global/summodel';

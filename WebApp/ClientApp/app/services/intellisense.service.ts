@@ -8,6 +8,11 @@ import { IntellisenseModel } from './../global/intellisensemodel';
 class IntellWrap{
     dateType: string;
     data: Array<IntellisenseModel>;
+
+    constructor(){
+        this.dateType = "";
+        this.data = [];
+    }
 }
 
 @Injectable()

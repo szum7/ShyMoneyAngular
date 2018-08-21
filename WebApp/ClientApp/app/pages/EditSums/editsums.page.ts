@@ -3,7 +3,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 //import { InputTextModule, DataTableModule, ButtonModule, DialogModule } from 'primeng/primeng';
 
 // Services
-import { SumService, IntellisenseService, TagService } from '../../_services/index';
+import { SumService, IntellisenseService, TagService } from '../../services/index';
 
 // Addons
 import { ToastrService } from 'toastr-ng2';
@@ -17,7 +17,7 @@ import { IntellisenseModel } from './../../global/intellisensemodel';
 // export * from './sum.service'; 
 
 // Core
-import { Control } from './core/Control';
+import { Control } from './Core/Control';
 
 class Ordering {
     public orderBy?: string;
@@ -25,11 +25,11 @@ class Ordering {
 }
 
 @Component({
-    selector: 'sum',
-    templateUrl: './sum.component.html',
-    styleUrls: ['./sum.component.css']
+    selector: 'EditSumsPage',
+    templateUrl: './editsums.page.html',
+    styleUrls: ['./editsums.page.css']
 })
-export class SumComponent implements OnInit {
+export class EditSumsPage implements OnInit {
 
     // Core
     private ctrl: Control;
@@ -57,6 +57,8 @@ export class SumComponent implements OnInit {
         private intellisenseService: IntellisenseService,
         private tagService: TagService,
         private toastrService: ToastrService) {
+
+        console.log("Ran");
 
         this.ctrl = new Control(this.sumService);
 
