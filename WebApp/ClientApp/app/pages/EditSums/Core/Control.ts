@@ -25,7 +25,9 @@ export class Control {
 
     public save(sum: SumModel): void {
         this.sumService.save(sum).subscribe(function (response) {
-            sum.Id = response.Id;
+            console.log(response);
+            console.log(sum);
+            sum.Id = response.data.Id;
         });
     }
 

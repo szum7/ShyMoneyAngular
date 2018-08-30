@@ -1,0 +1,9 @@
+﻿Én tartozom Tóth Bélának és a kiegyenlítés
+(Áron->Béla)
+Tóth Béla, debit, +400 : T. Béla adott nekem 400 forintot
+Tóth Béla, debit, -400 : megfizettem a tartozást T. Bélának
+
+Tóth Béla tartozik nekem  és a kiegyenlítés
+(Béla->Áron)
+Tóth Béla, loan, -400 : T. Béla kölcsönkér tőlem 400 forintot
+Tóth Béla, loan, +400 : T. Béla visszaadja a 400 forintot

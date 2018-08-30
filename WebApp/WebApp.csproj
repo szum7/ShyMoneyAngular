@@ -32,6 +32,8 @@
     <None Remove="ClientApp\app\direcitves\focus.directive.ts" />
     <None Remove="ClientApp\app\global\intellisensemodel.ts" />
     <None Remove="ClientApp\app\global\models.ts" />
+    <None Remove="ClientApp\app\pages\Calculations\calculations.page.ts" />
+    <None Remove="ClientApp\app\services\calculations.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +55,8 @@
     <TypeScriptCompile Include="ClientApp\app\global\tagmodel.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\sumsonday.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\sumsondaywrap.ts" />
+    <TypeScriptCompile Include="ClientApp\app\pages\Calculations\calculations.page.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\calculations.service.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

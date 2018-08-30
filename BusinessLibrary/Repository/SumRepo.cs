@@ -148,6 +148,8 @@ namespace BusinessLibrary.Repository
                 }
                 else
                 {
+                    List<SumTagConnModel> stcList = context.SumTagConn.Where(x => x.SumId == sum.Id).ToList();
+
                     sum.Title = p_sum.Title;
                     sum.Sum = p_sum.Sum;                    
                     sum.ModifyDate = now;
@@ -155,12 +157,9 @@ namespace BusinessLibrary.Repository
                     this.ResolveDateTypeDefaults(sum, p_sum);
 
                     // remove old tag connections
-                    if (sum.Tags != null)
+                    if (stcList.Count > 0)
                     {
-                        foreach (TagModel tag in sum.Tags)
-                        {
-                            context.SumTagConn.RemoveRange(context.SumTagConn.Where(x => x.SumId == sum.Id));
-                        }
+                        context.SumTagConn.RemoveRange(stcList);
                     }
                 }
 

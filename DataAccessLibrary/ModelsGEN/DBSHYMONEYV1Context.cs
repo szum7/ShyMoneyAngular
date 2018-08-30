@@ -13,6 +13,7 @@ namespace DataAccessLibrary.Models
         public virtual DbSet<SumTagConnModel> SumTagConn { get; set; }
         public virtual DbSet<TagModel> Tag { get; set; }
         public virtual DbSet<UserModel> User { get; set; }
+        public virtual DbSet<DateModel> Dates { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -412,6 +413,20 @@ namespace DataAccessLibrary.Models
                     .HasColumnName("USERNAME")
                     .HasMaxLength(100)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<DateModel>(entity =>
+            {
+                entity.ToTable("DATES");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric(15, 0)")
+                    .ValueGeneratedOnAdd();                
+
+                entity.Property(e => e.Date)
+                    .HasColumnName("DATE")
+                    .HasColumnType("datetime");
             });
         }
     }

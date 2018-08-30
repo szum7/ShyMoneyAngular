@@ -9,3 +9,4 @@ o tesztelni, hogy async hívás nélkül is megy-e
 - új cimkéket felvenni: kölcsön, tartozás, borsos gergely, lovaglás, clothes
 - felső menü becsukható legyen (ne zavarja a képernyőt feleslegesen)
 - tag conn-t megkétszerezi szerkesztés-mentésnél
+- tartoz és követelnél lehessen megadni embert külön beviteli mezőbe (SUM táblában, "alany" vagy hasonló. Lehet contact külön kapcsoló táblával is.)

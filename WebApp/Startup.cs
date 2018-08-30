@@ -28,6 +28,7 @@ namespace CRUD
             services.AddTransient<ISumRepo, SumRepo>();
             services.AddTransient<IIntellisenseRepo, IntellisenseRepo>();
             services.AddTransient<ITagRepo, TagRepo>();
+            services.AddTransient<ICalculationRepo, CalculationRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
