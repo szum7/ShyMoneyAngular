@@ -26,6 +26,11 @@ namespace BusinessLibrary.Repository
         public decimal expensePerDay { get; set; }
         public decimal flowPerDay { get; set; }
         public List<SumModel> sums { get; set; }
+
+        public MonthlyResult()
+        {
+            this.sums = new List<SumModel>();
+        }
     }
 
     public class CalculationRepo : ICalculationRepo
@@ -97,7 +102,9 @@ namespace BusinessLibrary.Repository
             decimal cumulatedFlow = 0; // starts with 0
             decimal income = 0;
             decimal expense = 0;
-            
+
+            ret.Add(new MonthlyResult());
+
             foreach (SumModel sum in sums)
             {
                 int thisYear = sum.InputDate.Value.Year;
@@ -107,9 +114,11 @@ namespace BusinessLibrary.Repository
                 {
                     if (thisMonth != prevMonth || thisYear != prevYear) // new month
                     {
-                        // Add month
-                        int daysInMonth = DateTime.DaysInMonth(prevYear, prevMonth);
-                        ret.Add(this.CreateMonthlyResult(id++, prevYear, prevMonth, expense, income, cumulatedFlow));  
+                        // Set last month
+                        this.SetMonthlyResult(ret[ret.Count - 1], id++, prevYear, prevMonth, expense, income, cumulatedFlow);
+
+                        // Add new month
+                        ret.Add(new MonthlyResult());  
 
                         // If month(s) are missing
                         // 2010-10 -> 2011-03 => add 11, 12, 1, 2 
@@ -131,8 +140,11 @@ namespace BusinessLibrary.Repository
                                     prevMonth++;
                                 }
 
-                                // Add dummy month
-                                ret.Add(this.CreateMonthlyResult(id++, prevYear, prevMonth, 0, 0, cumulatedFlow)); 
+                                // Set last dummy month
+                                this.SetMonthlyResult(ret[ret.Count - 1], id++, prevYear, prevMonth, 0, 0, cumulatedFlow);
+
+                                // Add new month
+                                ret.Add(new MonthlyResult());
                             }
                         }
 
@@ -146,6 +158,9 @@ namespace BusinessLibrary.Repository
                 prevYear = thisYear;
                 prevMonth = thisMonth;
 
+                // Add SumModel
+                ret[ret.Count - 1].sums.Add(sum);
+
                 // Add up
                 if (sum.Sum < 0)
                 {
@@ -157,28 +172,25 @@ namespace BusinessLibrary.Repository
                 }
                 cumulatedFlow += sum.Sum.Value;
             }
-            // Add last
-            ret.Add(this.CreateMonthlyResult(id++, prevYear, prevMonth, expense, income, cumulatedFlow));
+            // Set last month
+            this.SetMonthlyResult(ret[ret.Count - 1], id, prevYear, prevMonth, expense, income, cumulatedFlow);
 
             return ret;
         }
 
-        MonthlyResult CreateMonthlyResult(int id, int prevYear, int prevMonth, decimal expense, decimal income, decimal cumulatedFlow)
+        void SetMonthlyResult(MonthlyResult monthlyResult, int id, int prevYear, int prevMonth, decimal expense, decimal income, decimal cumulatedFlow)
         {
             int daysInMonth = DateTime.DaysInMonth(prevYear, prevMonth);
-            return (new MonthlyResult()
-            {
-                id = id++,
-                date = new DateTime(prevYear, prevMonth, 1),
-                dateString = String.Format("{0}-{1}-01", prevYear, prevMonth),
-                expense = expense,
-                income = income,
-                flow = income - expense,
-                cumulatedFlow = cumulatedFlow,
-                expensePerDay = expense / daysInMonth,
-                incomePerDay = income / daysInMonth,
-                flowPerDay = (income - expense) / daysInMonth
-            });
+            monthlyResult.id = id;
+            monthlyResult.date = new DateTime(prevYear, prevMonth, 1);
+            monthlyResult.dateString = String.Format("{0}-{1}-01", prevYear, prevMonth);
+            monthlyResult.expense = expense;
+            monthlyResult.income = income;
+            monthlyResult.flow = income - expense;
+            monthlyResult.cumulatedFlow = cumulatedFlow;
+            monthlyResult.expensePerDay = Math.Round(expense / daysInMonth, 2);
+            monthlyResult.incomePerDay = Math.Round(income / daysInMonth, 2);
+            monthlyResult.flowPerDay = Math.Round((income - expense) / daysInMonth, 2);
         }
         #endregion
 
