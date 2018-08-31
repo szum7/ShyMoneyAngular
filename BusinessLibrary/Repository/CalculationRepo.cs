@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BusinessLibrary.Repository
 {
-    public class MonthlySum
+    public class MonthlyResult
     {
         public int id { get; set; }
         public DateTime date { get; set; }
@@ -25,7 +25,7 @@ namespace BusinessLibrary.Repository
         public decimal incomePerDay { get; set; }
         public decimal expensePerDay { get; set; }
         public decimal flowPerDay { get; set; }
-        //public List<SumModel> sums { get; set; }
+        public List<SumModel> sums { get; set; }
     }
 
     public class CalculationRepo : ICalculationRepo
@@ -60,21 +60,25 @@ namespace BusinessLibrary.Repository
         // month2
         //   ...
 
+        #region MonthlySumups
         // from, to
         // 2016, december    income      expense     flow       cumulatedFlow       up/down icon
         // 2017, january     income      expense     flow       cumulatedFlow       up/down icon
         // 2017, february    income      expense     flow       cumulatedFlow       up/down icon
         // ...
-        public List<MonthlySum> MonthlySumups(DateTime FROM_DATE, DateTime TO_DATE)
+        public List<MonthlyResult> MonthlySumups(int FROM_YEAR, int FROM_MONTH, int TO_YEAR, int TO_MONTH)
         {
+            DateTime fromDate = new DateTime(FROM_YEAR, FROM_MONTH, 1);
+            DateTime toDate = new DateTime(TO_YEAR, TO_MONTH, 1);
+            toDate = toDate.AddMonths(1);
             List<SumModel> sums = new List<SumModel>();
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
                 sums = (from d in context.Sum
                         where (
                           (d.State == "Y")
-                          && (FROM_DATE == null || d.InputDate >= FROM_DATE)
-                          && (TO_DATE == null || d.InputDate <= TO_DATE)
+                          && d.InputDate >= fromDate
+                          && d.InputDate < toDate
                         )
                         orderby d.InputDate ascending
                         select new SumModel()
@@ -86,7 +90,7 @@ namespace BusinessLibrary.Repository
                         }).ToList();
             }
 
-            List<MonthlySum> ret = new List<MonthlySum>();
+            List<MonthlyResult> ret = new List<MonthlyResult>();
             int prevYear = -1;
             int prevMonth = -1;
             int id = 1;
@@ -97,71 +101,50 @@ namespace BusinessLibrary.Repository
             foreach (SumModel sum in sums)
             {
                 int thisYear = sum.InputDate.Value.Year;
-                int thisMonth = sum.InputDate.Value.Month;                
+                int thisMonth = sum.InputDate.Value.Month;
 
-                if (thisMonth != prevMonth || thisYear != prevYear) // new month
+                if (prevYear != -1 && prevMonth != -1)
                 {
-                    // Add month
-                    int daysInMonth = DateTime.DaysInMonth(prevYear, prevMonth);
-                    ret.Add(new MonthlySum()
+                    if (thisMonth != prevMonth || thisYear != prevYear) // new month
                     {
-                        id = id++,
-                        date = new DateTime(prevYear, prevMonth, 1),
-                        dateString = String.Format("{0}-{1}-01", prevYear, prevMonth),
-                        expense = expense,
-                        income = income,
-                        flow = income - expense,
-                        cumulatedFlow = cumulatedFlow,
-                        expensePerDay = expense / daysInMonth,
-                        incomePerDay = income / daysInMonth,
-                        flowPerDay = (income - expense) / daysInMonth
-                    });
+                        // Add month
+                        int daysInMonth = DateTime.DaysInMonth(prevYear, prevMonth);
+                        ret.Add(this.CreateMonthlyResult(id++, prevYear, prevMonth, expense, income, cumulatedFlow));  
 
-                    // If month(s) are missing
-                    // 2010-10 -> 2011-03 => add 11, 12, 1, 2 
-                    // ||
-                    // 2010-09 -> 2010-12 => 10, 11
-                    if ((thisYear != prevYear && prevMonth - thisMonth != 11) || 
-                        (thisMonth - prevMonth != 1)) 
-                    {
-                        while(thisYear != prevYear && thisMonth != prevMonth)
-                        {                     
-                            // Increase date (by 1 month)
-                            if(prevMonth == 12)
+                        // If month(s) are missing
+                        // 2010-10 -> 2011-03 => add 11, 12, 1, 2 
+                        // ||
+                        // 2010-09 -> 2010-12 => 10, 11
+                        if ((thisYear != prevYear && prevMonth - thisMonth != 11) ||
+                            (thisMonth - prevMonth != 1))
+                        {
+                            while (thisYear != prevYear && thisMonth != prevMonth)
                             {
-                                prevMonth = 1;
-                                prevYear++;
-                            }
-                            else
-                            {
-                                prevMonth++;
-                            }
+                                // Increase date (by 1 month)
+                                if (prevMonth == 12)
+                                {
+                                    prevMonth = 1;
+                                    prevYear++;
+                                }
+                                else
+                                {
+                                    prevMonth++;
+                                }
 
-                            // Add dummy month
-                            ret.Add(new MonthlySum()
-                            {
-                                id = id++,
-                                date = new DateTime(prevYear, prevMonth, 1),
-                                dateString = String.Format("{0}-{1}-01", prevYear, prevMonth),
-                                income = 0,
-                                expense = 0,
-                                flow = 0,
-                                cumulatedFlow = cumulatedFlow,
-                                expensePerDay = 0,
-                                incomePerDay = 0,
-                                flowPerDay = 0
-                            });
+                                // Add dummy month
+                                ret.Add(this.CreateMonthlyResult(id++, prevYear, prevMonth, 0, 0, cumulatedFlow)); 
+                            }
                         }
+
+                        // Reset
+                        income = 0;
+                        expense = 0;
                     }
-
-                    // Reset
-                    income = 0;
-                    expense = 0;
-
-                    // Set
-                    prevYear = thisYear;
-                    prevMonth = thisMonth;
                 }
+
+                // Set
+                prevYear = thisYear;
+                prevMonth = thisMonth;
 
                 // Add up
                 if (sum.Sum < 0)
@@ -174,9 +157,30 @@ namespace BusinessLibrary.Repository
                 }
                 cumulatedFlow += sum.Sum.Value;
             }
+            // Add last
+            ret.Add(this.CreateMonthlyResult(id++, prevYear, prevMonth, expense, income, cumulatedFlow));
 
             return ret;
         }
+
+        MonthlyResult CreateMonthlyResult(int id, int prevYear, int prevMonth, decimal expense, decimal income, decimal cumulatedFlow)
+        {
+            int daysInMonth = DateTime.DaysInMonth(prevYear, prevMonth);
+            return (new MonthlyResult()
+            {
+                id = id++,
+                date = new DateTime(prevYear, prevMonth, 1),
+                dateString = String.Format("{0}-{1}-01", prevYear, prevMonth),
+                expense = expense,
+                income = income,
+                flow = income - expense,
+                cumulatedFlow = cumulatedFlow,
+                expensePerDay = expense / daysInMonth,
+                incomePerDay = income / daysInMonth,
+                flowPerDay = (income - expense) / daysInMonth
+            });
+        }
+        #endregion
 
         // from, to
         // graph, x=days y=money

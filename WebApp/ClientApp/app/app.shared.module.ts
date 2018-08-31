@@ -22,10 +22,11 @@ import { DateRangePickerComponent } from './components/daterangepicker/daterange
 
 // Pages
 import { EditSumsPage } from './pages/EditSums/editsums.page';
+import { CalculationsPage } from './pages/Calculations/calculations.page';
 import { HomePage } from './pages/Home/home.page';
 
 // Services
-import { SumService, IntellisenseService, TagService } from './services/index';
+import { SumService, IntellisenseService, TagService, CalculationService } from './services/index';
 
 class AppBaseRequestOptions extends BaseRequestOptions {
     headers: Headers = new Headers();
@@ -46,12 +47,14 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         DateRangePickerComponent,
         // Pages
         EditSumsPage,
+        CalculationsPage,
         HomePage
     ],
     providers: [
         SumService,
         IntellisenseService,
         TagService,
+        CalculationService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         { provide: RequestOptions, useClass: AppBaseRequestOptions }
     ],
@@ -65,8 +68,9 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         //Angular2FontawesomeModule,
         RouterModule.forRoot([
             { path: 'EditSumsPage', component: EditSumsPage },
+            { path: 'Calculations', component: CalculationsPage },
             { path: 'Home', component: HomePage },
-            { path: '**'/*<-any url*/, redirectTo: 'EditSumsPage' }
+            { path: '**'/*<-any url*/, redirectTo: 'Calculations' }
             //{ path: '', redirectTo: 'sum', pathMatch: 'full' },
         ])
     ]

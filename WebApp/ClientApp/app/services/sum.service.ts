@@ -26,6 +26,8 @@ export class SumService {
             url += "TO_DATE=" + TO_DATE.toJSON();
         }
 
+        console.log(url);
+
         return this.http.get(url, { headers: headers })
             .map(response => <any>(<Response>response).json());
     }
