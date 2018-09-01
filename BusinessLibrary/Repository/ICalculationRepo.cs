@@ -6,6 +6,6 @@ namespace BusinessLibrary.Repository
 {
     public interface ICalculationRepo
     {
-        List<MonthlyResult> MonthlySumups(int FROM_YEAR, int FROM_MONTH, int TO_YEAR, int TO_MONTH);
+        List<MonthlyResult> MonthlySumups(int FROM_YEAR, int FROM_MONTH, int TO_YEAR, int TO_MONTH, bool fakeData);
     }
 }

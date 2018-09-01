@@ -18,9 +18,16 @@ namespace WebApp.Controllers
 
         #region - Get Methods
         [HttpGet, Produces("application/json")]
+        public IActionResult GetFakeMonthlySumups(int FROM_YEAR, int FROM_MONTH, int TO_YEAR, int TO_MONTH)
+        {
+            var data = repo.MonthlySumups(FROM_YEAR, FROM_MONTH, TO_YEAR, TO_MONTH, true);
+            return Json(data);
+        }
+
+        [HttpGet, Produces("application/json")]
         public IActionResult GetMonthlySumups(int FROM_YEAR, int FROM_MONTH, int TO_YEAR, int TO_MONTH)
         {
-            var data = repo.MonthlySumups(FROM_YEAR, FROM_MONTH, TO_YEAR, TO_MONTH);
+            var data = repo.MonthlySumups(FROM_YEAR, FROM_MONTH, TO_YEAR, TO_MONTH, false);
             return Json(data);
         }
         #endregion

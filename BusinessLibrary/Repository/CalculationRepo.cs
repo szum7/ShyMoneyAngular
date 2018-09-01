@@ -33,8 +33,35 @@ namespace BusinessLibrary.Repository
         }
     }
 
+    public class TagTotalResult
+    {
+        public TagModel tag { get; set; }
+        public decimal income { get; set; }
+        public decimal expense { get; set; }
+        /// <summary>
+        /// income - expense = flow
+        /// </summary>
+        public decimal flow { get; set; }
+        /// <summary>
+        /// Average per day
+        /// </summary>
+        public decimal flowPerDay { get; set; }
+        /// <summary>
+        /// Average per month. If from and to are not start and end month days, it counts as start and end month days.
+        /// e.g.: 2010-10-05 -> 2010-12-24 => 2010-10-01 -> 2011-01-01 (3 months)
+        /// </summary>
+        public decimal flowPerMonth { get; set; }
+    }
+
     public class CalculationRepo : ICalculationRepo
     {
+        private static Random RND;
+
+        public CalculationRepo()
+        {
+            CalculationRepo.RND = new Random();
+        }
+
         public void Get()
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
@@ -57,6 +84,49 @@ namespace BusinessLibrary.Repository
         // tag1     income      expense     flow    átl/month
         // tag2     income      expense     flow    átl/month
         // ...
+        public List<TagTotalResult> TagTotalResult(DateTime FROM, DateTime TO)
+        {
+            List<TagTotalResult> ret = new List<TagTotalResult>();
+            List<SumModel> sums;
+            using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
+            {
+                sums = (from d in context.Sum
+                        where (d.State == "Y" && d.InputDate >= FROM && d.InputDate < TO)
+                        select new SumModel()
+                        {
+                            Id = d.Id,
+                            Title = d.Title,
+                            Sum = d.Sum,
+                            InputDate = d.InputDate
+                        }).ToList();
+
+                Dictionary<decimal, SumModel> sumDict = new Dictionary<decimal, SumModel>();
+                foreach (SumModel sum in sums)
+                {
+                    sumDict.Add(sum.Id, sum);
+                }
+
+                List<TagModel> tags = (from d in context.Tag
+                                       where d.State == "Y"
+                                       orderby d.Id ascending
+                                       select new TagModel()
+                                       {
+                                           Id = d.Id,
+                                           Title = d.Title,
+                                           Description = d.Description,
+                                           Icon = d.Icon
+                                       }).ToList();
+
+                decimal prevId = -1;
+                ret.Add(new TagTotalResult());
+                foreach (TagModel tag in tags)
+                {
+
+                }
+            }
+
+            return null;
+        }
 
         // from, to
         // month1
@@ -71,7 +141,7 @@ namespace BusinessLibrary.Repository
         // 2017, january     income      expense     flow       cumulatedFlow       up/down icon
         // 2017, february    income      expense     flow       cumulatedFlow       up/down icon
         // ...
-        public List<MonthlyResult> MonthlySumups(int FROM_YEAR, int FROM_MONTH, int TO_YEAR, int TO_MONTH)
+        public List<MonthlyResult> MonthlySumups(int FROM_YEAR, int FROM_MONTH, int TO_YEAR, int TO_MONTH, bool fakeData)
         {
             DateTime fromDate = new DateTime(FROM_YEAR, FROM_MONTH, 1);
             DateTime toDate = new DateTime(TO_YEAR, TO_MONTH, 1);
@@ -110,6 +180,11 @@ namespace BusinessLibrary.Repository
                 int thisYear = sum.InputDate.Value.Year;
                 int thisMonth = sum.InputDate.Value.Month;
 
+                if (fakeData)
+                {
+                    sum.Sum = CalculationRepo.RND.Next(-150000, 150000);
+                }
+
                 if (prevYear != -1 && prevMonth != -1)
                 {
                     if (thisMonth != prevMonth || thisYear != prevYear) // new month
@@ -125,9 +200,10 @@ namespace BusinessLibrary.Repository
                         // ||
                         // 2010-09 -> 2010-12 => 10, 11
                         if ((thisYear != prevYear && prevMonth - thisMonth != 11) ||
-                            (thisMonth - prevMonth != 1))
+                            (thisYear == prevYear && thisMonth - prevMonth != 1))
                         {
-                            while (thisYear != prevYear && thisMonth != prevMonth)
+                            while ((thisYear != prevYear && prevMonth - thisMonth != 11)
+                                || (thisYear == prevYear && thisMonth - prevMonth != 1))
                             {
                                 // Increase date (by 1 month)
                                 if (prevMonth == 12)

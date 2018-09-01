@@ -1,2 +1,21 @@
-﻿body {
+﻿.page{
+    padding:30px 0;
 }
+tr.bb1{
+    border-bottom:1px solid #333;
+}
+tr td{
+    padding:5px;
+    border:1px solid #ddd;
+    min-width:100px;
+}
+tr.tblhead td{
+    background:#eee;
+}
+td.num {
+    /*background: #88e094;*/
+    text-align:right;
+}
+    td.num.red {
+        /*background: #e08888;*/
+    }

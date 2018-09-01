@@ -1,1 +1,60 @@
-﻿<p style="font-size:60pt;">Hello.</p>
+﻿<div class="page">
+    <p>Monthly Results</p>
+    <table>
+        <tr class="bb1 tblhead">
+            <td>ID</td>
+            <td>Date</td>
+            <td>Income</td>
+            <td>Expense</td>
+            <td>Flow</td>
+            <td>Income/D</td>
+            <td>Expense/D</td>
+            <td>Flow/D</td>
+            <td>Cumulated</td>
+            <td></td>
+        </tr>
+    </table>
+    <div *ngFor="let monthlyResult of monthlyResults">
+        <table>
+            <tr class="bb1">
+                <td>{{monthlyResult.id}}</td>
+                <td>{{monthlyResult.dateString}}</td>
+                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.income, 500000)}">
+                    {{AddThousandPoints(monthlyResult.income)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.expense, 250000, true)}">
+                    -{{AddThousandPoints(monthlyResult.expense)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.flow, 410000)}">
+                    {{AddThousandPoints(monthlyResult.flow)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.incomePerDay, 20000)}">
+                    {{(monthlyResult.incomePerDay)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.expensePerDay, 15000, true)}">
+                    -{{(monthlyResult.expensePerDay)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.flowPerDay, 20000)}">
+                    {{(monthlyResult.flowPerDay)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.cumulatedFlow, 1700000)}">
+                    {{AddThousandPoints(monthlyResult.cumulatedFlow)}}
+                </td>
+                <td>
+                    <button (click)="ToggleSums(monthlyResult)">
+                        <span *ngIf="!monthlyResult.isSumsOpen">+</span>
+                        <span *ngIf="monthlyResult.isSumsOpen">-</span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <table *ngIf="monthlyResult.isSumsOpen">
+            <tr *ngFor="let sum of monthlyResult.sums">
+                <td>{{sum.Id}}</td>
+                <td>{{ToSimpleDate(sum.InputDate)}}</td>
+                <td>{{sum.Title}}</td>
+                <td class="num" [ngStyle]="{'background-color': CalculateColour(sum.Sum, 420000)}">{{sum.Sum}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
