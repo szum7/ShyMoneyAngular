@@ -98,7 +98,29 @@ export class CalculationsPage implements OnInit {
         }
     }
 
-    CalculateColour(val: any, maxValue: any, forceNegative?: boolean): string {
+    GetColourOpacity(val: any, maxValue: any, forceNegative?: boolean): string {
+
+        val = parseInt(val);
+        maxValue = parseInt(maxValue);
+
+        if (maxValue > 0 && val != 0) {
+            let colour, percent;
+
+            percent = Math.abs(val) / maxValue;
+
+            if (val < 0 || (forceNegative)) {
+                colour = "rgba(214, 53, 53,";
+            } else {
+                colour = "rgba(109, 204, 51,";
+            }
+
+            return colour + percent + ")";
+        } else {
+            return "rgb(250,250,250)";
+        }
+    }
+
+    GetColourValue(val: any, maxValue: any, forceNegative?: boolean): string {
 
         val = parseInt(val);
         maxValue = parseInt(maxValue);

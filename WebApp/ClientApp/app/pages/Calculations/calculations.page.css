@@ -13,9 +13,5 @@ tr.tblhead td{
     background:#eee;
 }
 td.num {
-    /*background: #88e094;*/
     text-align:right;
 }
-    td.num.red {
-        /*background: #e08888;*/
-    }

@@ -19,25 +19,25 @@
             <tr class="bb1">
                 <td>{{monthlyResult.id}}</td>
                 <td>{{monthlyResult.dateString}}</td>
-                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.income, 500000)}">
+                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.income, 500000)}">
                     {{AddThousandPoints(monthlyResult.income)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.expense, 250000, true)}">
+                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.expense, 250000, true)}">
                     -{{AddThousandPoints(monthlyResult.expense)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.flow, 410000)}">
+                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.flow, 410000)}">
                     {{AddThousandPoints(monthlyResult.flow)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.incomePerDay, 20000)}">
+                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.incomePerDay, 20000)}">
                     {{(monthlyResult.incomePerDay)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.expensePerDay, 15000, true)}">
+                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.expensePerDay, 15000, true)}">
                     -{{(monthlyResult.expensePerDay)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.flowPerDay, 20000)}">
+                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.flowPerDay, 20000)}">
                     {{(monthlyResult.flowPerDay)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': CalculateColour(monthlyResult.cumulatedFlow, 1700000)}">
+                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.cumulatedFlow, 1700000)}">
                     {{AddThousandPoints(monthlyResult.cumulatedFlow)}}
                 </td>
                 <td>
@@ -53,7 +53,7 @@
                 <td>{{sum.Id}}</td>
                 <td>{{ToSimpleDate(sum.InputDate)}}</td>
                 <td>{{sum.Title}}</td>
-                <td class="num" [ngStyle]="{'background-color': CalculateColour(sum.Sum, 420000)}">{{sum.Sum}}</td>
+                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(sum.Sum, 420000)}">{{sum.Sum}}</td>
             </tr>
         </table>
     </div>
