@@ -59,6 +59,15 @@ export class SumService {
             .map(response => <any>(<Response>response).json());
     }
 
+    saveGetSum(SUM: SumModel) {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        let body = JSON.stringify(SUM);
+
+        return this.http.post("/Sum/SaveGetSum/", body, options)
+            .map(response => <any>(<Response>response).json());
+    }
+
     delete(ID: number): Observable<string> {
         return this.http.delete("/Sum/Delete/" + ID)
             .map(response => response.json())

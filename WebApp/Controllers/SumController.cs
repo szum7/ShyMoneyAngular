@@ -48,8 +48,13 @@ namespace WebApp.Controllers
         [HttpPost, Produces("application/json")]
         public IActionResult Save([FromBody] SumModel SUM)
         {
-            var data = repo.Save(SUM);
-            return Json(new { data = data });
+            return Json(repo.Save(SUM));
+        }
+
+        [HttpPost, Produces("application/json")]
+        public IActionResult SaveGetSum([FromBody] SumModel SUM)
+        {
+            return Json(repo.SaveGetSum(SUM));
         }
         #endregion
 

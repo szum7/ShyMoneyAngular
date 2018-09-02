@@ -13,7 +13,8 @@ namespace BusinessLibrary.Repository
         SumsOnDayWrap GetOnDates(DateTypeEnum dateType, DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
         List<SumModel> Get(DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
         List<SumModel> GetWithTags(DateTime? FROM_DATE = null, DateTime? TO_DATE = null);
-        SumModel Save(SumModel model);
+        decimal Save(SumModel model);
+        SumModel SaveGetSum(SumModel model);
         bool Delete(int id);
     }
 }

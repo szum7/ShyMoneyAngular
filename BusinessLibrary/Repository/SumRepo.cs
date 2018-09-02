@@ -121,7 +121,70 @@ namespace BusinessLibrary.Repository
         #endregion
 
         #region Save Methods
-        public SumModel Save(SumModel p_sum)
+
+        public decimal Save(SumModel p_sum)
+        {
+            using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
+            {
+                SumModel sum = context.Sum.Where(x => x.Id == p_sum.Id).FirstOrDefault();
+                DateTime now = DateTime.Now;
+                if (sum == null)
+                {
+                    sum = new SumModel()
+                    {
+                        Title = p_sum.Title,
+                        Sum = p_sum.Sum,
+                        AccountDate = p_sum.AccountDate,
+                        InputDate = p_sum.InputDate,
+                        DueDate = p_sum.DueDate,
+                        CreateDate = now,
+                        CreateBy = tmpUserId,
+                        ModifyDate = now,
+                        ModifyBy = tmpUserId,
+                        State = "Y",
+                        IsPayed = "Y"
+                    };
+                    this.ResolveDateTypeDefaults(sum, p_sum);
+                    context.Sum.Add(sum);
+                }
+                else
+                {
+                    List<SumTagConnModel> stcList = context.SumTagConn.Where(x => x.SumId == sum.Id).ToList();
+
+                    sum.Title = p_sum.Title;
+                    sum.Sum = p_sum.Sum;
+                    sum.ModifyDate = now;
+                    sum.ModifyBy = tmpUserId;
+                    this.ResolveDateTypeDefaults(sum, p_sum);
+
+                    // remove old tag connections
+                    if (stcList.Count > 0)
+                    {
+                        context.SumTagConn.RemoveRange(stcList);
+                    }
+                }
+
+                // add tag connections
+                if (p_sum.Tags != null)
+                {
+                    foreach (TagModel tag in p_sum.Tags)
+                    {
+                        context.SumTagConn.Add(new SumTagConnModel()
+                        {
+                            SumId = sum.Id,
+                            TagId = tag.Id
+                        });
+                    }
+                }
+
+                if (context.SaveChanges() >= 1)
+                    return sum.Id;
+                else
+                    return 0;
+            }
+        }
+
+        public SumModel SaveGetSum(SumModel p_sum)
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
@@ -163,7 +226,8 @@ namespace BusinessLibrary.Repository
                     }
                 }
 
-                // add tag connections
+                // TODO Valamiért elrontja, ha vannak tagek
+                // add tag connections 
                 if (p_sum.Tags != null)
                 {
                     foreach (TagModel tag in p_sum.Tags)

@@ -34,30 +34,8 @@ export class CalculationsPage implements OnInit {
         let _this = this;
 
         _this.loadMonthlySumups(function () {
-            //_this.JumbleData(_this.monthlyResults);
+
         }); 
-    }
-
-    JumbleData(arr: any): any {
-
-        var rnd, ifRnd;
-
-        for (var i = 0; i < arr.length; i++) {
-            rnd = Math.floor((Math.random() * 50000) + 3000); ifRnd = Math.floor(Math.random() * 2); if (ifRnd == 0) rnd *= -1;
-            arr[i].expense = Math.floor((arr[i].expense + rnd) * 100) / 100;
-            rnd = Math.floor((Math.random() * 50000) + 3000); ifRnd = Math.floor(Math.random() * 2); if (ifRnd == 0) rnd *= -1;
-            arr[i].income = Math.floor((arr[i].income + rnd) * 100) / 100;
-            rnd = Math.floor((Math.random() * 50000) + 3000); ifRnd = Math.floor(Math.random() * 2); if (ifRnd == 0) rnd *= -1;
-            arr[i].flow = Math.floor((arr[i].flow + rnd) * 100) / 100;
-            rnd = Math.floor((Math.random() * 50000) + 3000); ifRnd = Math.floor(Math.random() * 2); if (ifRnd == 0) rnd *= -1;
-            arr[i].flowPerDay = Math.floor((arr[i].flowPerDay + rnd) * 100) / 100;
-            rnd = Math.floor((Math.random() * 50000) + 3000); ifRnd = Math.floor(Math.random() * 2); if (ifRnd == 0) rnd *= -1;
-            arr[i].incomePerDay = Math.floor((arr[i].incomePerDay + rnd) * 100) / 100;
-            rnd = Math.floor((Math.random() * 50000) + 3000); ifRnd = Math.floor(Math.random() * 2); if (ifRnd == 0) rnd *= -1;
-            arr[i].expensePerDay = Math.floor((arr[i].expensePerDay + rnd) * 100) / 100;
-            rnd = Math.floor((Math.random() * 50000) + 3000); ifRnd = Math.floor(Math.random() * 2); if (ifRnd == 0) rnd *= -1;
-            arr[i].cumulatedFlow = Math.floor((arr[i].cumulatedFlow + rnd) * 100) / 100;
-        }
     }
 
     AddThousandPoints(val: any): string {
@@ -81,13 +59,6 @@ export class CalculationsPage implements OnInit {
 
     ToSimpleDate(val: any): string {
         return val.substr(0, 10);
-    }
-
-    IsNegative(val: any): boolean {
-        let num = parseInt(val);
-        if (num < 0)
-            return true;
-        return false;
     }
 
     ToggleSums(monthlyResult: any): void {

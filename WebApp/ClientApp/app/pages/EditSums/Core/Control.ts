@@ -27,7 +27,7 @@ export class Control {
         this.sumService.save(sum).subscribe(function (response) {
             console.log(response);
             console.log(sum);
-            sum.Id = response.data.Id;
+            sum.Id = response;
         });
     }
 
