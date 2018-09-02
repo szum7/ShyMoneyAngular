@@ -47,10 +47,13 @@ namespace BusinessLibrary.Repository
         /// </summary>
         public decimal flowPerDay { get; set; }
         /// <summary>
-        /// Average per month. If from and to are not start and end month days, it counts as start and end month days.
-        /// e.g.: 2010-10-05 -> 2010-12-24 => 2010-10-01 -> 2011-01-01 (3 months)
+        /// 2011-12-31 -> 2012-01-01 => 1 month
         /// </summary>
         public decimal flowPerMonth { get; set; }
+        /// <summary>
+        /// 2011-12-31 -> 2012-01-01 => 1 day, 0 month. 1 month is 30 days on average.
+        /// </summary>
+        public decimal flowPerMonthAvg { get; set; }
     }
 
     public class CalculationRepo : ICalculationRepo
@@ -62,7 +65,7 @@ namespace BusinessLibrary.Repository
             CalculationRepo.RND = new Random();
         }
 
-        public void Get()
+        public void TmpCalc1()
         {
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
@@ -80,53 +83,128 @@ namespace BusinessLibrary.Repository
             }
         }
 
+        #region SmartTagTotalResult
+        // a TagTotalResult-on lehet javítani.
+        // (1) Ne az egész időszak napjaira és hónapjaira ossza le, hanem első megjelenésétől kezdve utolsó megjelenéséig.
+        // (2) fix és monthly tageknél pontosan tudjuk az összeget és hogy havonta fordul elő. Pontosabb perDay, perMonth értékeket tudunk adni.
+        // (3) monthly tagnél a kimaradt hónapokat kihagyhatjuk a monthCount-ból
+        #endregion
+
+        #region TagTotalResult
         // from, to
         // tag1     income      expense     flow    átl/month
         // tag2     income      expense     flow    átl/month
         // ...
-        public List<TagTotalResult> TagTotalResult(DateTime FROM, DateTime TO)
+        public List<TagTotalResult> TagTotalResult(int FROM_YEAR, int FROM_MONTH, int FROM_DAY, int TO_YEAR, int TO_MONTH, int TO_DAY, bool fakeData)
         {
+            DateTime FROM = new DateTime(FROM_YEAR, FROM_MONTH, FROM_DAY);
+            DateTime TO = new DateTime(TO_YEAR, TO_MONTH, TO_DAY);
             List<TagTotalResult> ret = new List<TagTotalResult>();
-            List<SumModel> sums;
             using (DBSHYMONEYV1Context context = new DBSHYMONEYV1Context())
             {
-                sums = (from d in context.Sum
-                        where (d.State == "Y" && d.InputDate >= FROM && d.InputDate < TO)
-                        select new SumModel()
-                        {
-                            Id = d.Id,
-                            Title = d.Title,
-                            Sum = d.Sum,
-                            InputDate = d.InputDate
-                        }).ToList();
+                List<SumTagConnModel> sumTagConns = (from d in context.SumTagConn
+                                                     orderby d.TagId ascending
+                                                     select new SumTagConnModel()
+                                                     {
+                                                         Id = d.Id,
+                                                         SumId = d.SumId,
+                                                         TagId = d.TagId,
+                                                         Tag = (from f in context.Tag
+                                                                where f.Id == d.TagId
+                                                                select new TagModel()
+                                                                {
+                                                                    Id = f.Id,
+                                                                    Title = f.Title,
+                                                                    Description = f.Description,
+                                                                    Icon = f.Icon,
+                                                                    State = f.State
+                                                                }).Single(),
+                                                         Sum = (from g in context.Sum
+                                                                where g.Id == d.SumId
+                                                                select new SumModel()
+                                                                {
+                                                                    Id = g.Id,
+                                                                    Title = g.Title,
+                                                                    Sum = g.Sum,
+                                                                    InputDate = g.InputDate,
+                                                                    State = g.State
+                                                                }).Single()
+                                                     }).ToList();
 
-                Dictionary<decimal, SumModel> sumDict = new Dictionary<decimal, SumModel>();
-                foreach (SumModel sum in sums)
-                {
-                    sumDict.Add(sum.Id, sum);
-                }
+                decimal prevTagId = 0;
+                decimal income = 0;
+                decimal expense = 0;
+                decimal dayDiff = (decimal)(TO - FROM).TotalDays;
+                decimal monthDiff = ((TO.Year - FROM.Year) * 12) + (TO.Month - FROM.Month); // TODO ellenőrizni, tényleg jó-e
+                decimal monthDiffAvg = Math.Floor(dayDiff / 30m);
+                TagModel lastTag = null;
 
-                List<TagModel> tags = (from d in context.Tag
-                                       where d.State == "Y"
-                                       orderby d.Id ascending
-                                       select new TagModel()
-                                       {
-                                           Id = d.Id,
-                                           Title = d.Title,
-                                           Description = d.Description,
-                                           Icon = d.Icon
-                                       }).ToList();
-
-                decimal prevId = -1;
                 ret.Add(new TagTotalResult());
-                foreach (TagModel tag in tags)
+                foreach (SumTagConnModel sumTagConn in sumTagConns)
                 {
+                    if(sumTagConn.Tag.State != "Y" 
+                        || sumTagConn.Sum.State != "Y" 
+                        || sumTagConn.Sum.InputDate < FROM 
+                        || sumTagConn.Sum.InputDate >= TO)
+                    {
+                        continue;
+                    }
 
+                    decimal thisTagId = sumTagConn.TagId;
+
+                    // New tag
+                    if(prevTagId > 0 && thisTagId != prevTagId)
+                    {
+                        this.SetTagTotalResult(ret[ret.Count - 1], lastTag, income, expense, dayDiff, monthDiff, monthDiffAvg);
+
+                        // Set next tag
+                        ret.Add(new TagTotalResult());
+
+                        // Reset properties
+                        income = 0;
+                        expense = 0;
+                    }
+
+                    // Fake data
+                    if (fakeData)
+                    {
+                        sumTagConn.Sum.Sum = CalculationRepo.RND.Next(-150000, 150000);
+                    }
+
+                    // Cumulate props for next tag
+                    if (sumTagConn.Sum.Sum > 0)
+                    {
+                        income += sumTagConn.Sum.Sum.Value;
+                    }
+                    else if (sumTagConn.Sum.Sum < 0)
+                    {
+                        expense += Math.Abs(sumTagConn.Sum.Sum.Value);
+                    }
+
+                    // Set locals
+                    prevTagId = thisTagId;
+                    lastTag = sumTagConn.Tag;
                 }
+                // last one
+                this.SetTagTotalResult(ret[ret.Count - 1], lastTag, income, expense, dayDiff, monthDiff, monthDiffAvg);
             }
 
-            return null;
+            return ret;
         }
+
+        void SetTagTotalResult(TagTotalResult tagTotalResult, TagModel tag, decimal income, decimal expense, decimal dayDiff, decimal monthsDiff, decimal monthsDiffAvg)
+        {
+            tagTotalResult.tag = tag;
+            tagTotalResult.income = income;
+            tagTotalResult.expense = expense;
+            tagTotalResult.flow = income - expense;
+            tagTotalResult.flowPerDay = Math.Round(tagTotalResult.flow / dayDiff, 2);
+            if(monthsDiff > 0)
+                    tagTotalResult.flowPerMonth = Math.Round(tagTotalResult.flow / monthsDiff, 2);
+            if(monthsDiffAvg > 0)
+                tagTotalResult.flowPerMonthAvg = Math.Round(tagTotalResult.flow / monthsDiffAvg, 2);
+        }
+        #endregion
 
         // from, to
         // month1

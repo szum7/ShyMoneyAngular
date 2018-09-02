@@ -21,6 +21,7 @@ import { CalculationService } from '../../services/index';
 export class CalculationsPage implements OnInit {
 
     public monthlyResults: any;
+    public tagTotalResult: any;
 
     private _maxValue: number;
 
@@ -32,6 +33,10 @@ export class CalculationsPage implements OnInit {
 
     ngOnInit(): void {
         let _this = this;
+
+        _this.loadTagTotalResult(function () {
+
+        });
 
         _this.loadMonthlySumups(function () {
 
@@ -132,6 +137,20 @@ export class CalculationsPage implements OnInit {
     /**
      * Loaders
      */
+
+    private loadTagTotalResult(callback: Function): void {
+        callback = (typeof callback === 'undefined') ? (function () { }) : callback;
+
+        let _this = this;
+
+        this.calculationService.getTagTotalResult(2010, 1, 1, 2018, 9, 1).subscribe(function (response) {
+            console.log(response);
+            _this.tagTotalResult = response;
+
+            // END
+            callback();
+        });
+    }
 
     private loadMonthlySumups(callback: Function): void {
         callback = (typeof callback === 'undefined') ? (function () { }) : callback;
