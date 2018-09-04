@@ -32,8 +32,9 @@
     <None Remove="ClientApp\app\direcitves\focus.directive.ts" />
     <None Remove="ClientApp\app\global\intellisensemodel.ts" />
     <None Remove="ClientApp\app\global\models.ts" />
-    <None Remove="ClientApp\app\pages\Calculations\calculations.page.ts" />
+    <None Remove="ClientApp\app\pages\TagTotalResult\tagtotalresult.page.ts" />
     <None Remove="ClientApp\app\services\calculations.service.ts" />
+    <None Remove="ClientApp\app\services\global.service.ts" />
     <None Remove="ClientApp\app\services\models\MonthlyResult.ts" />
   </ItemGroup>
 
@@ -56,8 +57,10 @@
     <TypeScriptCompile Include="ClientApp\app\global\tagmodel.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\sumsonday.ts" />
     <TypeScriptCompile Include="ClientApp\app\global\sumsondaywrap.ts" />
-    <TypeScriptCompile Include="ClientApp\app\pages\Calculations\calculations.page.ts" />
+    <TypeScriptCompile Include="ClientApp\app\pages\MonthlyResults\monthlyresults.page.ts" />
+    <TypeScriptCompile Include="ClientApp\app\pages\TagTotalResult\tagtotalresult.page.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\calculations.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\global.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\models\MonthlyResult.ts" />
   </ItemGroup>
 

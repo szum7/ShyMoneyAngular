@@ -1,0 +1,41 @@
+﻿<div class="page">
+    <p>Tag Total Results</p>
+    <table>
+        <tr class="bb1 tblhead">
+            <td>ID</td>
+            <td class="ttl">Title</td>
+            <td>Income</td>
+            <td>Expense</td>
+            <td>Flow</td>
+            <td>Flow/M</td>
+            <td>Flow avg./M</td>
+            <td>Flow/D</td>
+        </tr>
+    </table>
+    <div *ngFor="let tagTotalResult of tagTotalResults">
+        <table>
+            <tr class="bb1">
+                <td>{{tagTotalResult.tag.Id}}</td>
+                <td class="ttl">{{tagTotalResult.tag.Title}}</td>
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(tagTotalResult.income, 4000000)}">
+                    {{gl.AddThousandPoints(tagTotalResult.income)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(tagTotalResult.expense, 4000000, true)}">
+                    -{{gl.AddThousandPoints(tagTotalResult.expense)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(tagTotalResult.flow, 3500000)}">
+                    {{gl.AddThousandPoints(tagTotalResult.flow)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(tagTotalResult.flowPerMonth, 30000)}">
+                    {{(tagTotalResult.flowPerMonth)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(tagTotalResult.flowPerMonthAvg, 25000)}">
+                    {{(tagTotalResult.flowPerMonthAvg)}}
+                </td>
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(tagTotalResult.flowPerDay, 1000)}">
+                    {{(tagTotalResult.flowPerDay)}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

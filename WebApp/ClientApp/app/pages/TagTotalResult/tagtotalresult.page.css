@@ -1,0 +1,25 @@
+﻿.page {
+    padding: 30px 0;
+}
+
+tr.bb1 {
+    border-bottom: 1px solid #333;
+}
+
+tr td {
+    padding: 5px;
+    border: 1px solid #ddd;
+    min-width: 100px;
+}
+
+    tr td.ttl {
+        min-width: 200px;
+    }
+
+tr.tblhead td {
+    background: #eee;
+}
+
+td.num {
+    text-align: right;
+}

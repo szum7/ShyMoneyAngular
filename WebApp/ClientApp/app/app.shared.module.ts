@@ -21,12 +21,13 @@ import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { DateRangePickerComponent } from './components/daterangepicker/daterangepicker.component';
 
 // Pages
-import { EditSumsPage } from './pages/EditSums/editsums.page';
-import { CalculationsPage } from './pages/Calculations/calculations.page';
 import { HomePage } from './pages/Home/home.page';
+import { EditSumsPage } from './pages/EditSums/editsums.page';
+import { MonthlyResultPage } from './pages/MonthlyResults/monthlyresults.page';
+import { TagTotalResultPage } from './pages/TagTotalResult/tagtotalresult.page';
 
 // Services
-import { SumService, IntellisenseService, TagService, CalculationService } from './services/index';
+import { GlobalService, SumService, IntellisenseService, TagService, CalculationService } from './services/index';
 
 class AppBaseRequestOptions extends BaseRequestOptions {
     headers: Headers = new Headers();
@@ -46,11 +47,13 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         NavMenuComponent,
         DateRangePickerComponent,
         // Pages
+        HomePage,
         EditSumsPage,
-        CalculationsPage,
-        HomePage
+        MonthlyResultPage,
+        TagTotalResultPage
     ],
     providers: [
+        GlobalService,
         SumService,
         IntellisenseService,
         TagService,
@@ -67,10 +70,11 @@ class AppBaseRequestOptions extends BaseRequestOptions {
         InputTextModule, DataTableModule, ButtonModule, DialogModule, SliderModule, CalendarModule, AutoCompleteModule, MultiSelectModule, 
         //Angular2FontawesomeModule,
         RouterModule.forRoot([
-            { path: 'EditSumsPage', component: EditSumsPage },
-            { path: 'Calculations', component: CalculationsPage },
             { path: 'Home', component: HomePage },
-            { path: '**'/*<-any url*/, redirectTo: 'Calculations' }
+            { path: 'EditSums', component: EditSumsPage },
+            { path: 'MonthlyResults', component: MonthlyResultPage },
+            { path: 'TagTotalResult', component: TagTotalResultPage },
+            { path: '**'/*<-any url*/, redirectTo: 'Home' }
             //{ path: '', redirectTo: 'sum', pathMatch: 'full' },
         ])
     ]

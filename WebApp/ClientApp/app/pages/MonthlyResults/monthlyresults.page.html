@@ -19,41 +19,42 @@
             <tr class="bb1">
                 <td>{{monthlyResult.id}}</td>
                 <td>{{monthlyResult.dateString}}</td>
-                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.income, 500000)}">
-                    {{AddThousandPoints(monthlyResult.income)}}
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(monthlyResult.income, 500000)}">
+                    {{gl.AddThousandPoints(monthlyResult.income)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.expense, 250000, true)}">
-                    -{{AddThousandPoints(monthlyResult.expense)}}
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(monthlyResult.expense, 250000, true)}">
+                    -{{gl.AddThousandPoints(monthlyResult.expense)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.flow, 410000)}">
-                    {{AddThousandPoints(monthlyResult.flow)}}
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(monthlyResult.flow, 300000)}">
+                    {{gl.AddThousandPoints(monthlyResult.flow)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.incomePerDay, 20000)}">
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(monthlyResult.incomePerDay, 20000)}">
                     {{(monthlyResult.incomePerDay)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.expensePerDay, 15000, true)}">
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(monthlyResult.expensePerDay, 15000, true)}">
                     -{{(monthlyResult.expensePerDay)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.flowPerDay, 20000)}">
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(monthlyResult.flowPerDay, 20000)}">
                     {{(monthlyResult.flowPerDay)}}
                 </td>
-                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(monthlyResult.cumulatedFlow, 1700000)}">
-                    {{AddThousandPoints(monthlyResult.cumulatedFlow)}}
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(monthlyResult.cumulatedFlow, 1700000)}">
+                    {{gl.AddThousandPoints(monthlyResult.cumulatedFlow)}}
                 </td>
                 <td>
                     <button (click)="ToggleSums(monthlyResult)">
                         <span *ngIf="!monthlyResult.isSumsOpen">+</span>
                         <span *ngIf="monthlyResult.isSumsOpen">-</span>
                     </button>
+                    <span>({{monthlyResult.sums.length}})</span>
                 </td>
             </tr>
         </table>
         <table *ngIf="monthlyResult.isSumsOpen">
             <tr *ngFor="let sum of monthlyResult.sums">
                 <td>{{sum.Id}}</td>
-                <td>{{ToSimpleDate(sum.InputDate)}}</td>
+                <td>{{gl.ToSimpleDate(sum.InputDate)}}</td>
                 <td>{{sum.Title}}</td>
-                <td class="num" [ngStyle]="{'background-color': GetColourOpacity(sum.Sum, 420000)}">{{sum.Sum}}</td>
+                <td class="num" [ngStyle]="{'background-color': gl.GetColourOpacity(sum.Sum, 50000)}">{{sum.Sum}}</td>
             </tr>
         </table>
     </div>
